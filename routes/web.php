@@ -22,6 +22,6 @@
 
 Route::get('/','menu@GetSelectMedida'); 
 
-Route::get('Producto','menu@GetTabla'); 1
+Route::get('Producto','menu@GetTabla'); 
 
 Route::get('addProducto','menu@addProductos');
