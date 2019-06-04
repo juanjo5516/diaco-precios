@@ -3,15 +3,15 @@
         {{-- Menu y submenu --}}
         <li class="nav-title">Catálogos</li>
         <li class="nav-item">
-            <a class="nav-link" href="colors.html">
+            <a class="nav-link" href=Producto>
                 <i class="nav-icon fas fa-align-right"></i> Producto</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="typography.html">
+            <a class="nav-link" href="Categoria">
                 <i class="nav-icon fas fa-align-right"></i></i> Categoría</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="typography.html">
+            <a class="nav-link" href="SubCategorias">
                 <i class="nav-icon fas fa-align-right"></i> Sub-Categoría</a>
         </li>
         <li class="nav-title">Vaciado</li>

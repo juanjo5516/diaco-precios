@@ -5,5 +5,5 @@
 
 
 @section('diaco_title')
-    Integración DIACO
+    DIACO
 @endsection

@@ -1,21 +1,20 @@
-function addProducto(form) {
-
+function addGeneral(form,link,tabla) {
     $(form).submit(function(e) {
         e.preventDefault();
         let parametros = $(this).serialize();
         $.ajax({
             data: parametros,
-            url: "addProducto",
+            url: link,
             type: "get",
             contentType: false,
             cache: true,
             processData: false,
             success: function(response) {
                 if(response == "1"){
-                   
-                    $('#tDatos').DataTable().ajax.reload();
-                        $("#snoAlertBox").fadeIn();
-                        closeSnoAlertBox("#snoAlertBox");   
+                    $(tabla).DataTable().ajax.reload();
+                    $('form :input').val('');
+                    $("#snoAlertBox").fadeIn();
+                    closeSnoAlertBox("#snoAlertBox");   
                 }else{
                       $("#snoAlertBoxE").fadeIn();
                       closeSnoAlertBox("#snoAlertBoxE"); 

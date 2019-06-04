@@ -10,18 +10,21 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('/admin', function () {
-//     return view('admin.home');
-// });
-// Route::get('/', function () {
-//     return view('admin.home');
-// });
 
-
-
-
+/*
+/----------------------------------------------------------------------------
+/ Rutas para los Menús
+/----------------------------------------------------------------------------
+/
+*/
 Route::get('/','menu@GetSelectMedida'); 
-
-Route::get('Producto','menu@GetTabla'); 
-
+Route::get('Productos','menu@GetTabla'); 
 Route::get('addProducto','menu@addProductos');
+Route::get('index','menu@GetSelectMedida');
+Route::get('Producto','menu@viewProducto');
+Route::get('Categoria','menu@viewCateogira');
+Route::get('TablaCategoria','menu@GetTablaC');
+Route::get('categorias','menu@addCategorias');
+Route::get('SubCategoria','menu@viewSubCategoria');
+Route::get('TablaSubCategoria','menu@GetTablaS');
+Route::get('AddSubCategoria','menu@addSCategorias');

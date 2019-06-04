@@ -20,18 +20,115 @@ class menu extends Controller
 
     }
 
+    /* Show tables */
     public function GetTabla(){
-        $DataT = DB::table("productoCBA")
-                                        ->select('productoCBA.id_producto as ID','productoCBA.nombre as Pnombre')->get();
-        return datatables()->collection($DataT)->toJson();
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("productoCBA")
+                                            ->select('productoCBA.nombre as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+            
     }
 
+    public function GetTablaC(){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("categoriaCBA")->select('id_Categoria as ID','nombre as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
 
+    public function GetTablaS(){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("subcategoriaCBA")->select('nombre as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+
+    /*Add Data */
     public function addProductos(Request $request){
-        $query = DB::statement("exec AddProductoCba '".$request->nombreP ."',".$request->medidaP.",".$request->CategoriaP.",".$request->SCategoriaP);
-        print $query;
+        DB::beginTransaction();
 
+        if($request->nombreP != ""){
+            try {
+                $query = DB::statement("exec AddProductoCba '".$request->nombreP ."'");
+                print $query;
+
+                DB::commit();
+            } catch (\Exceptio $e) {
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }
+    }
+
+    public function addCategorias(Request $request){
+        DB::beginTransaction();
+
+        if($request->nombreP != ""){
+            try {
+                $query = DB::statement("exec addCategoria '" .$request->nombreP. "'");
+                print $query;
+                DB::commit();
+            } catch(\Exceptio $e){
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }
+        
+        
+    }
+
+    public function addSCategorias(Request $request){
+        DB::beginTransaction();
+
+        if($request->nombreP != ""){
+            try {
+                $query = DB::statement("exec addSubCategoria '" .$request->nombreP. "'");
+                print $query;
+                DB::commit();
+            } catch(\Exceptio $e){
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }
+        
+        
     }
 
 
+    /* view */
+    public function viewProducto(){
+        return view ('menu.addProducto');
+    }
+
+    public function viewCateogira(){
+        return view ('menu.addCategoria');
+    }
+
+    public function viewSubCategoria(){
+        return view('menu.addSubCategoria');
+    }
+
+    
 }

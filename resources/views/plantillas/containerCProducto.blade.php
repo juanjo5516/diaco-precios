@@ -16,18 +16,21 @@
                 <div id="snoAlertBox" class="alert alert-warning" data-alert="alert">Producto Almacenado.</div>
                 <div id="snoAlertBoxE" class="alert alert-danger" data-alert="alert">Error al ingresar un producto.</div>
             
-                <table class="table table-striped display table-bordered tData" id="tDatos" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                        </tr>
-                    </thead>
-                    
-                </table>
-                
+                <div class="container">
+                    <table class="table table-striped display table-bordered tData" id="tDatos" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 

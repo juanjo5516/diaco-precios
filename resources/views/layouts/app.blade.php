@@ -27,20 +27,16 @@
     @include('common.header')
     <div class="app-body">
         <div class="sidebar">
-
             @include('common.sidebar')
-
             <button class="sidebar-minimizer brand-minimizer" type="button"></button>
         </div>
         <main class="main">
-
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item">
-                    <a href="#">Admin</a>
+                <a href=index>Admin</a>
                 </li>
-                <li class="breadcrumb-item active">Dashboard</li>
-
+                @yield('Ruta')
                 <li class="breadcrumb-menu d-md-down-none">
                     <div class="btn-group" role="group" aria-label="Button group">
                         <a class="btn" href="#">
@@ -55,7 +51,7 @@
             </ol>
             <div class="container-fluid">
                 <div id="ui-view">
-                @include('common.containerCProducto')
+                    @yield('contenido')
                 </div>
             </div>
         </main>
@@ -63,103 +59,12 @@
     </div>
     @include('common.footer')
     <!-- Scripts -->
-
+    
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
-    
-<script>
-    $(document).ready(function(){
-        addProducto('#addProductos');
-        GetTabla('#tDatos');
-        
-    })
-
-   
-
-            function GetTabla(tabla){
-                
-                var table =  $(tabla).DataTable( {
-        
-                    "searching": true,
-                    "destroy": true,
-                    responsive: true,
-                    "serverSide": true,
-                    "ajax": "{{ url('Producto') }}",
-                    "type" : "GET",
-                    'dataType': 'json',
-                    "columns": [
-                        { data: 'ID' , width: 100},
-                        { data: 'Pnombre' ,width: 100},
-                    ],
-                    dom: 'Bfrtip',
-                    lengthMenu: [
-                        [ 5,10, 25, 50, -1 ],
-                        [ '5 Filas','10 Filas', '25 Filas', '50 Filas', 'Todo' ]
-                    ],
-                    buttons: [
-                        
-                        
-                        {
-                            extend:'excel',
-                            className: 'btn-success',
-                            init: function(api, node, config) {
-                            $(node).removeClass('btn-secondary')
-                            }
-                        },
-                        {
-                            extend:'pageLength',
-                            className: 'btn-primary',
-                            init: function(api, node, config) {
-                            $(node).removeClass('btn-secondary')
-                            }
-                        }
-                    ],
-                    "language": {
-                        buttons: {
-                        pageLength: {
-                            _: "Mostrar %d Registros",
-                            '-1': "Todos"
-                            }
-                        },
-                        "lengthMenu": "Display _MENU_ records",
-                        "info": "_TOTAL_ registros",
-                        "search": "Buscar",
-                        "paginate": {
-                            "next": ">>",
-                            "previous": "<<",
-                        },
-                        "loadingRecords": "Cargando...",
-                        "processing": "Procesando...",
-                        "emptyTable": "No hay datos",
-                        "zeroRecords": "No hay coincidencias",
-                        "infoEmpty": "Mostrando registros del …un total de 0 registros",
-                        "infoFiltered": "(filtrado de un total de _MAX_ registros)"
-                    
-                    }       
-                });
-
-                
-
-                // table.columns().every( function () {
-                //     var that = this;
-
-                //         $( 'input', this.footer() ).on( 'keyup change', function () {
-                //             if ( that.search() !== this.value ) {
-                                
-                //                 that
-                                    
-                //                     .search( this.value )
-                //                     .draw();
-                //             }
-                //         });
-                //     } );
-            }
-
-
-</script>
-
+    <script src="{{ asset('js/Datatables/TableProducto.js') }}"></script>
+    @yield('Table')
 </body>
 
 </html>
