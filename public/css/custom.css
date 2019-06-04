@@ -1,0 +1,24 @@
+.float {
+    display: block;
+}
+
+input,
+select {
+    background-color: #e6eeff !important;
+}
+
+.tData {
+    margin-top: 25px;
+}
+
+.Fdata {
+    margin-bottom: 35px;
+}
+
+#snoAlertBox{
+    display:none;
+}
+
+#snoAlertBoxE{
+    display:none;
+}
