@@ -25,6 +25,7 @@ Route::get('Producto','menu@viewProducto');
 Route::get('Categoria','menu@viewCateogira');
 Route::get('TablaCategoria','menu@GetTablaC');
 Route::get('categorias','menu@addCategorias');
-Route::get('SubCategoria','menu@viewSubCategoria');
+Route::get('SubCategorias','menu@viewSubCategoria');
 Route::get('TablaSubCategoria','menu@GetTablaS');
 Route::get('AddSubCategoria','menu@addSCategorias');
+Route::get('Mercado','menu@VaciadoMercado');

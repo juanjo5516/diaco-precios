@@ -1,14 +1,17 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Datatables;
+use Carbon\Carbon;
 
 class menu extends Controller
 {
 
+    
 
 
     public function GetSelectMedida(){
@@ -130,5 +133,36 @@ class menu extends Controller
         return view('menu.addSubCategoria');
     }
 
+    public function UserLogin(){
+        $user = DB::table('diaco_usuario')
+                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.nombre_sede as sede','diaco_usuario.nombre')->where('diaco_usuario.id_usuario', '=', 1)->get();
+        return $user;
+    }
+    
+    public function VaciadoMercado(){
+        $date = Carbon::now();
+        $nusuario = $this->UserLogin();
+        $date = $date->format('d-m-Y');
+        $categoria = DB::table("categoriaCBA")->select('id_Categoria as id','nombre as nombre')->get();
+        $producto = DB::table("productoCBA")->select('id_producto as id','nombre as Pnombre')->get();
+        $medida = DB::table('medida')->select('id_medida as id','nombre as nombre')->get();
+        return view('menu.addMercado',['fecha' => $date,'Nsede' => $nusuario,'collection' => $categoria, 'producto' => $producto,
+        'medida' => $medida]);
+    }
+
     
 }
+
+/*
+
+SELECT usuario.*,sede.nombre_sede FROM diaco_usuario usuario
+	inner join diaco_sede sede
+        ON sede.id_diaco_sede = usuario.id_sede_diaco
+
+
+        DB::table('users')
+            ->join('contacts', 'users.id', '=', 'contacts.user_id')
+            ->join('orders', 'users.id', '=', 'orders.user_id')
+            ->select('users.*', 'contacts.phone', 'orders.price')
+            ->get();
+        */
