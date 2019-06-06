@@ -95,22 +95,22 @@
             </div>
         </div>
     
-        <div class="row ">
-                <div class="col-md-12 mb-12">
-                    <div class="card mb-12">
-                        <div class="card-header text-left">
-                            Productos
-                        </div>
-                        <div class="card-body">
-                            <div class="row">      
-                                
-                                <div class="col-12 Linea">
+    <div class="row ">
+            <div class="col-md-12 mb-12">
+                <div class="card mb-12">
+                    <div class="card-header text-left">
+                        Productos
+                    </div>
+                    <div class="card-body">
+                        <div class="row">      
+                            <div class="col-12 Linea">
+                                <form id="DproductoT">
                                     <table class="table " >
                                         <tbody>
                                             <tr>
                                                 <td  class="CData">Producto:</td>
                                                     <td colspan="3" class="CResult">
-                                                        <select class="form-control" name="Dcategoria" id="Dcategoria">
+                                                        <select class="form-control" name="Dproducto" id="Dproducto">
                                                             @foreach ($producto as $item)
                                                                 <option  value="{{ $item->id }}">{{ $item->Pnombre }}</option>
                                                             @endforeach
@@ -120,32 +120,57 @@
                                             <tr>
                                                 <td class="CData">Medida:</td>
                                                 <td style="width:350px">
-                                                    <select class="form-control" name="Dcategoria" id="Dcategoria">
-                                                            @foreach ($medida as $item)
-                                                                <option  value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                                    <select class="form-control" name="Dmedida" id="Dmedida">
+                                                            @foreach ($medida as $medidas)
+                                                                <option  value="{{ $medidas->id }}">{{ $medidas->nombre }}</option>
                                                             @endforeach
                                                     </select>
                                                 </td>
                                                 <td class="CDataS">Precio:</td>
                                                 <td style="width:350px;">
                                                     <input type="text" class="form-control" name="Dprecio" id="Dprecio" placeholder="">                                                      
-                                                 </td>
+                                                </td>
                                             </tr>                                        
                                         </tbody>
                                     </table>
-                                    <table class="table" id="TDProductos">
-                                        <thead class="table-dark">
-                                            <tr>
-                                                <th>Producto</th>
-                                                <th>Medida</th>
-                                                <th>Precio</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
+                                    <div class="Pagrega">
+                                            <button type="submit" class="btn btn-primary" >Ingresar</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-12 mb-12">
+            <div class="card mb-12">
+                <div class="card-header text-left">
+                    Detalle
+                </div>
+                <div class="card-body">
+                    <div class="row">      
+                        <div class="col-12 Linea">
+                            <table class="table" id="TDProductos">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Medida</th>
+                                        <th>Precio</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
+</div>
+
+
+
+
+

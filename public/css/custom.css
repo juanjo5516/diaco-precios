@@ -70,3 +70,9 @@ select {
     border:1px solid #e6e6e6;
     padding: 2em;
 }
+
+.Detalle-header{
+    width: 100% !important;
+    background-color: #fea;
+    
+}

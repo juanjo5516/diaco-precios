@@ -60,6 +60,8 @@ function GetTabla(tabla,link){
     });
 }
 
+
+
 function GetTablaSub(tabla,link){
     var table =  $(tabla).DataTable( {
         "searching": true,

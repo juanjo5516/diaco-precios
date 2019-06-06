@@ -62,6 +62,18 @@ class menu extends Controller
         }
     }
 
+    public function GetTablaM(){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("medida")->select('nombre as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+
     /*Add Data */
     public function addProductos(Request $request){
         DB::beginTransaction();
@@ -119,6 +131,26 @@ class menu extends Controller
         
     }
 
+    public function addMedidas(Request $request){
+        DB::beginTransaction();
+
+        if($request->nombreP != ""){
+            try {
+                $query = DB::statement("exec addMedidaCBA '" .$request->nombreP. "'");
+                print $query;
+                DB::commit();
+            } catch(\Exceptio $e){
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }
+        
+        
+    }
+
+    
 
     /* view */
     public function viewProducto(){
@@ -133,6 +165,9 @@ class menu extends Controller
         return view('menu.addSubCategoria');
     }
 
+    public function viewMedida(){
+        return view('menu.addMedida');
+    }
     public function UserLogin(){
         $user = DB::table('diaco_usuario')
                     ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.nombre_sede as sede','diaco_usuario.nombre')->where('diaco_usuario.id_usuario', '=', 1)->get();
@@ -150,6 +185,9 @@ class menu extends Controller
         'medida' => $medida]);
     }
 
+    public function imprimir(){
+        print "si";
+    }
     
 }
 
