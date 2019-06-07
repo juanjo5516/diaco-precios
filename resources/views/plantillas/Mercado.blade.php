@@ -15,16 +15,18 @@
                             Sede:
                         </td>
                         <td colspan="5" class="column-data">
-                            Sede central
+                            @foreach($Nsede as $key)
+                                {{ $key->sede }}
+                            @endforeach
                         </td>
                         <td  class="column-title">
                             Categoria:
                         </td>
                         <td colspan="5" class="column-data-select">
                             <select name="" id="" class="form-control">
-                                <option value="">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
+                                @foreach ($collection as $item)
+                                    <option  value="{{ $item->id }}">{{ $item->nombre }}</option>
+                                @endforeach
                             </select>
                         </td>
                     </tr>
@@ -34,7 +36,9 @@
                             Verificador:
                         </td>
                         <td colspan="5" class="column-data">
-                            Juan José Jolón Granados
+                            @foreach($Nsede as $key)
+                               {{ $key->nombre }}
+                            @endforeach
                         </td>
                         <td  class="column-title">
                             Establecimiento:
@@ -67,15 +71,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <form id="DproductoT">
+                        {{-- <form id="DproductoT">
                             <td  class="column-title">
                                 Producto:
                             </td>
                             <td colspan="3" class="column-data">
                                 <select name="Dproducto" id="Dproducto" class="form-control">
-                                    <option value="">Producto 1</option>
-                                    <option value="">Producto 2</option>
-                                    <option value="">Producto 3 </option>
+                                    @foreach ($producto as $item)
+                                        <option  value="{{ $item->id }}">{{ $item->Pnombre }}</option>
+                                    @endforeach
                                 </select>
                             </td>
                             <td  class="column-title">
@@ -83,29 +87,30 @@
                             </td>
                             <td colspan="3" class="column-data-select">
                                 <select name="Dmedida" id="Dmedida" class="form-control">
-                                    <option value="">Libra</option>
-                                    <option value="">Manojo</option>
-                                    <option value="">Mercado 3 </option>
+                                    @foreach ($medida as $medidas)
+                                        <option  value="{{ $medidas->id }}">{{ $medidas->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </td>
                             <td  class="column-title">
                                     Precio:
                             </td>
                             <td colspan="3" class="column-data-select">
-                                <input  class="form-control" type="text" name="Dprecio" id="Dprecio" value="Q 25.65"  required>
+                                <input  class="form-control" type="text" name="Dprecio" id="Dprecio"  required>
                             </td>
                         
                         </tr>
-                        <tr >
+                        <tr > --}}
                             <td colspan="12" class="fecha">
-                                    <button type="submit" class="btn btn-primary" >Ingresar Producto</button>
+                                    <button type="button" class="btn btn-primary" id="addLinea">Ingresar Producto</button>
                             </td>
-                        </tr>
-                    </form>
+                    </tr>
+                    {{-- </form> --}}
                     <tr>
                         <table class="table" id="TDProductos">
                             <thead class="table-dark">
                                 <tr>
+                                    <th>#</th>
                                     <th>Producto</th>
                                     <th>Medida</th>
                                     <th>Precio</th>
@@ -114,9 +119,12 @@
                         </table>
                     </tr>
                     <td colspan="12" class="fecha">
-                            <button type="submit" class="btn btn-success" >Almacenar Boleta</button>
+                            <button type="button" class="btn btn-success" id="almacenar">Almacenar Boleta</button>
                     </td>
                 </table>
+                <div id="Djson">
+
+                </div>
             </div>
     </div>
 </div>

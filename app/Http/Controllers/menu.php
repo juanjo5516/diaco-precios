@@ -181,26 +181,14 @@ class menu extends Controller
         $categoria = DB::table("categoriaCBA")->select('id_Categoria as id','nombre as nombre')->get();
         $producto = DB::table("productoCBA")->select('id_producto as id','nombre as Pnombre')->get();
         $medida = DB::table('medida')->select('id_medida as id','nombre as nombre')->get();
-        return view('menu.addMercado',['fecha' => $date,'Nsede' => $nusuario,'collection' => $categoria, 'producto' => $producto,
-        'medida' => $medida]);
-    }
-
-    public function imprimir(){
-        print "si";
+        return view('menu.addMercado',
+        [
+            'fecha' => $date,
+            'Nsede' => $nusuario,
+            'collection' => $categoria, 
+            'producto' => $producto,
+            'medida' => $medida
+        ]);
     }
     
 }
-
-/*
-
-SELECT usuario.*,sede.nombre_sede FROM diaco_usuario usuario
-	inner join diaco_sede sede
-        ON sede.id_diaco_sede = usuario.id_sede_diaco
-
-
-        DB::table('users')
-            ->join('contacts', 'users.id', '=', 'contacts.user_id')
-            ->join('orders', 'users.id', '=', 'orders.user_id')
-            ->select('users.*', 'contacts.phone', 'orders.price')
-            ->get();
-        */

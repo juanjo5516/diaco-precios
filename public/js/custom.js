@@ -34,36 +34,17 @@ function closeSnoAlertBox(divAlert){
 
 function TablaVacia(table){
     let T = $(table).DataTable({
-        "searching": true,
+        "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        } ],
+        "order": [[ 1, 'asc' ]],
+        "searching": false,
         "destroy": true,
-        dom: 'Bfrtip',
-        lengthMenu: [
-            [ 50, -1 ],
-            [ '50 Filas', 'Todo' ]
-        ],
-        buttons: [
-            {
-                extend:'excel',
-                className: 'btn-success',
-                init: function(api, node, config) {
-                $(node).removeClass('btn-secondary')
-                }
-            },
-            {
-                extend:'pageLength',
-                className: 'btn-primary',
-                init: function(api, node, config) {
-                $(node).removeClass('btn-secondary')
-                }
-            }
-        ],
+        "pagingType": "full_numbers",
+        "paging": false,
         "language": {
-            buttons: {
-            pageLength: {
-                _: "Mostrar %d Registros",
-                '-1': "Todos"
-                }
-            },
             "lengthMenu": "Display _MENU_ records",
             "info": "_TOTAL_ registros",
             "search": "Buscar",
@@ -82,18 +63,27 @@ function TablaVacia(table){
     });
 }
 
-function AddColumna(Djson,producto,medida,precio){
-        console.log(Djson);
+var counter = 0;
+function AddColumna(producto2,medida){
         var t = $('#TDProductos').DataTable();
-        var counter = 1;
+        
         t.row.add( [
-            producto +'<input type="hidden" id="' + counter + '" name="producto'+ counter +'" value="'+ Djson.Dproducto +'"/>',
-            medida +'<input type="hidden" id="' + counter + '" name="producto'+ counter +'" value="'+ Djson.Dmedida +'"/>',
-            precio +'<input type="hidden" id="' + counter + '" name="producto'+ counter +'" value="'+ Djson.Dprecio +'"/>'
+            '',
+            '<select name="Dproducto'+ counter +'" id="Dproducto'+ counter +'" class="form-control">'+producto2+'</select>',
+            medida,
+            '<input type="text" class="form-control" id="' + counter + '" name="precio'+ counter +'" value=""/>'
         ] ).draw( false );
  
         counter++;
+
+        t.on( 'order.dt search.dt', function () {
+            t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+        } ).draw();
     
  
 }
 
+/*'<input type="text" class="form-control" id="' + counter + '" name="producto'+ counter +'" value="'+ counter +'"/>',
+'<input type="text" class="form-control" id="' + counter + '" name="medida'+ counter +'" value="'+ counter +'"/>', */
