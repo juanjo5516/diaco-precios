@@ -2,7 +2,7 @@
 
 
 @section('contenido')
-    @include('plantillas.mercados')
+    @include('plantillas.Mercado')
 @endsection
 
 @section('Table')
@@ -15,7 +15,7 @@
             //GetTablaSub('#TDProductos',"{{ url('Productos') }}");
 
             $('#DproductoT').on( 'submit', function (e) {
-                
+                console.log("asdf");
                 e.preventDefault();
                 var jsonData=$(this).serializeArray()
                     .reduce(function(a, z) { a[z.name] = z.value; return a; }, {});

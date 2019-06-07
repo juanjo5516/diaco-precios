@@ -76,3 +76,18 @@ select {
     background-color: #fea;
     
 }
+.border-shadow {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)  !important;
+    border-radius: 1px  !important;
+}
+
+.column-title{
+    text-align: center;
+    font-weight: bold;
+    width:10%;
+}
+
+.column-data, .column-data-select{
+    width:20%;
+}
+
