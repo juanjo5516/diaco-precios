@@ -18,6 +18,14 @@
             <a class="nav-link" href="Medida">
                     <i class="nav-icon fas fa-angle-right"></i> Medida</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="Mercados">
+                    <i class="nav-icon fas fa-angle-right"></i> Mercado</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="Establecimiento">
+                    <i class="nav-icon fas fa-angle-right"></i> Establecimiento</a>
+        </li>
         <li class="nav-title">Vaciado</li>
         <li class="nav-item nav-dropdown">
             <a class="nav-link nav-dropdown-toggle" href="#">

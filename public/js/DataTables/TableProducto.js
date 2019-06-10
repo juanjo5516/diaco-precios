@@ -9,8 +9,8 @@ function GetTabla(tabla,link){
         "type" : "GET",
         'dataType': 'json',
         "columns": [
-            { data: 'ID' , width: 100},
-            { data: 'Pnombre' ,width: 600},
+            { data: 'ID' , width: 600},
+            { data: 'Pnombre' ,width: 100},
         ],
         dom: 'Bfrtip',
         lengthMenu: [
@@ -18,8 +18,6 @@ function GetTabla(tabla,link){
             [ '5 Filas','10 Filas', '25 Filas', '50 Filas', 'Todo' ]
         ],
         buttons: [
-            
-            
             {
                 extend:'excel',
                 className: 'btn-success',

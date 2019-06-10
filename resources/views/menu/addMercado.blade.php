@@ -8,28 +8,14 @@
 @section('Table')
     <script>
         $(document).ready(function(){
-            
-            
             TablaVacia('#TDProductos');
-            //addGeneral('#addProductos','addProducto','#TDProductos');
-            //GetTablaSub('#TDProductos',"{{ url('Productos') }}");
-
-            // $('#DproductoT').on( 'submit', function (e) {
-            //     e.preventDefault();
-            //     var jsonData=$(this).serializeArray()
-            //         .reduce(function(a, z) { a[z.name] = z.value; return a; }, {});
-            //         producto = $("#Dproducto option:selected").text();
-            //         medida = $("#Dmedida option:selected").text();
-            //         precio = $("#Dprecio").val();
-            //     AddColumna(jsonData,producto,medida,precio);
-            // });
             producto = '<select name="Dproducto" id="Dproducto" class="form-control"> @foreach ($producto as $item) <option  value="{{ $item->id }}">{{ $item->Pnombre }}</option> @endforeach </select>';
             producto2 = '@foreach ($producto as $item) <option  value="{{ $item->id }}">{{ $item->Pnombre }}</option> @endforeach';
             medida = '<select name="Dmedida" id="Dmedida" class="form-control"> @foreach ($medida as $medidas) <option  value="{{ $medidas->id }}">{{ $medidas->nombre }}</option> @endforeach </select>';
+            medida2 = '@foreach ($medida as $medidas) <option  value="{{ $medidas->id }}">{{ $medidas->nombre }}</option> @endforeach ';
             $('#addLinea').on('click',function () {
-                AddColumna(producto2,medida);
+                AddColumna(producto2,medida2);
             });
-
             $('#almacenar').on('click',function(){               
                 t = $('#TDProductos').DataTable().data();
                 ar = $()
@@ -38,23 +24,31 @@
                 };
                 for (var i = 0; i < t.rows()[0].length; i++) { 
                     ar = ar.add(t.row(i).node())
-                    
                 }
                 json_obj = {}
                 ar.find('select,input,textarea').each(function(i, el) {
                     json_obj[$(el).attr('name')] = $(el).val();
                 });
-                
-                
-                
-                
-                
+                paso = JSON.stringify(json_obj);
+                /*LLenado a controler*/
+                //addGeneral('#addVaciados','addProducto','#TDProductos')
                 
                 /*$('#Djson').text(ar.find('select,input,textarea').serialize());*/
-                $('#Djson').text(JSON.stringify(json_obj));
+                //$('#Djson').text(paso);
             })
+            $('#mercadoVaciado').change(function(e){
+                e.preventDefault();
+                let parametros = $(this).serialize();
+                ChangeAddress(parametros,'GetAddress','#direccionMercadoVaciado');
+            });
             
-            
+            $('#establecimientoVaciado').change(function(e){
+                e.preventDefault();
+                let parametros = $(this).serialize();
+                ChangeAddress(parametros,'GetAddressEstablecimiento','#direccionEstablecimientoVaciado')
+            })
+            addGeneral('#addVaciados','AddVaciadoMercado','')
+            /*AddVaciadoMercado*/
         })
     </script>
 @endsection

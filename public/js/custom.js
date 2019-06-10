@@ -2,6 +2,7 @@ function addGeneral(form,link,tabla) {
     $(form).submit(function(e) {
         e.preventDefault();
         let parametros = $(this).serialize();
+        console.log(parametros);
         $.ajax({
             data: parametros,
             url: link,
@@ -21,7 +22,6 @@ function addGeneral(form,link,tabla) {
                 }
             }
         })
-
     })
 }
 
@@ -64,14 +64,14 @@ function TablaVacia(table){
 }
 
 var counter = 0;
-function AddColumna(producto2,medida){
+function AddColumna(producto2,medida2){
         var t = $('#TDProductos').DataTable();
         
         t.row.add( [
             '',
-            '<select name="Dproducto'+ counter +'" id="Dproducto'+ counter +'" class="form-control">'+producto2+'</select>',
-            medida,
-            '<input type="text" class="form-control" id="' + counter + '" name="precio'+ counter +'" value=""/>'
+            '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control">'+producto2+'</select>',
+            '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control">'+ medida2 +'</select>', 
+            '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>'
         ] ).draw( false );
  
         counter++;
@@ -85,5 +85,19 @@ function AddColumna(producto2,medida){
  
 }
 
-/*'<input type="text" class="form-control" id="' + counter + '" name="producto'+ counter +'" value="'+ counter +'"/>',
-'<input type="text" class="form-control" id="' + counter + '" name="medida'+ counter +'" value="'+ counter +'"/>', */
+
+function ChangeAddress(parametros,link,textbox){
+    $.ajax({
+        url: link, 
+        type: 'get',
+        dataType: 'json',
+        data: parametros
+    })
+      .done(function(respuesta) {
+          $(textbox).val(respuesta[0]['direccion']);
+          })
+        .fail(function() {
+            $(textbox).val("sin dirección");
+            console.log("error");
+        })
+}

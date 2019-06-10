@@ -74,6 +74,52 @@ class menu extends Controller
         }
     }
 
+    public function GetChangeAddress(Request $request){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table('mercadoCBA')->select('direccionMercado as direccion')->where('idMercado', '=', $request->mercadoVaciado)->get();
+            return $DataT;
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+
+    public function GetChangeAddressEstablecimiento(Request $request){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table('EstablecimientoCBA')->select('direccionEstablecimiento as direccion')->where('idEstablecimiento', '=', $request->establecimientoVaciado)->get();
+            return $DataT;
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+    public function GetTablaMercado(){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("mercadoCBA")->select('nombreMercado as ID','direccionMercado as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+
+    public function GetTablaEstablecimiento(){
+        DB::beginTransaction();
+        try {
+            $DataT = DB::table("EstablecimientoCBA")->select('nombreEstablecimiento as ID','direccionEstablecimiento as Pnombre')->get();
+            return datatables()->collection($DataT)->toJson();
+            DB::commit();
+        }catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
     /*Add Data */
     public function addProductos(Request $request){
         DB::beginTransaction();
@@ -150,11 +196,85 @@ class menu extends Controller
         
     }
 
+    public function addDetalleMercados(Request $request){
+        DB::beginTransaction();
+
+        if($request->nombreM != ""){
+            try {
+                $query = DB::insert('INSERT INTO mercadoCBA(nombreMercado, direccionMercado) values (?, ?)', [$request->nombreM, $request->direccionM]);
+                print $query;
+                DB::commit();
+            } catch(\Exceptio $e){
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }   
+    }
+
+    public function AddDestablecimiento(Request $request){
+        DB::beginTransaction();
+
+        if($request->nombreM != ""){
+            try {
+                $query = DB::insert('INSERT INTO EstablecimientoCBA(nombreEstablecimiento, direccionEstablecimiento) values (?, ?)', [$request->nombreM, $request->direccionM]);
+                print $query;
+                DB::commit();
+            } catch(\Exceptio $e){
+                DB::rollBack();
+                print $e;
+            }
+        }else{
+            print 'No se puede ingresar, por falta de datos';
+        }
+    }
     
 
-    /* view */
+    public function AddMercadoVaciado(Request $request){
+        DB::beginTransaction();
+       
+        $valor = sizeof($request->Dproducto);
+        try {
+            for ($i=0; $i  < $valor ; $i++) { 
+                
+                $query = DB::statement("exec AddVaciado '?',?,?,?,?,'?',?,?,'?',?,?,?",
+                [
+                    $request->fechaVaciado,
+                    (int)$request->sedeVaciado,
+                    (int)$request->verificadorVaciado,
+                    1,
+                    (int)$request->mercadoVaciado,
+                    $request->direccionMercadoVaciado,
+                    (int)$request->categoriaVaciado,
+                    (int)$request->establecimientoVaciado,
+                    $request->direccionEstablecimientoVaciado,
+                    (int)$request->Dproducto[$i],
+                    (int)$request->Dmedida[$i],
+                    (int)$request->precio[$i]
+
+                ]);
+                //print $query;
+            }  
+            /* exec AddVaciado 10-06-2019,Sede Guatemala,Franklyn Algaba,1,2,zona 2,1,2,lote 8 calle 4 zona 8,17,1,4)
+                               '2019-06-10',1,1,1,1,'zona 1',1,1,'1-25 zona 1',1,1,2
+                               '10-06-2019',1,1,1,2,'zona 2',1,2,'lote 8 calle 4 zona 8',1,1,85*/
+
+            DB::commit();
+        } catch (\Exceptio $e) {
+            DB::rollBack();
+            print $e;
+        }
+    }
+
+
+    /* view  */
     public function viewProducto(){
         return view ('menu.addProducto');
+    }
+
+    public function viewMercado(){
+        return view ('menu.addDetalleMercado');
     }
 
     public function viewCateogira(){
@@ -165,12 +285,16 @@ class menu extends Controller
         return view('menu.addSubCategoria');
     }
 
+    public function viewEstablecimiento(){
+        return view('menu.addEstablecimiento');
+    }
+
     public function viewMedida(){
         return view('menu.addMedida');
     }
     public function UserLogin(){
         $user = DB::table('diaco_usuario')
-                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.nombre_sede as sede','diaco_usuario.nombre')->where('diaco_usuario.id_usuario', '=', 1)->get();
+                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
         return $user;
     }
     
@@ -181,13 +305,17 @@ class menu extends Controller
         $categoria = DB::table("categoriaCBA")->select('id_Categoria as id','nombre as nombre')->get();
         $producto = DB::table("productoCBA")->select('id_producto as id','nombre as Pnombre')->get();
         $medida = DB::table('medida')->select('id_medida as id','nombre as nombre')->get();
+        $mercado = DB::table('mercadoCBA')->select('idMercado as id','nombreMercado as nombre','direccionMercado as direccion')->get();
+        $establecimiento = DB::table('EstablecimientoCBA')->select('idEstablecimiento as id','nombreEstablecimiento as nombre','direccionEstablecimiento as direccion')->get();
         return view('menu.addMercado',
         [
             'fecha' => $date,
             'Nsede' => $nusuario,
             'collection' => $categoria, 
             'producto' => $producto,
-            'medida' => $medida
+            'medida' => $medida,
+            'mercado' => $mercado,
+            'establecimiento' => $establecimiento
         ]);
     }
     
