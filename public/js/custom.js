@@ -1,8 +1,8 @@
-function addGeneral(form,link,tabla) {
+var counter = 0;
+function addGeneral(form,link,tabla,tipo) {
     $(form).submit(function(e) {
         e.preventDefault();
         let parametros = $(this).serialize();
-        console.log(parametros);
         $.ajax({
             data: parametros,
             url: link,
@@ -11,11 +11,21 @@ function addGeneral(form,link,tabla) {
             cache: true,
             processData: false,
             success: function(response) {
-                if(response == "1"){
-                    $(tabla).DataTable().ajax.reload();
-                    $('form :input').val('');
-                    $("#snoAlertBox").fadeIn();
-                    closeSnoAlertBox("#snoAlertBox");   
+                if(response == 1){
+                    if (tipo) {
+                        $(tabla).DataTable().ajax.reload();
+                        LimpiarSelect();
+                        $("#snoAlertBox").fadeIn();
+                        closeSnoAlertBox("#snoAlertBox");
+                    }else{
+                        $(tabla).DataTable().clear().destroy();
+                        counter = 0;
+                        TablaVacia('#TDProductos');
+                        LimpiarSelect();
+                        $("#snoAlertBox").fadeIn();
+                        closeSnoAlertBox("#snoAlertBox");
+                    }
+                       
                 }else{
                       $("#snoAlertBoxE").fadeIn();
                       closeSnoAlertBox("#snoAlertBoxE"); 
@@ -25,7 +35,17 @@ function addGeneral(form,link,tabla) {
     })
 }
 
-function addVaciado(form,link,tabla) {
+function LimpiarSelect(){
+    // $('select').each(function(){ 
+    //     $(this).find('option:first').prop('selected', 'selected'); 
+    // });
+    $('#categoriaVaciado').find('option:first').prop('selected', 'selected'); 
+    $('#mercadoVaciado').find('option:first').prop('selected', 'selected'); 
+    $('#establecimientoVaciado').find('option:first').prop('selected', 'selected'); 
+    $('#direccionMercadoVaciado').val('');
+    $('#direccionEstablecimientoVaciado').val('');
+}
+function Vaciado(form,link,tabla) {
     $(form).submit(function(e) {
         e.preventDefault();
         let parametros = $(this).serialize();
@@ -41,8 +61,7 @@ function addVaciado(form,link,tabla) {
                 if(response == "1"){
                     $(tabla).DataTable().destroy();
                     $('form :input').val('');
-                    $("#snoAlertBox").fadeIn();
-                    closeSnoAlertBox("#snoAlertBox");   
+                      
                 }else{
                       $("#snoAlertBoxE").fadeIn();
                       closeSnoAlertBox("#snoAlertBoxE"); 
@@ -92,7 +111,7 @@ function TablaVacia(table){
     });
 }
 
-var counter = 0;
+
 function AddColumna(producto2,medida2){
         var t = $('#TDProductos').DataTable();
         

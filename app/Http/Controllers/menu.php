@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Datatables;
 use Carbon\Carbon;
+use Alert;
 
 class menu extends Controller
 {
@@ -312,5 +313,5 @@ class menu extends Controller
             'establecimiento' => $establecimiento
         ]);
     }
-    
+
 }

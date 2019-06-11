@@ -47,7 +47,7 @@
                 let parametros = $(this).serialize();
                 ChangeAddress(parametros,'GetAddressEstablecimiento','#direccionEstablecimientoVaciado')
             })
-            addVaciado('#addVaciados','AddVaciadoMercado','#TDProductos')
+            addGeneral('#addVaciados','AddVaciadoMercado','#TDProductos',false)
             /*AddVaciadoMercado*/
         })
     </script>

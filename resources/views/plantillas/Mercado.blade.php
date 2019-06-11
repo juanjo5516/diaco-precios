@@ -30,6 +30,7 @@
                             {{-- categoria --}}
                             <td colspan="5" class="column-data-select" >
                                 <select name="categoriaVaciado" id="categoriaVaciado" class="form-control">
+                                    <option value="-1">Seleccione una Opción</option>
                                     @foreach ($collection as $item)
                                         <option  value="{{ $item->id }}">{{ $item->nombre }}</option>
                                     @endforeach
@@ -58,6 +59,7 @@
                             {{-- Mercado --}}
                             <td colspan="5" class="column-data">
                                 <select name="mercadoVaciado" id="mercadoVaciado" class="form-control">
+                                    <option value="-1">Seleccione una Opción</option>
                                     @foreach ($mercado as $mercados)
                                         <option value="{{ $mercados->id }}">{{ $mercados->nombre }}</option>
                                     @endforeach
@@ -78,6 +80,7 @@
                             {{-- Establecimiento --}}
                             <td colspan="5" class="column-data-select">
                                 <select name="establecimientoVaciado" id="establecimientoVaciado" class="form-control">
+                                    <option value="-1">Seleccione una Opción</option>
                                     @foreach ($establecimiento as $Establecimiento)
                                         <option value="{{ $Establecimiento->id }}">{{ $Establecimiento->nombre }}</option>
                                     @endforeach
@@ -113,9 +116,8 @@
                                 <button type="submit" class="btn btn-success" id="almacenar">Almacenar Boleta</button>
                         </td>
                     </table>
-                    <div id="Djson">
-
-                    </div>
+                    <div id="snoAlertBox" class="alert alert-warning" data-alert="alert">Boleta Almacenada.</div>
+                    <div id="snoAlertBoxE" class="alert alert-danger" data-alert="alert">Error al ingresar la Boleta.</div>
                 </div>
         </div>
     </div>

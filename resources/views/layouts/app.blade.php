@@ -62,6 +62,7 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
     <script src="{{ asset('js/Datatables/TableProducto.js') }}"></script>
+    
     @yield('Table')
 </body>
 
