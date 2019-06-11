@@ -232,39 +232,33 @@ class menu extends Controller
     
 
     public function AddMercadoVaciado(Request $request){
-        DB::beginTransaction();
+         DB::beginTransaction();
        
-        $valor = sizeof($request->Dproducto);
-        try {
-            for ($i=0; $i  < $valor ; $i++) { 
-                
-                $query = DB::statement("exec AddVaciado '?',?,?,?,?,'?',?,?,'?',?,?,?",
+         $valor = sizeof($request->Dproducto);
+         try {
+             for ($i=0; $i  < $valor ; $i++) { 
+                $query = DB::statement("exec AddVaciado :fecha,:sede,:verificador,:mercado,:NombreMercado,:direccionMercado,:categoria,:establecimiento,:direccionEstablecimiento,:Dproducto,:Dmedida,:Dprecio",
                 [
-                    $request->fechaVaciado,
-                    (int)$request->sedeVaciado,
-                    (int)$request->verificadorVaciado,
-                    1,
-                    (int)$request->mercadoVaciado,
-                    $request->direccionMercadoVaciado,
-                    (int)$request->categoriaVaciado,
-                    (int)$request->establecimientoVaciado,
-                    $request->direccionEstablecimientoVaciado,
-                    (int)$request->Dproducto[$i],
-                    (int)$request->Dmedida[$i],
-                    (int)$request->precio[$i]
-
-                ]);
-                //print $query;
-            }  
-            /* exec AddVaciado 10-06-2019,Sede Guatemala,Franklyn Algaba,1,2,zona 2,1,2,lote 8 calle 4 zona 8,17,1,4)
-                               '2019-06-10',1,1,1,1,'zona 1',1,1,'1-25 zona 1',1,1,2
-                               '10-06-2019',1,1,1,2,'zona 2',1,2,'lote 8 calle 4 zona 8',1,1,85*/
-
-            DB::commit();
-        } catch (\Exceptio $e) {
-            DB::rollBack();
-            print $e;
-        }
+                    'fecha' => $request->fechaVaciado,
+                    'sede' => $request->sedeVaciado,
+                    'verificador' => $request->verificadorVaciado,
+                    'mercado' => 1,
+                    'NombreMercado' => $request->mercadoVaciado,
+                    'direccionMercado' => $request->direccionMercadoVaciado,
+                    'categoria' => $request->categoriaVaciado,
+                    'establecimiento' => $request->establecimientoVaciado,
+                    'direccionEstablecimiento' => $request->direccionEstablecimientoVaciado,
+                    'Dproducto' => $request->Dproducto[$i],
+                    'Dmedida' => $request->Dmedida[$i],
+                    'Dprecio' => $request->precio[$i]
+                ]); 
+             } 
+             print $query; 
+             DB::commit();
+         } catch (\Exceptio $e) {
+             DB::rollBack();
+             print $e;
+         }
     }
 
 

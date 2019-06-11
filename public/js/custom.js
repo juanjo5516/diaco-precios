@@ -25,6 +25,35 @@ function addGeneral(form,link,tabla) {
     })
 }
 
+function addVaciado(form,link,tabla) {
+    $(form).submit(function(e) {
+        e.preventDefault();
+        let parametros = $(this).serialize();
+        console.log(parametros);
+        $.ajax({
+            data: parametros,
+            url: link,
+            type: "get",
+            contentType: false,
+            cache: true,
+            processData: false,
+            success: function(response) {
+                if(response == "1"){
+                    $(tabla).DataTable().destroy();
+                    $('form :input').val('');
+                    $("#snoAlertBox").fadeIn();
+                    closeSnoAlertBox("#snoAlertBox");   
+                }else{
+                      $("#snoAlertBoxE").fadeIn();
+                      closeSnoAlertBox("#snoAlertBoxE"); 
+                }
+            }
+        })
+    })
+}
+
+
+
 function closeSnoAlertBox(divAlert){
     window.setTimeout(function () {
       $(divAlert).fadeOut("show")
