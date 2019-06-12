@@ -7,26 +7,39 @@
 @section('Table')
 <script>
         $(document).ready(function(){
-            var analytics = {!! $chart !!}
-            
-            google.charts.load('current', {'packages':['corechart']});
+                var datos = {!! $chart !!} 
+                console.log(datos);
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    datos
+                ]);
 
-            google.charts.setOnLoadCallback(drawChart);
+                var view = new google.visualization.DataView(data);
+                view.setColumns([0, 1,
+                                { calc: "stringify",
+                                    sourceColumn: 1,
+                                    type: "string",
+                                    role: "annotation" },
+                                2]);
 
-            function drawChart()
-            {
-                var data = google.visualization.arrayToDataTable(analytics);
-                console.log(data);
-                
                 var options = {
-                title : 'data'
+                    title: "Density of Precious Metals, in g/cm^3",
+                    width: 600,
+                    height: 400,
+                    bar: {groupWidth: "95%"},
+                    legend: { position: "none" },
                 };
-                var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
-                chart.draw(data, options);
-            }
-            
+                var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+                chart.draw(view, options);
+                };
         })
+
+       
     </script>
+
+
     
 @endsection
 

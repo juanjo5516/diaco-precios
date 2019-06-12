@@ -25,7 +25,7 @@ class ChartController extends Controller
         $array[] = ['Gender', 'Number'];
         foreach($Producto as $key => $value)
         {
-        $array[++$key] = [$value->nombre, $value->precio];
+        $array['data'.++$key] = [$value->nombre, $value->precio];
         }
         //return view('menu.dashboard')->with('chart', json_encode($array));
 
