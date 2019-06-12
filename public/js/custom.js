@@ -1,3 +1,4 @@
+
 var counter = 0;
 function addGeneral(form,link,tabla,tipo) {
     $(form).submit(function(e) {
@@ -12,9 +13,9 @@ function addGeneral(form,link,tabla,tipo) {
             processData: false,
             success: function(response) {
                 if(response == 1){
-                    if (tipo) {
+                    if (tipo == true) {
                         $(tabla).DataTable().ajax.reload();
-                        LimpiarSelect();
+                        $('form :input').val('');
                         $("#snoAlertBox").fadeIn();
                         closeSnoAlertBox("#snoAlertBox");
                     }else{
@@ -33,6 +34,10 @@ function addGeneral(form,link,tabla,tipo) {
             }
         })
     })
+}
+
+function LimpiarText(){
+    $('form :input').val('');
 }
 
 function LimpiarSelect(){

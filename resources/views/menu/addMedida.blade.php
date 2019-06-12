@@ -8,7 +8,7 @@
 @section('Table')
     <script>
         $(document).ready(function(){
-            addGeneral('#addMedida','Medidas','#tMedida',1);
+            addGeneral('#addMedida','Medidas','#tMedida',true);
             GetTablaSub('#tMedida',"{{ url('TablaMedida') }}");  
         })
     </script>

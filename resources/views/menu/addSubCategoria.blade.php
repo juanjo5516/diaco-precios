@@ -8,7 +8,7 @@
 @section('Table')
     <script>
         $(document).ready(function(){
-            addGeneral('#addSubCategorias','AddSubCategoria','#tSCategoria',1);
+            addGeneral('#addSubCategorias','AddSubCategoria','#tSCategoria',true);
             GetTablaSub('#tSCategoria',"{{ url('TablaSubCategoria') }}");
             
         })

@@ -8,7 +8,7 @@
 @section('Table')
     <script>
         $(document).ready(function(){
-            addGeneral('#addMercados','DetalleMercados','#tMercados',1);
+            addGeneral('#addMercados','DetalleMercados','#tMercados',true);
             GetTabla('#tMercados',"{{ url('TablaMercados') }}");  
         })
     </script>

@@ -41,3 +41,5 @@ Route::get('addDestablecimiento','menu@AddDestablecimiento');
 Route::get('GetTablaEstablecimiento','menu@GetTablaEstablecimiento');
 Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
+/*Graficos */
+Route::get('bar-chart', 'ChartController@ChartProductos');
