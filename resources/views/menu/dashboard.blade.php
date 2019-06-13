@@ -8,39 +8,24 @@
 <script>
         $(document).ready(function(){
                 var datos = {!! $chart !!} 
-                console.log(datos);
-                google.charts.load("current", {packages:["corechart"]});
+                
+                google.charts.load("current", {'packages':["corechart"]});
                 google.charts.setOnLoadCallback(drawChart);
                 function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                    datos
-                ]);
+                    var data = google.visualization.arrayToDataTable(datos);
+                    console.log(datos);
+                    var options = {
+                        title: "Movimiento de los Precios en Verduras",
+                        pieHole: 0.4,
 
-                var view = new google.visualization.DataView(data);
-                view.setColumns([0, 1,
-                                { calc: "stringify",
-                                    sourceColumn: 1,
-                                    type: "string",
-                                    role: "annotation" },
-                                2]);
-
-                var options = {
-                    title: "Density of Precious Metals, in g/cm^3",
-                    width: 600,
-                    height: 400,
-                    bar: {groupWidth: "95%"},
-                    legend: { position: "none" },
                 };
-                var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
-                chart.draw(view, options);
+                var chart = new google.visualization.PieChart(document.getElementById("barchart_values"));
+                chart.draw(data, options);
                 };
         })
 
        
-    </script>
-
-
-    
+    </script>  
 @endsection
 
 

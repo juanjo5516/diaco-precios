@@ -17,26 +17,18 @@ class ChartController extends Controller
 	WHERE VAC.id_producto = 6
  */
     function ChartProductos(){
-        $Producto = DB::table('vaciadoCBA')->join('productoCBA','productoCBA.id_producto','=','vaciadoCBA.id_producto')
-        ->select('vaciadoCBA.fecha','vaciadoCBA.precio','productoCBA.nombre')
-        ->where('vaciadoCBA.id_producto','=',6)
-        ->get();
+        // $Producto = DB::table('vaciadoCBA')->join('productoCBA','productoCBA.id_producto','=','vaciadoCBA.id_producto')
+        // ->select('vaciadoCBA.precio','productoCBA.nombre')
+        // ->groupBy('productoCBA.nombre')
+        // ->get();
 
+        $Producto = DB::select('SELECT avg(v.precio) as precio,p.nombre FROM vaciadoCBA v INNER JOIN productoCBA p ON p.id_producto = v.id_producto  GROUP BY p.nombre');
         $array[] = ['Gender', 'Number'];
         foreach($Producto as $key => $value)
         {
-        $array['data'.++$key] = [$value->nombre, $value->precio];
+        $array[++$key] = [$value->nombre, (int)$value->precio];
         }
-        //return view('menu.dashboard')->with('chart', json_encode($array));
 
-
-        // $chart = Charts::create('pie', 'highcharts')
-        //     ->title('My nice chart')
-        //     ->labels(['First', 'Second', 'Third'])
-        //     ->values($Producto[0])
-        //     ->dimensions(1000,500)
-        //     ->responsive(false);
-            
         return view('menu.dashboard')->with('chart', json_encode($array));
         //return $Producto;
     }
