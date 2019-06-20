@@ -11,7 +11,7 @@ function GetTabla(tabla,link){
         "columns": [
             { data: 'ID' , width: 600},
             { data: 'Pnombre' ,width: 100},
-        ],
+        ], 
         dom: 'Bfrtip',
         lengthMenu: [
             [ 5,10, 25, 50, -1 ],
