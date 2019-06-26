@@ -30,7 +30,7 @@
             @include('common.sidebar')
             <button class="sidebar-minimizer brand-minimizer" type="button"></button>
         </div>
-        <main class="main">
+        <main  class="main">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item">
@@ -42,13 +42,13 @@
                         
                         <a class="btn" href="bar-chart">
                             <i class="fas fa-tachometer-alt"></i> &nbsp;Dashboard</a>
-                        <a class="btn" href="#">
-                                <i class="fas fa-cogs"></i> &nbsp;Settings</a>
+                        {{-- <a class="btn" href="#">
+                                <i class="fas fa-cogs"></i> &nbsp;Settings</a> --}}
                     </div>
                 </li>
             </ol>
-            <div class="container-fluid">
-                <div id="ui-view">
+            <div  class="container-fluid">
+                <div id="main">
                     @yield('contenido')
                 </div>
             </div>
@@ -56,6 +56,7 @@
 
     </div>
     @include('common.footer')
+
     <!-- Scripts -->
     
     <script src="{{ asset('js/custom.js') }}"></script>
@@ -65,6 +66,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
     @yield('Table')
+
 </body>
 
 </html>

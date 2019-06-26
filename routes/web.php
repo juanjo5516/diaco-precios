@@ -43,3 +43,7 @@ Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 /*Graficos */
 Route::get('bar-chart', 'ChartController@ChartProductos');
+
+/* Rutas de Editor de Plantillas */
+
+Route::get('Edicion','plantillasController@index');
