@@ -26,7 +26,8 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('edicion-component', require('./components/EdicionPlantilla/edicion.vue').default);
-
+Vue.component('formulario-component',require('./components/EdicionPlantilla/formularioEdicion.vue').default)
+Vue.component('asignacion-component',require('./components/EdicionPlantilla/AsignarSede.vue').default);
 
 const app = new Vue({
     el: '#main'

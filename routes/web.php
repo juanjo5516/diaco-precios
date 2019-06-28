@@ -45,5 +45,7 @@ Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 Route::get('bar-chart', 'ChartController@ChartProductos');
 
 /* Rutas de Editor de Plantillas */
-
 Route::get('Edicion','plantillasController@index');
+Route::get('addPlantillas','plantillasController@store');
+Route::get('AsignarSede','plantillasController@Asede');
+Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');

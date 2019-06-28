@@ -29,7 +29,11 @@
         <li class="nav-title">Plantillas</li>
         <li class="nav-item">
             <a class="nav-link" href=Edicion>
-                <i class="nav-icon fas fa-angle-right"></i> Editor</a>
+                <i class="nav-icon fas fa-angle-right"></i> Editor
+            </a>
+            <a class="nav-link" href=AsignarSede>
+                <i class="nav-icon fas fa-angle-right"></i> Asignación
+            </a>
         </li>
         <li class="nav-title">Vaciado</li>
         <li class="nav-item nav-dropdown">

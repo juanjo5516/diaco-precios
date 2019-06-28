@@ -54,7 +54,7 @@
 @endsection
 
 @section('Ruta')
-    <li class="breadcrumb-item">
+    <li class="breadcrumb-item"> 
         Mercado
     </li>
 @endsection

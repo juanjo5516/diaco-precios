@@ -12,6 +12,7 @@ function addGeneral(form,link,tabla,tipo) {
             cache: true,
             processData: false,
             success: function(response) {
+                console.log(response);
                 if(response == 1){
                     if (tipo == true) {
                         $(tabla).DataTable().ajax.reload();
@@ -21,13 +22,14 @@ function addGeneral(form,link,tabla,tipo) {
                     }else{
                         $(tabla).DataTable().clear().destroy();
                         counter = 0;
-                        TablaVacia('#TDProductos');
+                        TablaVacia(tabla);
                         LimpiarSelect();
                         $("#snoAlertBox").fadeIn();
                         closeSnoAlertBox("#snoAlertBox");
                     }
                        
                 }else{
+                     console.log(response);
                       $("#snoAlertBoxE").fadeIn();
                       closeSnoAlertBox("#snoAlertBoxE"); 
                 }
@@ -35,6 +37,46 @@ function addGeneral(form,link,tabla,tipo) {
         })
     })
 }
+
+function addvue(form) {
+    $(form).submit(function(e) {
+        e.preventDefault();
+        let parametros = $(this).serialize();
+        console.log(parametros);
+        // $.ajax({
+        //     data: parametros,
+        //     url: link,
+        //     type: "get",
+        //     contentType: false,
+        //     cache: true,
+        //     processData: false,
+        //     success: function(response) {
+        //         console.log(response);
+        //         // if(response == 1){
+        //         //     if (tipo == true) {
+        //         //         $(tabla).DataTable().ajax.reload();
+        //         //         $('form :input').val('');
+        //         //         $("#snoAlertBox").fadeIn();
+        //         //         closeSnoAlertBox("#snoAlertBox");
+        //         //     }else{
+        //         //         $(tabla).DataTable().clear().destroy();
+        //         //         counter = 0;
+        //         //         TablaVacia(tabla);
+        //         //         LimpiarSelect();
+        //         //         $("#snoAlertBox").fadeIn();
+        //         //         closeSnoAlertBox("#snoAlertBox");
+        //         //     }
+                       
+        //         // }else{
+        //         //      console.log(response);
+        //         //       $("#snoAlertBoxE").fadeIn();
+        //         //       closeSnoAlertBox("#snoAlertBoxE"); 
+        //         // }
+        //     }
+        // })
+    })
+}
+
 
 function LimpiarText(){
     $('form :input').val('');
@@ -138,6 +180,27 @@ function AddColumna(producto2,medida2){
  
 }
 
+
+function AddColumnaGeneral(producto2,medida2,tabla){
+    var t = $(tabla).DataTable();
+    
+    t.row.add( [
+        '',
+        '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control">'+producto2+'</select>',
+        '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control">'+ medida2 +'</select>', 
+        '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>'
+    ] ).draw( false );
+
+    counter++;
+
+    t.on( 'order.dt search.dt', function () {
+        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+
+
+}
 
 function ChangeAddress(parametros,link,textbox){
     $.ajax({
