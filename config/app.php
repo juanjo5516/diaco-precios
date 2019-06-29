@@ -177,7 +177,7 @@ return [
 
         Yajra\DataTables\DataTablesServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
-       
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

@@ -12,15 +12,21 @@ use App\ListarAsignacion;
 class plantillasController extends Controller
 {
 
+  
 
     public function Asede(){
         $Lista = $this->ListarAsignaciones();
-        $Plantillas = DB::table('plantillasCBA')->select('NombrePlantilla','id')
-        return view('Ediciones.sedes',[
-            'Coleccion' => $Lista
+        $Plantillas = DB::table('NAME_TEMPLATE_CBA')->select('id','NombreTemplate')->get();
+        $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
+     
+        return view('Ediciones.sedes',
+        [
+            'Coleccion' => $Lista,
+            'Plantillas' => $Plantillas,
+            'Sedes' =>$sede
         ]);
     }
-    select distinct NombrePlantilla from plantillasCBA
+    // select distinct NombrePlantilla from plantillasCBA
     
     public function index(){
         $date = Carbon::now();
@@ -120,11 +126,13 @@ class plantillasController extends Controller
 
         $Lista = new ListarAsignacion;
      
-        $Lista->idPlantilla = $request->Nplantilla;
-        $Lista->idSede  = $request->categoriaVaciado;
+        $Lista->idPlantilla = $request->SPlantilla;
+        $Lista->idSede  = $request->SSede;
         $Lista->created_at  = $TIMESTAMP;
         $Lista->estatus  = 1;
         $Lista->save();
-
+        print $Lista;
     }
+
+
 }

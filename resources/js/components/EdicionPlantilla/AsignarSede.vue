@@ -7,21 +7,26 @@
         id="vue-Asignacion"
         
     >
-        <el-form-item label="Plantillas: ">
-            <el-select name="idPlantilla" class="vue-select" v-model="formInline.region" placeholder="Plantillas">
-                <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
-            </el-select>
+        <el-form-item label="Plantillas: "> 
+          <select name="SPlantillas" id="SPlantilla" class="form-control">
+              <option >Seleccione una Opción</option>
+              <option v-for="(item, idx) in coleccion" :key="idx"  :value="item.id">{{ item.NombreTemplate}}</option>
+          </select>         
         </el-form-item>
         
         <el-form-item label="Sedes: ">
-            <el-select  name="idSede" class="vue-select" v-model="formInline.region" placeholder="Sedes">
-                <el-option label="Zone one" value="shanghai"></el-option>
-                <el-option label="Zone two" value="beijing"></el-option>
-            </el-select>
+         <select name="SSede" id="SSede" class="form-control">
+            <option >Seleccione una Opción</option>
+              <option v-for="(item, idx) in Sedes" :key="idx"  :value="item.id_diaco_sede">{{ item.nombre_sede}}</option>
+          </select> 
+            <!-- <el-select  name="idSede" class="vue-select" v-model="id_diaco_sede" placeholder="Sedes">
+                <el-option v-for="(item,idx) in Sedes" :key="idx" :label=" item.nombre_sede " :value=" item.id_diaco_sede "></el-option>
+               
+            </el-select> -->
         </el-form-item>
 
         <el-form-item>
-            <button type="submit" class="btn btn-success" id="btnAsignar">Asignar</button>
+            <button @click="onSubmit" type="submit" class="btn btn-success" id="btnAsignar">Asignar</button>
         </el-form-item>
     </el-form>
 
@@ -111,18 +116,32 @@
 
 <script>
   export default {
-    
+    props: ['coleccion','Sedes'],
     data() {
       return {
         formInline: {
-          user: '',
-          region: ''
+          selectPlantilla:'',
+          selectSede:''
         },
         'tableData' : [],
-        search: ''
+        search: '',
+         SPlantilla:'',
+         SSede:''
       }
     },
-    methods: {
+    
+     methods: {
+      onSubmit: function(){
+        var url = 'http://128.5.101.19:8000/aLista';
+        axios.post(url, {
+            SPlantilla: this.SPlantilla,
+            SSede: this.SSede
+        }).then(response =>{
+          console.log("exito");
+        }).catch(error => {
+				console.log(error.message)
+        });
+      },
       resetDateFilter() {
         this.$refs.filterTable.clearFilter('date');
       },
