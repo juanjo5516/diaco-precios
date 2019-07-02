@@ -43,37 +43,6 @@ function addvue(form) {
         e.preventDefault();
         let parametros = $(this).serialize();
         console.log(parametros);
-        // $.ajax({
-        //     data: parametros,
-        //     url: link,
-        //     type: "get",
-        //     contentType: false,
-        //     cache: true,
-        //     processData: false,
-        //     success: function(response) {
-        //         console.log(response);
-        //         // if(response == 1){
-        //         //     if (tipo == true) {
-        //         //         $(tabla).DataTable().ajax.reload();
-        //         //         $('form :input').val('');
-        //         //         $("#snoAlertBox").fadeIn();
-        //         //         closeSnoAlertBox("#snoAlertBox");
-        //         //     }else{
-        //         //         $(tabla).DataTable().clear().destroy();
-        //         //         counter = 0;
-        //         //         TablaVacia(tabla);
-        //         //         LimpiarSelect();
-        //         //         $("#snoAlertBox").fadeIn();
-        //         //         closeSnoAlertBox("#snoAlertBox");
-        //         //     }
-                       
-        //         // }else{
-        //         //      console.log(response);
-        //         //       $("#snoAlertBoxE").fadeIn();
-        //         //       closeSnoAlertBox("#snoAlertBoxE"); 
-        //         // }
-        //     }
-        // })
     })
 }
 
@@ -216,4 +185,77 @@ function ChangeAddress(parametros,link,textbox){
             $(textbox).val("sin dirección");
             console.log("error");
         })
+}
+
+function GetTablaAsede(tabla,link){
+    var table =  $(tabla).DataTable( {
+        "searching": true,
+        "destroy": true,
+        responsive: false,
+        "serverSide": true,
+        "ajax": link,
+        "type" : "GET",
+        'dataType': 'json',
+        "columns": [
+            { data: 'NombreTemplate', width: "35%"},
+            { data: 'nombre_sede', width: "35%"},
+            { data: 'estatus', width: "5%"},
+            {
+                data: null,
+                className: "center",
+                defaultContent: '<a href="" class="editor_edit">Edit</a> / <a href="" class="editor_remove">Delete</a>'
+            }
+        ], 
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if (aData["estatus"] == "1") {
+                $("td:eq(2)", nRow).html("Activo");
+            }else{
+                $("td:eq(2)", nRow).html("Inactivo");
+            }
+            return nRow;
+        },
+        dom: 'Bfrtip',
+        lengthMenu: [
+            [ 5,10, 25, 50, -1 ],
+            [ '5 Filas','10 Filas', '25 Filas', '50 Filas', 'Todo' ]
+        ],
+        buttons: [
+            {
+                extend:'excel',
+                className: 'btn-success',
+                init: function(api, node, config) {
+                $(node).removeClass('btn-secondary')
+                }
+            },
+            {
+                extend:'pageLength',
+                className: 'btn-primary',
+                init: function(api, node, config) {
+                $(node).removeClass('btn-secondary')
+                }
+            }
+        ],
+        "language": {
+            buttons: {
+            pageLength: {
+                _: "Mostrar %d Registros",
+                '-1': "Todos"
+                }
+            },
+            "lengthMenu": "Display _MENU_ records",
+            "info": "_TOTAL_ registros",
+            "search": "Buscar",
+            "paginate": {
+                "next": ">>",
+                "previous": "<<",
+            },
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "emptyTable": "No hay datos",
+            "zeroRecords": "No hay coincidencias",
+            "infoEmpty": "Mostrando registros del …un total de 0 registros",
+            "infoFiltered": "(filtrado de un total de _MAX_ registros)"
+        
+        }       
+    });
 }

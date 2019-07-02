@@ -15,18 +15,30 @@ class plantillasController extends Controller
   
 
     public function Asede(){
-        $Lista = $this->ListarAsignaciones();
+        
         $Plantillas = DB::table('NAME_TEMPLATE_CBA')->select('id','NombreTemplate')->get();
         $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
      
         return view('Ediciones.sedes',
         [
-            'Coleccion' => $Lista,
             'Plantillas' => $Plantillas,
             'Sedes' =>$sede
         ]);
+        
     }
-    // select distinct NombrePlantilla from plantillasCBA
+    
+    public function getAsede(){
+        
+        try {
+             $Lista = $this->ListarAsignaciones();
+             return datatables()->collection($Lista)->toJson();
+             DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            print $e;
+        }
+        
+    }
     
     public function index(){
         $date = Carbon::now();
@@ -115,23 +127,45 @@ class plantillasController extends Controller
     }
 
     public function ListarAsignaciones(){
-        $Listar = new ListarAsignacion;
-
-        return $Listar->all();
+        $Listar = DB::table('AsignarSedeCBA')
+                        ->join('NAME_TEMPLATE_CBA','AsignarSedeCBA.idPlantilla','=','NAME_TEMPLATE_CBA.id')
+                        ->join('diaco_sede','AsignarSedeCBA.idSede','=','diaco_sede.id_diaco_sede')
+                        ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+                        ->get();
+        return $Listar;
          
     }
 
+    public function getInbox(){
+        $buson = DB::table('AsignarSedeCBA')
+                        ->join('NAME_TEMPLATE_CBA','AsignarSedeCBA.idPlantilla','=','NAME_TEMPLATE_CBA.id')
+                        ->join('diaco_sede','AsignarSedeCBA.idSede','=','diaco_sede.id_diaco_sede')
+                        // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+                        ->selectraw("NAME_TEMPLATE_CBA.id,NAME_TEMPLATE_CBA.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (AsignarSedeCBA.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
+                        ->where('diaco_sede.id_diaco_sede', '=', 1)
+                        ->get();
+        //print $buson;
+        return response()->json($buson);
+    }
     public function storeLista(Request $request){
-        $TIMESTAMP = Carbon::now();
-
         $Lista = new ListarAsignacion;
      
         $Lista->idPlantilla = $request->SPlantilla;
         $Lista->idSede  = $request->SSede;
-        $Lista->created_at  = $TIMESTAMP;
+        $Lista->created_at  = $request->created_at_new;
         $Lista->estatus  = 1;
         $Lista->save();
-        print $Lista;
+        return 1;
+    }
+
+    public function showInbox(){
+        return view('Ediciones.bandejaEntrada');
+    }
+
+    public function showPrinter($id){
+        return view('Ediciones.printer',[
+            'id' => $id
+        ]);
     }
 
 

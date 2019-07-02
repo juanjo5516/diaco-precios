@@ -21,6 +21,6 @@ CREATE TABLE AsignarSedeCBA(
     id_Asignacion INTEGER NOT NULL IDENTITY(1,1) PRIMARY KEY,
     idPlantilla INTEGER NOT NULL FOREIGN KEY REFERENCES NAME_TEMPLATE_CBA(id),
     idSede INTEGER NOT NULL FOREIGN KEY REFERENCES diaco_sede(id_diaco_sede),
-    created_at TIMESTAMP,
+    created_at DATETIME,
     estatus INTEGER
 )

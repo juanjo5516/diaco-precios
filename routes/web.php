@@ -52,4 +52,8 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('AsignarSede','plantillasController@Asede');
     Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
     Route::post('aLista', 'plantillasController@storeLista');
+    Route::get('GetListaAsede','plantillasController@getAsede');
+    Route::get('Bandeja','plantillasController@showInbox');
+    Route::get('getinbox','plantillasController@getInbox');
+    Route::get('Printer/{id}','plantillasController@showPrinter');
 }); 

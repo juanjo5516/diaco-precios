@@ -5,8 +5,9 @@
                 Asignar Plantillas
             </div>
             <div class="card-body">
-                <asignacion-component :tableData="'{{ $Coleccion }}'" :coleccion="{{ $Plantillas }}" :Sedes="{{ $Sedes }}"></asignacion-component>
+                <asignacion-component :coleccion="{{ $Plantillas }}" :Sedes="{{ $Sedes }}"></asignacion-component>
             </div>
+            
         </div>
     </div>
 </div> 
