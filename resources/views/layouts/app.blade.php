@@ -43,7 +43,7 @@
                         
                         <a class="btn" href="bar-chart">
                             <i class="fas fa-tachometer-alt"></i> &nbsp;Dashboard</a>
-                        <a class="btn" href="Bandeja">
+                        <a class="btn" href="../Bandeja">
                                 <i class="fas fa-mail-bulk"></i> &nbsp;Bandeja</a>
                     </div>
                 </li>

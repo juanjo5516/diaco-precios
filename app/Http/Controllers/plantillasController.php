@@ -12,7 +12,11 @@ use App\ListarAsignacion;
 class plantillasController extends Controller
 {
 
-  
+    public function UserLogin(){
+        $user = DB::table('diaco_usuario')
+                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
+        return $user;
+    }
 
     public function Asede(){
         
@@ -73,6 +77,11 @@ class plantillasController extends Controller
         }
     }
 
+    public function getFecha(){
+        $date = Carbon::now();
+        $date = $date->format('d-m-Y');
+        return $date;
+    }
    
     public function store(Request $request){
         $TIMESTAMP = Carbon::now();
@@ -163,9 +172,58 @@ class plantillasController extends Controller
     }
 
     public function showPrinter($id){
-        return view('Ediciones.printer',[
-            'id' => $id
-        ]);
+        DB::beginTransaction();
+        try {
+
+            $fecha = $this->getFecha();
+            $usuario = $this->UserLogin();
+            // $query = DB::select('
+            //                     SELECT pl.NombrePlantilla,pl.created_at,cl.nombre as categoria,prl.nombre,md.nombre FROM PlantillasCBA pl
+            //                         INNER JOIN categoriaCBA cl
+            //                             ON cl.id_Categoria = pl.idCategoria
+            //                         INNER JOIN productoCBA prl
+            //                             ON prl.id_producto = pl.idProducto
+            //                         INNER JOIN medida md
+            //                             ON md.id_medida = pl.idMedida
+            //                         INNER JOIN NAME_TEMPLATE_CBA npl
+            //                             ON npl.NombreTemplate = pl.NombrePlantilla
+            //                         WHERE npl.id = :id',[
+            //                             'id' => $id]);
+            
+            $query = DB::table('PlantillasCBA')
+                            ->selectraw('PlantillasCBA.NombrePlantilla,PlantillasCBA.created_at,categoriaCBA.nombre as categoria,productoCBA.nombre as produto,medida.nombre as medida') 
+                            ->join('categoriaCBA','id_Categoria','=','idCategoria')
+                            ->join('productoCBA','id_producto','=','idProducto')
+                            ->join('medida','id_medida','=','idMedida')
+                            ->join('NAME_TEMPLATE_CBA','NombreTemplate','=','NombrePlantilla')
+                            ->where('NAME_TEMPLATE_CBA.id',$id)
+                            ->get();
+            $categorias = DB::select('
+                                SELECT distinct cl.nombre as categoria FROM PlantillasCBA pl
+                                    INNER JOIN categoriaCBA cl
+                                        ON cl.id_Categoria = pl.idCategoria
+                                    INNER JOIN productoCBA prl
+                                        ON prl.id_producto = pl.idProducto
+                                    INNER JOIN medida md
+                                        ON md.id_medida = pl.idMedida
+                                    INNER JOIN NAME_TEMPLATE_CBA npl
+                                        ON npl.NombreTemplate = pl.NombrePlantilla
+                                    WHERE npl.id = :id',[
+                                        'id' => $id]);
+            return view('Ediciones.printer',[
+                'id' => $id,
+                'fecha' => $fecha,
+                'usuario' => $usuario,
+                'coleccion' => $query,
+                'categoria' => $categorias
+            ]);
+            DB::commit(); 
+        } catch (\Exceptio $e) {
+            DB::rollBack();
+            
+        }
+
+        
     }
 
 

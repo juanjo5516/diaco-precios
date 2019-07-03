@@ -4,66 +4,182 @@
     <div slot="header" class="clearfix">
       <span>Impresión</span>
     </div>
-  <table class="table" >
-                        <tr >
-                            <td colspan="12" class="fecha">
-                                Fecha: <span>12-25-25</span>
-                                12-25-25
-                                    <input type="hidden" name="fechaVaciado" value="12-25-25">
-                            </td>
-                        </tr>
-                        <tr >
-                            <td  class="column-title">
-                                Sede:
-                            </td>
-                           
-                            <td colspan="5" class="column-data" >
-                               2
-                            </td>
-                            <td  class="column-title">
-                                Categoria:
-                            </td>
-                            
-                            <td colspan="5" class="column-data-select" >
+        <table class="table" >
+            <tr >
+                <td colspan="12">
+                    Fecha: <span>{{ fecha }}</span>
+                        <input type="hidden" name="fechaVaciado" value="12-25-25">
+                </td>
+            </tr>
+            <tr v-for="(index , ex) in usuario" :key="ex">
+                <td>
+                    Sede:
+                </td>
+                <td colspan="5"  >
+                    {{ index.sede }}
+                </td>
+                <td >
+                    Verificador:
+                </td>
+                <td colspan="5"  >
+                    {{ index.nombre }} 
+                    
+                </td>
+            </tr>
+        </table>
+  
+  <br>
+    <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
+        <div slot="header" class="clearfix">
+            <span >
+                {{ item.categoria }}
+            </span>
+        </div>
+        <div>
+            <el-table
+                :data="tableData"
+                style="width: 100%;"
+                border="true">
+                <el-table-column
+                    prop="id"
+                    label="Numero"
+                    width="80"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    prop="Establecimiento"
+                    label="Nombre del Establecimiento"
+                    align="center"
+                    
+                    >
+                </el-table-column>
+                <el-table-column
+                    prop="local"
+                    label="Numero de Local"
+                    align="center"
+                    width="100">
+                </el-table-column>
+            </el-table>
+        </div>
+        <table class="table table-bordered descripcion" >
+                    <thead>
+                        <tr>
+                            <th>
+                                Producto
+                            </th>
+                            <th>
+                                Medida
+                            </th>
+                            <th>
+                                1
+                            </th>
+                            <th>
+                                2
+                            </th>
+                            <th>
                                 3
-                            </td>
-                        </tr>
-
-                        <tr >
-                            <td  class="column-title">
-                                Verificador:
-                            </td>
-                            
-                            <td colspan="5" class="column-data" >
+                            </th>
+                            <th>
                                 4
-                            </td>
-                           
+                            </th>
+                            <th>
+                                5
+                            </th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(index, ix) of coleccion " :key="ix" v-if="index.categoria == item.categoria">
+                                <td >
+                                    {{ index.produto }}
+                                </td>
+                                <td >
+                                    {{ index.medida }}
+                                </td>
+                                <td >
+                                    &nbsp;
+                                </td>
+                                <td >
+                                    &nbsp;
+                                </td>
+                                <td >
+                                    &nbsp;
+                                </td>
+                                <td >
+                                    &nbsp;
+                                </td>
+                                <td >
+                                    &nbsp;
+                                </td>
+                        </tr>
+                    </tbody>
+                </table>
+    </el-card>
 
-                    </table>
+
   </el-card>
 </div> 
 </template>
 
 <style>
-  .has-gutter{
-    text-align: center;
-  }
+    .has-gutter{
+        text-align: center!important;
+    }
+
+    .el-card{
+        margin-bottom:25px !important;
+    }
+
+    .descripcion{
+        margin-top:20px;
+    
+    }
+  
+    .descripcion td{
+        border: 1px solid #dbdbdb !important;
+        
+    }
+
+    .descripcion th{
+        text-align: center !important;
+    }
 
 </style>
 
 
 <script>
     export default {
+        props: ['fecha','usuario','coleccion','categoria'],
         data() {
             return {
-                DataResult:[]
+                DataResult:[],
+                tableData: [{
+                    id: '1',
+                    Establecimiento: '',
+                    local: ''
+                }, {
+                    id: '2',
+                    Establecimiento: '',
+                    local: ''
+                }, {
+                    id: '3',
+                    Establecimiento: '',
+                    local: ''
+                }, {
+                    id: '4',
+                    Establecimiento: '',
+                    local: ''
+                },{
+                    id: '5',
+                    Establecimiento: '',
+                    local: ''
+                }]
+                
             }
           },
           mounted(){
             // invocar los métodos
             this.getData();
-           // this.pollData();
+            
           },
           methods: {
             viewPrinter: function(){
