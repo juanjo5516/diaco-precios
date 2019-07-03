@@ -171,8 +171,8 @@ class plantillasController extends Controller
         return view('Ediciones.bandejaEntrada');
     }
 
-    public function showPrinter($id){
-        DB::beginTransaction();
+    public function showprinter($id){
+       // DB::beginTransaction();
         try {
 
             $fecha = $this->getFecha();
@@ -210,16 +210,29 @@ class plantillasController extends Controller
                                         ON npl.NombreTemplate = pl.NombrePlantilla
                                     WHERE npl.id = :id',[
                                         'id' => $id]);
-            return view('Ediciones.printer',[
+            // return view('Ediciones.printer_data',[
+            //     'id' => $id,
+            //     'fecha' => $fecha,
+            //     'usuario' => $usuario,
+            //     'coleccion' => $query,
+            //     'categoria' => $categorias
+            // ]);
+
+                
+            $pdf = \PDF::loadView('Ediciones.printer_data',[
                 'id' => $id,
                 'fecha' => $fecha,
                 'usuario' => $usuario,
                 'coleccion' => $query,
-                'categoria' => $categorias
+                 'categoria' => $categorias
             ]);
-            DB::commit(); 
+            return $pdf->stream();
+            // return $pdf->download('Ediciones.pdf');
+            
+           // DB::commit(); 
         } catch (\Exceptio $e) {
-            DB::rollBack();
+            //DB::rollBack();
+            print $e;
             
         }
 

@@ -55,5 +55,5 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('GetListaAsede','plantillasController@getAsede');
     Route::get('Bandeja','plantillasController@showInbox');
     Route::get('getinbox','plantillasController@getInbox');
-    Route::get('Printer/{id}','plantillasController@showPrinter');
+    Route::get('Printer/{id}','plantillasController@showprinter');
 }); 

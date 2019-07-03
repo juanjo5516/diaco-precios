@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app') --}}
 
 
 @section('contenido')
@@ -14,7 +14,7 @@
         });
     </script> --}}
 @endsection
-
+{{-- 
 @section('Ruta')
     <li class="breadcrumb-item">
         Asignación de Plantillas
@@ -22,4 +22,4 @@
 @endsection
 @section('diaco_title')
     DIACO
-@endsection
+@endsection --}}
