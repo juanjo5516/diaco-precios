@@ -15,7 +15,8 @@ class plantillasController extends Controller
     public function UserLogin(){
         $user = DB::table('diaco_usuario')
                     ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
-        return $user;
+        //return response()->json($user);
+                    return $user;
     }
 
     public function Asede(){
@@ -146,12 +147,17 @@ class plantillasController extends Controller
     }
 
     public function getInbox(){
+        $usuario = $this->UserLogin();
+
+        
         $buson = DB::table('AsignarSedeCBA')
                         ->join('NAME_TEMPLATE_CBA','AsignarSedeCBA.idPlantilla','=','NAME_TEMPLATE_CBA.id')
                         ->join('diaco_sede','AsignarSedeCBA.idSede','=','diaco_sede.id_diaco_sede')
+                        ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                         // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
                         ->selectraw("NAME_TEMPLATE_CBA.id,NAME_TEMPLATE_CBA.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (AsignarSedeCBA.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
-                        ->where('diaco_sede.id_diaco_sede', '=', 1)
+                        ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+                        ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
                         ->get();
         //print $buson;
         return response()->json($buson);
