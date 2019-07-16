@@ -78,7 +78,7 @@
     
      methods: {
       onSubmit: function(){
-        var url = 'http://128.5.101.19:8000/aLista';
+        var url = 'http://128.5.101.19/aLista';
         axios.post(url, {
             SPlantilla: this.select1,
             SSede: this.select2,

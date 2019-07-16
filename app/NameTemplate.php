@@ -12,5 +12,5 @@ class NameTemplate extends Model
     ];
 
 
-    protected $table = 'NAME_TEMPLATE_CBA';
+    protected $table = 'diaco_name_template_cba';
 }

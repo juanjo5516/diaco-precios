@@ -12,7 +12,7 @@ class EdicionPlantilla extends Model
     ];
 
 
-    protected $table = 'PlantillasCBA';
+    protected $table = 'diaco_plantillascba';
 
     
 }

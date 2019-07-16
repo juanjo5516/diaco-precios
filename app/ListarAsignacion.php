@@ -12,5 +12,5 @@ class ListarAsignacion extends Model
     ];
 
 
-    protected $table = 'AsignarSedeCBA';
+    protected $table = 'diaco_asignarsedecba';
 }

@@ -21,7 +21,7 @@ class plantillasController extends Controller
 
     public function Asede(){
         
-        $Plantillas = DB::table('NAME_TEMPLATE_CBA')->select('id','NombreTemplate')->get();
+        $Plantillas = DB::table('diaco_name_template_cba')->select('id','NombreTemplate')->get();
         $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
      
         return view('Ediciones.sedes',
@@ -48,9 +48,9 @@ class plantillasController extends Controller
     public function index(){
         $date = Carbon::now();
         $date = $date->format('d-m-Y');
-        $categoria = DB::table("categoriaCBA")->select('id_Categoria as id','nombre as nombre')->get()->toJson(JSON_PRETTY_PRINT);
-        $producto = DB::table("productoCBA")->select('id_producto as id','nombre as Pnombre')->get();
-        $medida = DB::table('medida')->select('id_medida as id','nombre as nombre')->get();
+        $categoria = DB::table("diaco_categoriacba")->select('id_Categoria as id','nombre as nombre')->get()->toJson(JSON_PRETTY_PRINT);
+        $producto = DB::table("diaco_productocba")->select('id_producto as id','nombre as Pnombre')->get();
+        $medida = DB::table('diaco_medida')->select('id_medida as id','nombre as nombre')->get();
         //dd($categoria);
         return view('Ediciones.index',
         [
@@ -137,10 +137,10 @@ class plantillasController extends Controller
     }
 
     public function ListarAsignaciones(){
-        $Listar = DB::table('AsignarSedeCBA')
-                        ->join('NAME_TEMPLATE_CBA','AsignarSedeCBA.idPlantilla','=','NAME_TEMPLATE_CBA.id')
-                        ->join('diaco_sede','AsignarSedeCBA.idSede','=','diaco_sede.id_diaco_sede')
-                        ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+        $Listar = DB::table('diaco_asignarsedecba')
+                        ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+                        ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+                        ->select('diaco_name_template_cba.NombreTemplate','diaco_sede.nombre_sede','diaco_asignarsedecba.estatus','diaco_asignarsedecba.created_at')
                         ->get();
         return $Listar;
          
@@ -150,12 +150,12 @@ class plantillasController extends Controller
         $usuario = $this->UserLogin();
 
         
-        $buson = DB::table('AsignarSedeCBA')
-                        ->join('NAME_TEMPLATE_CBA','AsignarSedeCBA.idPlantilla','=','NAME_TEMPLATE_CBA.id')
-                        ->join('diaco_sede','AsignarSedeCBA.idSede','=','diaco_sede.id_diaco_sede')
+        $buson = DB::table('diaco_asignarsedecba')
+                        ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+                        ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
                         ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                         // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                        ->selectraw("NAME_TEMPLATE_CBA.id,NAME_TEMPLATE_CBA.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (AsignarSedeCBA.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
+                        ->selectraw("diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
                         ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                         ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
                         ->get();
@@ -184,23 +184,23 @@ class plantillasController extends Controller
             $fecha = $this->getFecha();
             $usuario = $this->UserLogin();
             
-            $query = DB::table('PlantillasCBA')
-                            ->selectraw('PlantillasCBA.NombrePlantilla,PlantillasCBA.created_at,categoriaCBA.nombre as categoria,productoCBA.nombre as produto,medida.nombre as medida') 
-                            ->join('categoriaCBA','id_Categoria','=','idCategoria')
-                            ->join('productoCBA','id_producto','=','idProducto')
-                            ->join('medida','id_medida','=','idMedida')
-                            ->join('NAME_TEMPLATE_CBA','NombreTemplate','=','NombrePlantilla')
-                            ->where('NAME_TEMPLATE_CBA.id',$id)
+            $query = DB::table('diaco_plantillascba')
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida') 
+                            ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+                            ->join('diaco_productocba','id_producto','=','idProducto')
+                            ->join('diaco_medida','id_medida','=','idMedida')
+                            ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                            ->where('diaco_name_template_cba.id',$id)
                             ->get();
             $categorias = DB::select('
-                                SELECT distinct cl.nombre as categoria FROM PlantillasCBA pl
-                                    INNER JOIN categoriaCBA cl
+                                SELECT distinct cl.nombre as categoria FROM diaco_plantillascba pl
+                                    INNER JOIN diaco_categoriacba cl
                                         ON cl.id_Categoria = pl.idCategoria
-                                    INNER JOIN productoCBA prl
+                                    INNER JOIN diaco_productocba prl
                                         ON prl.id_producto = pl.idProducto
-                                    INNER JOIN medida md
+                                    INNER JOIN diaco_medida md
                                         ON md.id_medida = pl.idMedida
-                                    INNER JOIN NAME_TEMPLATE_CBA npl
+                                    INNER JOIN diaco_name_template_cba npl
                                         ON npl.NombreTemplate = pl.NombrePlantilla
                                     WHERE npl.id = :id',[
                                         'id' => $id]);
@@ -233,31 +233,31 @@ class plantillasController extends Controller
         
     }
     public function getPlantillas($id){
-        $query = DB::table('PlantillasCBA')
-                        ->selectraw('PlantillasCBA.NombrePlantilla,PlantillasCBA.created_at,categoriaCBA.nombre as categoria,productoCBA.nombre as produto,medida.nombre as medida, productoCBA.id_producto as producto') 
-                        ->join('categoriaCBA','id_Categoria','=','idCategoria')
-                        ->join('productoCBA','id_producto','=','idProducto')
-                        ->join('medida','id_medida','=','idMedida')
-                        ->join('NAME_TEMPLATE_CBA','NombreTemplate','=','NombrePlantilla')
-                        ->where('NAME_TEMPLATE_CBA.id',$id)
+        $query = DB::table('diaco_plantillascba')
+                        ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto') 
+                        ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+                        ->join('diaco_productocba','id_producto','=','idProducto')
+                        ->join('diaco_medida','id_medida','=','idMedida')
+                        ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                        ->where('diaco_name_template_cba.id',$id)
                         ->get();
         return $query;
     }
 
     public function getCategoria($id){
-        $categoria = DB::table('PlantillasCBA')
-                            ->selectraw('distinct categoriaCBA.nombre as categoria')
-                            ->join('categoriaCBA','id_Categoria','=','idCategoria')
-                            ->join('productoCBA','id_producto','=','idProducto')
-                            ->join('medida','id_medida','=','idMedida')
-                            ->join('name_template_cba','NombreTemplate','=','NombrePlantilla')
-                            ->where('name_template_cba.id',$id)
+        $categoria = DB::table('diaco_plantillascba')
+                            ->selectraw('distinct diaco_categoriacba.nombre as categoria')
+                            ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+                            ->join('diaco_productocba','id_producto','=','idProducto')
+                            ->join('diaco_medida','id_medida','=','idMedida')
+                            ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                            ->where('diaco_name_template_cba.id',$id)
                             ->get();
         return $categoria;
     }
 
     public function getMercado(){
-        $mercado = DB::table('mercadoCBA')->select('idMercado','nombreMercado as nombre')->get();
+        $mercado = DB::table('diaco_mercadocba')->select('idMercado','nombreMercado as nombre')->get();
         return $mercado;
     }
 

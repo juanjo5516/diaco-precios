@@ -22,7 +22,7 @@ class ChartController extends Controller
         // ->groupBy('productoCBA.nombre')
         // ->get();
 
-        $Producto = DB::select('SELECT avg(v.precio) as precio,p.nombre FROM vaciadoCBA v INNER JOIN productoCBA p ON p.id_producto = v.id_producto  GROUP BY p.nombre');
+        $Producto = DB::select('SELECT avg(v.precio) as precio,p.nombre FROM vaciadoCBA v INNER JOIN diaco_productocba p ON p.id_producto = v.id_producto  GROUP BY p.nombre');
         $array[] = ['Gender', 'Number'];
         foreach($Producto as $key => $value)
         {

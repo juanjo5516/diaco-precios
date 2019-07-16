@@ -3,35 +3,35 @@
         {{-- Menu y submenu --}}
         <li class="nav-title">Catálogos</li>
         <li class="nav-item">
-            <a class="nav-link" href=Producto>
+            <a class="nav-link" href=../Producto>
                     <i class="nav-icon fas fa-angle-right"></i> Producto</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="Categoria">
+            <a class="nav-link" href="../Categoria">
                     <i class="nav-icon fas fa-angle-right"></i> Categoría</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="SubCategorias">
+            <a class="nav-link" href="../SubCategorias">
                     <i class="nav-icon fas fa-angle-right"></i> Sub-Categoría</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="Medida">
+            <a class="nav-link" href="../Medida">
                     <i class="nav-icon fas fa-angle-right"></i> Medida</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="Mercados">
+            <a class="nav-link" href="../Mercados">
                     <i class="nav-icon fas fa-angle-right"></i> Mercado</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="Establecimiento">
+            <a class="nav-link" href="../Establecimiento">
                     <i class="nav-icon fas fa-angle-right"></i> Establecimiento</a>
         </li>
         <li class="nav-title">Plantillas</li>
         <li class="nav-item">
-            <a class="nav-link" href=Edicion>
+            <a class="nav-link" href=../Edicion>
                 <i class="nav-icon fas fa-angle-right"></i> Editor
             </a>
-            <a class="nav-link" href=AsignarSede>
+            <a class="nav-link" href=../AsignarSede>
                 <i class="nav-icon fas fa-angle-right"></i> Asignación
             </a>
         </li>
@@ -41,7 +41,7 @@
                     <i class="nav-icon fas fa-angle-double-right"></i> Ingreso</a>
             <ul class="nav-dropdown-items">
                 <li class="nav-item">
-                    <a class="nav-link" href=Mercado>
+                    <a class="nav-link" href=../Mercado>
                         <i class="nav-icon fas fa-angle-right"></i> Mercado</a>
                 </li>
                 <li class="nav-item">
