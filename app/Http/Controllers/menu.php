@@ -30,7 +30,7 @@ class menu extends Controller
         try {
             $DataT = DB::table("productoCBA")
                                             ->select('productoCBA.nombre as Pnombre')->get();
-            return datatables()->collection($DataT)->toJson();
+            return datatables()->collection($DataT)->toJson(); 
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();

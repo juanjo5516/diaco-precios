@@ -27,13 +27,15 @@
         width="220"
         label="Operaciones">
         <template slot-scope="scope">
-          <el-button
-            size="small"
-            type="success"
-            icon="el-icon-s-order"
-            plain
-            @click="handleEdit(scope.$index, scope.row)">Vaciar
-          </el-button>
+          <el-link :underline=false v-bind:href="'/vaciado/'+scope.row.id" :id=scope.row.id_Asignacion>  
+            <el-button
+              size="small"
+              type="success"
+              icon="el-icon-s-order"
+              plain>
+              Vaciar
+            </el-button>
+          </el-link>
           <el-link :underline=false v-bind:href="'/Printer/'+scope.row.id" :id=scope.row.id_Asignacion>
             <el-button
               size="small"
@@ -99,10 +101,6 @@
                 .finally(function () {
                   // always executed
                 });
-            },
-            handleEdit(index, row) {
-                console.log(index,row);
-                //return view('Ediciones.printer')
             },
             pollData () {
              setInterval(() => {

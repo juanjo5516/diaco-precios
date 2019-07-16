@@ -18,9 +18,14 @@ window.Vue = require('vue');
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/es';
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+
+
 
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+
 
 Vue.use(ElementUI, { locale }, Buefy);
 
@@ -33,10 +38,11 @@ Vue.component('formulario-component',require('./components/EdicionPlantilla/form
 Vue.component('asignacion-component',require('./components/EdicionPlantilla/AsignarSede.vue').default);
 Vue.component('inbox-component',require('./components/EdicionPlantilla/inbox.vue').default)
 Vue.component('printer-component',require('./components/EdicionPlantilla/printer.vue').default)
+Vue.component('vaciado-component',require('./components/EdicionPlantilla/vaciado.vue').default)
+Vue.component('v-select', vSelect)
 
 const app = new Vue({
     el: '#main'
-    
 });
 
 

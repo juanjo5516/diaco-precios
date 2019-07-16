@@ -127,6 +127,37 @@ function TablaVacia(table){
     });
 }
 
+function TablaVue(table){
+    let T = $(table).DataTable({
+        "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        } ],
+        "order": [[ 1, 'asc' ]],
+        "searching": false,
+        "destroy": true,
+        "pagingType": "full_numbers",
+        "paging": false,
+        "language": {
+            "lengthMenu": "Display _MENU_ records",
+            "info": "_TOTAL_ registros",
+            "search": "Buscar",
+            "paginate": {
+                "next": ">>",
+                "previous": "<<",
+            },
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "emptyTable": "No hay datos",
+            "zeroRecords": "No hay coincidencias",
+            "infoEmpty": "Mostrando registros del …un total de 0 registros",
+            "infoFiltered": "(filtrado de un total de _MAX_ registros)"
+        
+        }       
+    });
+}
+
 
 function AddColumna(producto2,medida2){
         var t = $('#TDProductos').DataTable();
@@ -147,6 +178,27 @@ function AddColumna(producto2,medida2){
         } ).draw();
     
  
+}
+
+function AddColumnavue(tabla){
+    var t = $(tabla);
+    
+    t.row.add( [
+        '',
+        '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control">'+1+'</select>',
+        '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control">'+ 2 +'</select>', 
+        '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>'
+    ] ).draw( false );
+
+    counter++;
+
+    t.on( 'order.dt search.dt', function () {
+        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+
+
 }
 
 

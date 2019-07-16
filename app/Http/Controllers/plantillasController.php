@@ -183,18 +183,6 @@ class plantillasController extends Controller
 
             $fecha = $this->getFecha();
             $usuario = $this->UserLogin();
-            // $query = DB::select('
-            //                     SELECT pl.NombrePlantilla,pl.created_at,cl.nombre as categoria,prl.nombre,md.nombre FROM PlantillasCBA pl
-            //                         INNER JOIN categoriaCBA cl
-            //                             ON cl.id_Categoria = pl.idCategoria
-            //                         INNER JOIN productoCBA prl
-            //                             ON prl.id_producto = pl.idProducto
-            //                         INNER JOIN medida md
-            //                             ON md.id_medida = pl.idMedida
-            //                         INNER JOIN NAME_TEMPLATE_CBA npl
-            //                             ON npl.NombreTemplate = pl.NombrePlantilla
-            //                         WHERE npl.id = :id',[
-            //                             'id' => $id]);
             
             $query = DB::table('PlantillasCBA')
                             ->selectraw('PlantillasCBA.NombrePlantilla,PlantillasCBA.created_at,categoriaCBA.nombre as categoria,productoCBA.nombre as produto,medida.nombre as medida') 
@@ -243,6 +231,56 @@ class plantillasController extends Controller
         }
 
         
+    }
+    public function getPlantillas($id){
+        $query = DB::table('PlantillasCBA')
+                        ->selectraw('PlantillasCBA.NombrePlantilla,PlantillasCBA.created_at,categoriaCBA.nombre as categoria,productoCBA.nombre as produto,medida.nombre as medida, productoCBA.id_producto as producto') 
+                        ->join('categoriaCBA','id_Categoria','=','idCategoria')
+                        ->join('productoCBA','id_producto','=','idProducto')
+                        ->join('medida','id_medida','=','idMedida')
+                        ->join('NAME_TEMPLATE_CBA','NombreTemplate','=','NombrePlantilla')
+                        ->where('NAME_TEMPLATE_CBA.id',$id)
+                        ->get();
+        return $query;
+    }
+
+    public function getCategoria($id){
+        $categoria = DB::table('PlantillasCBA')
+                            ->selectraw('distinct categoriaCBA.nombre as categoria')
+                            ->join('categoriaCBA','id_Categoria','=','idCategoria')
+                            ->join('productoCBA','id_producto','=','idProducto')
+                            ->join('medida','id_medida','=','idMedida')
+                            ->join('name_template_cba','NombreTemplate','=','NombrePlantilla')
+                            ->where('name_template_cba.id',$id)
+                            ->get();
+        return $categoria;
+    }
+
+    public function getMercado(){
+        $mercado = DB::table('mercadoCBA')->select('idMercado','nombreMercado as nombre')->get();
+        return $mercado;
+    }
+
+    public function showVaciado($id){
+        $fecha = $this->getFecha();
+        $usuario = $this->UserLogin();
+        $plantilla = $this->getPlantillas($id);
+        $categoria = $this->getCategoria($id);
+        $data = $this->getMercado();
+        //dd($data);
+        //return response()->json($mercado);
+        
+
+        return view('Ediciones.vaciado',
+            [
+                'fecha' => $fecha,
+                'user' => $usuario,
+                'coleccion' => $plantilla,
+                'categoria' => $categoria,
+                'mercado' => $data
+
+            ]
+        );
     }
 
 

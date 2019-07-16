@@ -4,11 +4,12 @@
     </button>
     <a class="navbar-brand" href="#">
         <img class="navbar-brand-full" src=" {{ asset('images/diaco/logo.webp') }}" width="119" height="45" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src=" {{ asset('img/brand/sygnet.svg') }} " width="30" height="30" alt="CoreUI Logo">
     </a>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
     </button>
+    
     <!-- <ul class="nav navbar-nav d-md-down-none">
     <li class="nav-item px-3">
     <a class="nav-link" href="#">Dashboard</a>
@@ -221,8 +222,16 @@
     </a>
     </div>
     </li> </ul>-->
-
+    
     <ul class="nav navbar-nav ml-auto">
+        <li>
+                <a class="btn" href="bar-chart">
+                        <i class="fas fa-tachometer-alt"></i> &nbsp;Dashboard</a>
+        </li>
+        <li>
+                <a class="btn" href="../Bandeja">
+                    <i class="fas fa-mail-bulk"></i> &nbsp;Bandeja</a>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                 aria-expanded="false">
