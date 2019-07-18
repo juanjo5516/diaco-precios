@@ -38,11 +38,81 @@ function addGeneral(form,link,tabla,tipo) {
     })
 }
 
+function mensaje(id,Anterior1,Anterior2,actual){
+    let aumentoAnterior1 = Anterior1*1.10;
+    let aumentoAnterior2 = Anterior2*1.10;
+
+    let aumentonaranja1 = Anterior1*1.15;
+    let aumentonaranja2 = Anterior2*1.15;
+
+    actualf = parseFloat(actual);
+    console.log(aumentonaranja1 +'  '+ aumentonaranja1);
+
+    if(actual > 0){
+
+        if(actual >= Anterior1 && actual <= Anterior2){
+            $('#'+id).removeClass('bg-danger');
+            $('#'+id).removeClass('bg-warning text-dark');
+            $('#'+id).addClass('bg-success');
+        //     console.log('si'+actual);
+        }else if((actual >= aumentoAnterior1 && actual <= aumentoAnterior2  )){
+            $('#'+id).removeClass('bg-danger');
+            $('#'+id).removeClass('bg-success');
+            $('#'+id).addClass('bg-warning text-dark');
+        }else if(actual >= aumentonaranja1 && actual <= aumentonaranja2 ){
+            $('#'+id).removeClass('bg-warning text-dark');
+            $('#'+id).removeClass('bg-success');
+            $('#'+id).addClass('bg-danger');
+        }
+    }
+    else{
+        $('#'+id).removeClass('bg-warning text-dark');
+        $('#'+id).removeClass('bg-success');
+        $('#'+id).removeClass('bg-danger');
+    }
+    // if ((actual >= Anterior1 && actual <= aumentoAnterior1) || (actual >= Anterior2 && actual <= aumentoAnterior2) ){
+   
+          
+    // }else{
+    //     $('#'+id).removeClass('bg-success');
+    //     $('#'+id).addClass('bg-danger');
+    //     console.log('no'+actualf+'anterior2 '+aumentoAnterior2);
+    // }
+    
+
+    // if (actual >= Anterior1 && actual <= aumentoAnterior1 || actual >= Anterior2 && actual <= aumentoAnterior2) {
+    //     $('#'+id).removeClass('bg-danger');
+    //     $('#'+id).addClass('bg-success');
+    //     console.log('si'+actual);
+       
+    // }
+    // else{
+    //     $('#'+id).removeClass('bg-success');
+    //     $('#'+id).addClass('bg-danger');
+    //     console.log('no'+actual+'anterior2 '+Anterior2);
+    // }
+
+
+
+    // let aumento = actual*1.10;
+    // if (aumento > Anterior2) {
+    //     $('#'+id).removeClass('bg-success');
+    //     $('#'+id).addClass('bg-danger');
+    // }else{
+    //     $('#'+id).removeClass('bg-danger');
+    //     $('#'+id).addClass('bg-success');
+    // }
+}
+
 function addvue(form) {
+    // let parametros = $(form).serializeObject();
+    // console.log(parametros);
     $(form).submit(function(e) {
+        console.log( $( this ).serializeArray() );
         e.preventDefault();
-        let parametros = $(this).serialize();
-        console.log(parametros);
+        //let parametros = $(this).serialize();
+        
+        
     })
 }
 

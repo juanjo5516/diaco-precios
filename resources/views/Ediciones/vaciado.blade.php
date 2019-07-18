@@ -10,7 +10,7 @@
         $(document).ready(function(){
             addvue('#vue-Asignacion');
             //TablaVue('#vue');
-            GetTablaAsede("#table-vue-asede","{{ url('GetListaAsede') }}");
+            //GetTablaAsede("#table-vue-asede","{{ url('GetListaAsede') }}");
 
         });
 

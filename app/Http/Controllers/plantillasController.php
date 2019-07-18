@@ -234,13 +234,36 @@ class plantillasController extends Controller
     }
     public function getPlantillas($id){
         $query = DB::table('diaco_plantillascba')
-                        ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto') 
+                        // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
+                        ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
                         ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
                         ->where('diaco_name_template_cba.id',$id)
                         ->get();
+
+        $query2 = DB::select("
+        SELECT 
+	dp.NombrePlantilla,
+	dp.created_at,
+	cb.nombre as categoria,
+	pc.nombre as produto,
+	dm.nombre as medida,
+	pc.id_producto as idProducto,
+	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,
+	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2
+		 FROM diaco_plantillascba dp
+	INNER JOIN diaco_categoriacba cb
+		ON cb.id_Categoria = dp.idCategoria
+	INNER JOIN diaco_productocba pc
+		ON pc.id_producto = dp.idProducto
+	INNER JOIN diaco_medida dm
+		ON dm.id_medida = dp.idMedida
+	INNER JOIN diaco_name_template_cba nca
+		ON nca.NombreTemplate = dp.NombrePlantilla
+	WHERE nca.id = :id
+        ",['id' => $id]);
         return $query;
     }
 
@@ -267,7 +290,7 @@ class plantillasController extends Controller
         $plantilla = $this->getPlantillas($id);
         $categoria = $this->getCategoria($id);
         $data = $this->getMercado();
-        //dd($data);
+        //dd($plantilla);
         //return response()->json($mercado);
         
 

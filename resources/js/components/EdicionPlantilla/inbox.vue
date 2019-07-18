@@ -78,6 +78,7 @@
           mounted(){
             // invocar los métodos
             this.getData();
+            
            // this.pollData();
           },
           methods: {
@@ -92,7 +93,7 @@
                 .then(response => {
                   // handle success
                   this.DataResult = response.data;
-                  console.log(this.DataResult);
+                  //console.log(this.DataResult);
                 })
                 .catch(function (error) {
                   // handle error
@@ -102,6 +103,8 @@
                   // always executed
                 });
             },
+
+            
             pollData () {
              setInterval(() => {
                 console.log('RETRIEVE_DATA_FROM_BACKEND')

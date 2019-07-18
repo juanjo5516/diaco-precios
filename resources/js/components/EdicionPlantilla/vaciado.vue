@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion">
+    <!-- <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion"> -->
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>Vaciado de Información de Mercados</span>
@@ -41,7 +41,7 @@
                   <tr>
                     <td>1</td>
                     <td>
-                      <el-select name="sede1" class="vue-select" v-model="sede1"  >
+                      <el-select name="Visita[1]" class="vue-select" v-model="sede1"  >
                         <el-option
                           v-for="(sede,index) in establecimientos"
                           v-bind:key=" index "
@@ -51,7 +51,7 @@
                       </el-select>
                     </td>
                     <td>
-                       <el-input v-model="input1" name="Mercado1" maxlength="3"></el-input> 
+                       <el-input v-model="input1" name="iputMercado[1]" maxlength="3"></el-input> 
                     </td>
                   </tr>
                   
@@ -59,7 +59,7 @@
                     <td>2</td>
                     <td>
                       <el-select
-                        name="idSede2"
+                        name="Visita[2]"
                         class="vue-select"
                         v-model="select2"
                         placeholder="Plantillas"
@@ -73,14 +73,14 @@
                       </el-select>
                     </td>
                     <td>
-                      <el-input v-model="input2" name="Mercado2" maxlength="3"></el-input>
+                      <el-input v-model="input2" name="iputMercado[2]" maxlength="3"></el-input>
                     </td>
                   </tr>
                   <tr>
                     <td>3</td>
                     <td>
                       <el-select
-                        name="idSede3"
+                        name="Visita[3]"
                         class="vue-select"
                         v-model="select3"
                         placeholder="Plantillas"
@@ -94,14 +94,14 @@
                       </el-select>
                     </td>
                     <td>
-                      <el-input v-model="input3" name="Mercado3" maxlength="3"></el-input>
+                      <el-input v-model="input3" name="iputMercado[3]" maxlength="3"></el-input>
                     </td>
                   </tr>
                   <tr>
                     <td>4</td>
                     <td>
                       <el-select
-                        name="idSede4"
+                        name="Visita[4]"
                         class="vue-select"
                         v-model="select4"
                         placeholder="Plantillas"
@@ -115,14 +115,14 @@
                       </el-select>
                     </td>
                     <td>
-                      <el-input v-model="input4" name="Mercado4" maxlength="3"></el-input>
+                      <el-input v-model="input4" name="iputMercado[4]" maxlength="3"></el-input>
                     </td>
                   </tr>
                   <tr>
                     <td>5</td>
                     <td>
                       <el-select
-                        name="idSede5"
+                        name="Visita[5]"
                         class="vue-select"
                         v-model="select5"
                         placeholder="Plantillas"
@@ -136,7 +136,7 @@
                       </el-select>
                     </td>
                     <td>
-                      <el-input v-model="input5" name="Mercado5" maxlength="3"></el-input>
+                      <el-input v-model="input5" name="iputMercado[5]" maxlength="3"></el-input>
                     </td>
                   </tr>
                 </tbody>
@@ -144,15 +144,17 @@
             </div>
           </el-card>
         </div>
+        
       </el-card>
-
+    
+<el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion">
       <!-- Vaciado -->
       <el-card class="box-card">
         <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
           <div slot="header" class="clearfix">
             <span>{{ item.categoria }}</span>
           </div>
-          <table class="table table-bordered" id="vue">
+          <table class="table table-bordered head" id="vue">
             <thead>
               <tr>
                 <th class="productoName">Producto</th>
@@ -164,33 +166,24 @@
                 <th>3</th>
                 <th>4</th>
                 <th>5</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="(index, ix) of coleccion "
+                v-for="(index, ix) of Productos "
                 :key="ix"
-                v-if="index.categoria == item.categoria"
-              >
+                v-if="index.categoria == item.categoria">
                 <td>{{ index.produto }}</td>
                 <td>{{ index.medida }}</td>
-                <td></td>
-                <td>&nbsp;</td>
-                <td class="precioName">
-                  <input name="precio1[]" class="form-control" />
-                </td>
-                <td class="precioName">
-                  <input name="precio2[]" class="form-control" />
-                </td>
-                <td class="precioName">
-                  <input name="precio3[]" class="form-control" />
-                </td>
-                <td class="precioName">
-                  <input name="precio4[]" class="form-control" />
-                </td>
-                <td class="precioName">
-                  <input name="precio5[]" class="form-control" />
-                </td>
+                <td >{{ index.precio1 }}</td>
+                <td>{{ index.precio2 }}</td>
+                <td class="precioName" v-html="index.inputColumn1"></td>
+                <td class="precioName" v-html="index.inputColumn2"></td>
+                <td class="precioName" v-html="index.inputColumn3"></td>
+                <td class="precioName" v-html="index.inputColumn4"></td>
+                <td class="precioName" v-html="index.inputColumn5"></td>
+                <td v-html="index.label"></td>
               </tr>
             </tbody>
           </table>
@@ -252,6 +245,30 @@
   margin: 0 auto !important;
   padding: 0 auto !important;
 }
+
+.paso{
+  background-color: green;
+  width: 23px;
+  height: 22px;
+  border-radius: 10px;
+  margin-top:10px;
+}
+
+.aumento{
+  background-color: red;
+  width: 23px;
+  height: 22px;
+  border-radius: 10px;
+  margin-top:10px;
+}
+
+.inputAumento{
+  background-color: red !important;
+}
+
+.inputPaso{
+  background-color: green !important;
+}
 </style>
 
 <script>
@@ -274,16 +291,36 @@ export default {
       input5: "",
       linea: 1,
       formInline: {},
-      
+      Productos:[],
     };
   },
   mounted() {
-    
-    //for (var prop in establecimientos) { if (establecimientos.hasOwnProperty(prop)) { console.log(prop.id) } }
-    // invocar los métodos
-    //this._filas("#vue");
-    // this.pollData();
+    this.DataProductos();
+
   },
-  methods: {}
+  methods: {
+    DataProductos: function(){
+          for (let i = 0; i <= this.coleccion.length-1; i++) {
+            this.Productos.push({
+              NombrePlantilla: this.coleccion[i].NombrePlantilla,
+              categoria: this.coleccion[i].categoria,
+              created_at: this.coleccion[i].created_at,
+              medida: this.coleccion[i].medida,
+              producto: this.coleccion[i].producto,
+              produto: this.coleccion[i].produto,
+              precio1: this.coleccion[i].Anterior1,
+              precio2: this.coleccion[i].Anterior2,
+              inputColumn1: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn1_${ i } name=inputColumn1[${ i }] />`,
+              inputColumn2: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn2_${ i } name=inputColumn2[${ i }] />`,
+              inputColumn3: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn3_${ i } name=inputColumn3[${ i }] />`,
+              inputColumn4: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn4_${ i } name=inputColumn4[${ i }] />`,
+              inputColumn5: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn5_${ i } name=inputColumn5[${ i }] />`,
+              
+              
+            })
+        }
+    }
+    
+  }
 };
 </script>
