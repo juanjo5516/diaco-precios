@@ -30,7 +30,7 @@
         <div class="sidebar">
             @include('common.sidebar')
             <button class="sidebar-minimizer brand-minimizer" type="button"></button>
-        </div>
+        </div> 
         <main  class="main">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>

@@ -102,7 +102,7 @@ class plantillasController extends Controller
                     $Edicion->idProducto  = $request->Dproducto[$i];
                     $Edicion->idMedida  = $request->Dmedida[$i];
                     $Edicion->estado  = 1;
-                    $Edicion->created_at = $TIMESTAMP;
+                    $Edicion->created_at = $TIMESTAMP; 
                     $Edicion->save();
     
                 }
