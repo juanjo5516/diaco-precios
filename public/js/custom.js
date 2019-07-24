@@ -46,7 +46,8 @@ function mensaje(id,Anterior1,Anterior2,actual){
     let aumentonaranja2 = Anterior2*1.15;
 
     actualf = parseFloat(actual);
-    console.log(aumentonaranja1 +'  '+ aumentonaranja1);
+    // console.log(aumentonaranja1 +'  '+ aumentonaranja1);
+    // console.log(aumentoAnterior1 +'  '+ aumentoAnterior2);
 
     if(actual > 0){
 
@@ -54,7 +55,7 @@ function mensaje(id,Anterior1,Anterior2,actual){
             $('#'+id).removeClass('bg-danger');
             $('#'+id).removeClass('bg-warning text-dark');
             $('#'+id).addClass('bg-success');
-        //     console.log('si'+actual);
+             
         }else if((actual >= aumentoAnterior1 && actual <= aumentoAnterior2  )){
             $('#'+id).removeClass('bg-danger');
             $('#'+id).removeClass('bg-success');
@@ -63,13 +64,18 @@ function mensaje(id,Anterior1,Anterior2,actual){
             $('#'+id).removeClass('bg-warning text-dark');
             $('#'+id).removeClass('bg-success');
             $('#'+id).addClass('bg-danger');
+        }else{
+            
+            $('#'+id).removeClass('bg-warning text-dark');
+            $('#'+id).removeClass('bg-success');
+            $('#'+id).addClass('bg-danger');
         }
     }
-    else{
-        $('#'+id).removeClass('bg-warning text-dark');
-        $('#'+id).removeClass('bg-success');
-        $('#'+id).removeClass('bg-danger');
-    }
+    // else{
+    //     $('#'+id).removeClass('bg-warning text-dark');
+    //     $('#'+id).removeClass('bg-success');
+    //     $('#'+id).addClass('bg-danger');
+    // }
     // if ((actual >= Anterior1 && actual <= aumentoAnterior1) || (actual >= Anterior2 && actual <= aumentoAnterior2) ){
    
           
@@ -104,14 +110,35 @@ function mensaje(id,Anterior1,Anterior2,actual){
     // }
 }
 
-function addvue(form) {
+function addvue(form,link) {
     // let parametros = $(form).serializeObject();
     // console.log(parametros);
     $(form).submit(function(e) {
-        console.log( $( this ).serializeArray() );
+        //console.log( $( this ).serializeArray() );
         e.preventDefault();
-        //let parametros = $(this).serialize();
-        
+        let parametros = $(this).serialize();
+        //console.log(parametros);
+        $.ajax({
+            data: parametros,
+            url: link,
+            type: "get",
+            contentType: false,
+            cache: true,
+            processData: false,
+            success: function(response) {
+                if(response == "1"){
+                    // $(tabla).DataTable().destroy();
+                    // $('form :input').val('');
+                    console.log("exito")
+                      
+                }else{
+                    //   $("#snoAlertBoxE").fadeIn();
+                    //   closeSnoAlertBox("#snoAlertBoxE"); 
+                    console.log('fallo');
+                    
+                }
+            }
+        })
         
     })
 }

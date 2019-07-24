@@ -235,7 +235,7 @@ class plantillasController extends Controller
     public function getPlantillas($id){
         $query = DB::table('diaco_plantillascba')
                         // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
-                        ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
+                        ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -287,7 +287,7 @@ class plantillasController extends Controller
     public function showVaciado($id){
         $fecha = $this->getFecha();
         $usuario = $this->UserLogin();
-        $plantilla = $this->getPlantillas($id);
+        $plantilla = $this->getPlantillas($id); 
         $categoria = $this->getCategoria($id);
         $data = $this->getMercado();
         //dd($plantilla);
@@ -304,6 +304,11 @@ class plantillasController extends Controller
 
             ]
         );
+    }
+
+    public function vaciado(Request $request){
+        $valor = sizeof($request->inputColumn1);
+        dd($request->inputColumn1[0]);
     }
 
 

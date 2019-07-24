@@ -8,7 +8,7 @@
 @section('Table')
      <script>
         $(document).ready(function(){
-            addvue('#vue-Asignacion');
+            addvue('#vue-Asignacion','../mercadoCBA');
             //TablaVue('#vue');
             //GetTablaAsede("#table-vue-asede","{{ url('GetListaAsede') }}");
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <!-- <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion"> -->
+    <el-form :inline="false" :model="formInline" class="form" ref="formInline"  id="vue-Asignacion">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>Vaciado de Información de Mercados</span>
@@ -147,7 +147,7 @@
         
       </el-card>
     
-<el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion">
+<!-- <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion"> -->
       <!-- Vaciado -->
       <el-card class="box-card">
         <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
@@ -160,7 +160,7 @@
                 <th class="productoName">Producto</th>
                 <th class="medidaName">Medida</th>
                 <th class="ReferencesName">Ref. 1</th>
-                <th class="ReferencesName">Ref. 2</th>
+                <!-- <th class="ReferencesName">Ref. 2</th> -->
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
@@ -175,9 +175,9 @@
                 :key="ix"
                 v-if="index.categoria == item.categoria">
                 <td>{{ index.produto }}</td>
-                <td>{{ index.medida }}</td>
-                <td >{{ index.precio1 }}</td>
-                <td>{{ index.precio2 }}</td>
+                <td class="ReferencesName">{{ index.medida }}</td>
+                <!-- <td >{{ index.precio1 }}</td> -->
+                <td class="ReferencesName">{{ index.precio2 }}</td>
                 <td class="precioName" v-html="index.inputColumn1"></td>
                 <td class="precioName" v-html="index.inputColumn2"></td>
                 <td class="precioName" v-html="index.inputColumn3"></td>
@@ -188,8 +188,9 @@
             </tbody>
           </table>
         </el-card>
-        <el-button type="success" icon="el-icon-folder-add" plain>Almacenar</el-button>
-        <button type="submit" class="btn btn-outline-success">Almacenar</button>
+        <!-- <el-button @click="submit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button> -->
+        <button  type="submit" class="btn btn-outline-success">Almacenar</button>
+        
       </el-card>
     </el-form>
   </div>
@@ -235,6 +236,7 @@
 
 .ReferencesName {
   widows: 10%;
+  text-align: center !important;
 }
 
 .precioName {
@@ -292,6 +294,7 @@ export default {
       linea: 1,
       formInline: {},
       Productos:[],
+      formData:'asdf'
     };
   },
   mounted() {
@@ -318,9 +321,9 @@ export default {
               
               
             })
+            // console.log(this.Productos);
         }
-    }
-    
+    },
   }
 };
 </script>

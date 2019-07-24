@@ -56,5 +56,6 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('Bandeja','plantillasController@showInbox');
     Route::get('getinbox','plantillasController@getInbox');
     Route::get('Printer/{id}','plantillasController@showprinter');
-    Route::get('vaciado/{id}','plantillasController@showVaciado');
+    Route::get('vaciado/{id}','plantillasController@showVaciado'); 
+    Route::get('mercadoCBA','plantillasController@vaciado');
 }); 
