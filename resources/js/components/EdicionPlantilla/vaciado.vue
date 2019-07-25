@@ -10,6 +10,9 @@
         <div slot="header" class="date">
           Fecha:
           <span>{{ fecha }}</span>
+          
+          <input type="hidden" :value="idplantilla" name="idPlantilla">
+          
         </div>
         <div>
           <table class="table">
@@ -21,6 +24,7 @@
               <tr >
                 <td class="titulo">Verificador:</td>
                 <td colspan="11">{{ index.nombre }}</td>
+                <input type="hidden" :value="index.id_usuario" name="idVerificador" >
               </tr>
             </tbody>
           </table>
@@ -159,7 +163,7 @@
               <tr>
                 <th class="productoName">Producto</th>
                 <th class="medidaName">Medida</th>
-                <th class="ReferencesName">Ref. 1</th>
+                <th class="ReferencesName" >Ref. 1</th>
                 <!-- <th class="ReferencesName">Ref. 2</th> -->
                 <th>1</th>
                 <th>2</th>
@@ -167,6 +171,7 @@
                 <th>4</th>
                 <th>5</th>
                 <th></th>
+                
               </tr>
             </thead>
             <tbody>
@@ -176,17 +181,19 @@
                 v-if="index.categoria == item.categoria">
                 <td>{{ index.produto }}</td>
                 <td class="ReferencesName">{{ index.medida }}</td>
-                <!-- <td >{{ index.precio1 }}</td> -->
+                <!-- <td class="precioName" v-html="index.productoId"></td> -->
                 <td class="ReferencesName">{{ index.precio2 }}</td>
                 <td class="precioName" v-html="index.inputColumn1"></td>
                 <td class="precioName" v-html="index.inputColumn2"></td>
                 <td class="precioName" v-html="index.inputColumn3"></td>
                 <td class="precioName" v-html="index.inputColumn4"></td>
                 <td class="precioName" v-html="index.inputColumn5"></td>
-                <td v-html="index.label"></td>
+                <td v-html="index.productoId" ></td>
+                
               </tr>
             </tbody>
           </table>
+          
         </el-card>
         <!-- <el-button @click="submit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button> -->
         <button  type="submit" class="btn btn-outline-success">Almacenar</button>
@@ -276,7 +283,7 @@
 <script>
 export default {
   name: "vaciado",
-  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos"],
+  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos","idplantilla"],
   
   data() {
     return {
@@ -313,12 +320,13 @@ export default {
               produto: this.coleccion[i].produto,
               precio1: this.coleccion[i].Anterior1,
               precio2: this.coleccion[i].Anterior2,
-              inputColumn1: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn1_${ i } name=inputColumn1[${ i }] />`,
-              inputColumn2: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn2_${ i } name=inputColumn2[${ i }] />`,
-              inputColumn3: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn3_${ i } name=inputColumn3[${ i }] />`,
-              inputColumn4: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn4_${ i } name=inputColumn4[${ i }] />`,
-              inputColumn5: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn5_${ i } name=inputColumn5[${ i }] />`,
-              
+              inputColumn1: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn1_${ i } name=inputColumn[1][${ i }] />`,
+              inputColumn2: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn2_${ i } name=inputColumn[2][${ i }] />`,
+              inputColumn3: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn3_${ i } name=inputColumn[3][${ i }] />`,
+              inputColumn4: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn4_${ i } name=inputColumn[4][${ i }] />`,
+              inputColumn5: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn5_${ i } name=inputColumn[5][${ i }] />`,
+              productoId: `<input type=hidden class="form-control" id=idProducto_${ i } name=idProducto[${ i }]  value= ${this.coleccion[i].producto} />`,
+              medidaId: `<input type=hidden class="form-control" id=idMedida${ i } name=idMedida[${ i }]  value= ${this.coleccion[i].idmedida} />`
               
             })
             // console.log(this.Productos);

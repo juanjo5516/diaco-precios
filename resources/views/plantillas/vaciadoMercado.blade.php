@@ -6,6 +6,7 @@
                 :coleccion="{{ json_encode($coleccion)}}"
                 :categoria="{{ json_encode($categoria)}}"
                 :establecimientos="{{ json_encode($mercado) }}"
+                :idplantilla="{{ $idPlantilla }}"
                 >
             </vaciado-component>
     </div>

@@ -117,11 +117,35 @@ function addvue(form,link) {
         //console.log( $( this ).serializeArray() );
         e.preventDefault();
         let parametros = $(this).serialize();
-        //console.log(parametros);
+        var serializedForm = $(form).serializeArray().reduce(function(result, field){
+            if (result.hasOwnProperty(field.name)) {
+                if (Array.isArray(result[field.name])) {
+                    result[field.name].push(field.value);
+                } else {
+                    result[field.name] = [result[field.name], field.value];
+                }
+            } else {
+                result[field.name] = field.value;
+            }
+            return result;
+        }, {});
+        var jsonForm = JSON.stringify(serializedForm);
+
+                // Agrego el tipo MIME del archivo y la codificación de caracteres
+                var jsonFileData = 'data:application/json;charset=UTF-8,';
+
+                // Codifico la cadena JSON con la función "encodeURIComponent" para que pueda ser parte del atributo "href" y luego lo agrego.
+                jsonFileData += encodeURIComponent(jsonForm);
+        
+        
         $.ajax({
             data: parametros,
             url: link,
             type: "get",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            contentType: "json",
             contentType: false,
             cache: true,
             processData: false,
