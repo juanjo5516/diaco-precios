@@ -34,6 +34,9 @@
             <a class="nav-link" href=../AsignarSede>
                 <i class="nav-icon fas fa-angle-right"></i> Asignación
             </a>
+            <a class="nav-link" href=../clonar>
+                <i class="nav-icon fas fa-angle-right"></i> Clonar plantilla
+            </a>
         </li>
         <li class="nav-title">Vaciado</li>
         <li class="nav-item nav-dropdown">

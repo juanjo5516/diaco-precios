@@ -340,5 +340,8 @@ class plantillasController extends Controller
         }
     }
 
+    public function clon(){
+        return view('Ediciones.clon');
+    }
 
 }

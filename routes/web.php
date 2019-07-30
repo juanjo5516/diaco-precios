@@ -75,5 +75,6 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('Printer/{id}','plantillasController@showprinter');
     Route::get('vaciado/{id}','plantillasController@showVaciado'); 
     Route::post('mercadoCBA','plantillasController@vaciado');
+    Route::get('clonar','plantillasController@clon');
 }); 
 
