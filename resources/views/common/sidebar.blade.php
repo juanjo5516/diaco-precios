@@ -35,7 +35,7 @@
                 <i class="nav-icon fas fa-angle-right"></i> Asignación
             </a>
             <a class="nav-link" href=../clonar>
-                <i class="nav-icon fas fa-angle-right"></i> Clonar plantilla
+                <i class="nav-icon fas fa-angle-right"></i> Clonar plantillas
             </a>
         </li>
         <li class="nav-title">Vaciado</li>
