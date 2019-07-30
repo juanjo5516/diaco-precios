@@ -11,6 +11,23 @@
 |
 */
 
+// Auth::routes();
+
+// Route::get('/inicio', 'HomeController@index')->name('home');
+
+// Route::get('/inicio', function () {
+//     // if (Auth::check()) {
+//     //     // The user is logged in...
+//     //     return redirect()->intended('/home');
+        
+//     // }else{
+//         return view('auth.login'); 
+    
+// });
+
+
+
+
 /*
 /----------------------------------------------------------------------------
 / Rutas para los Menús
@@ -57,5 +74,6 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('getinbox','plantillasController@getInbox');
     Route::get('Printer/{id}','plantillasController@showprinter');
     Route::get('vaciado/{id}','plantillasController@showVaciado'); 
-    Route::get('mercadoCBA','plantillasController@vaciado');
+    Route::post('mercadoCBA','plantillasController@vaciado');
 }); 
+

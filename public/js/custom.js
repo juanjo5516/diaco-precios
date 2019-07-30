@@ -113,7 +113,7 @@ function mensaje(id,Anterior1,Anterior2,actual){
 function addvue(form,link) {
     // let parametros = $(form).serializeObject();
     // console.log(parametros);
-    $(form).submit(function(e) {
+    $(form).submit(function(e) { 
         //console.log( $( this ).serializeArray() );
         e.preventDefault();
         let parametros = $(this).serialize();
@@ -137,11 +137,12 @@ function addvue(form,link) {
                 // Codifico la cadena JSON con la función "encodeURIComponent" para que pueda ser parte del atributo "href" y luego lo agrego.
                 jsonFileData += encodeURIComponent(jsonForm);
         
+        console.log(serializedForm);
         
         $.ajax({
-            data: parametros,
+            data: serializedForm,
             url: link,
-            type: "get",
+            type: "post",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

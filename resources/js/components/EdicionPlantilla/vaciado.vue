@@ -1,7 +1,7 @@
 <template>
   <div>
     
-    <el-form :inline="false" :model="formInline" class="form" ref="formInline"  id="vue-Asignacion">
+    <el-form :inline="false" v-model="formInline" class="form" ref="formInline"  id="vue-Asignacion">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>Vaciado de Información de Mercados</span>
@@ -11,7 +11,7 @@
           Fecha:
           <span>{{ fecha }}</span>
           
-          <input type="hidden" :value="idplantilla" name="idPlantilla">
+          <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
           
         </div>
         <div>
@@ -24,7 +24,7 @@
               <tr >
                 <td class="titulo">Verificador:</td>
                 <td colspan="11">{{ index.nombre }}</td>
-                <input type="hidden" :value="index.id_usuario" name="idVerificador" >
+                <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
               </tr>
             </tbody>
           </table>
@@ -42,7 +42,23 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr v-for="n in 5" :key="n">
+                    <td>{{ n }}</td>
+                    <td >
+                      <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]">
+                          <el-option
+                            v-for="(sede,index) in establecimientos"
+                            v-bind:key=" index "
+                            :label=" sede.nombre  " 
+                            :value=" sede.idMercado "
+                          ></el-option>
+                      </el-select>
+                    </td>
+                    <td >
+                      <input type="text" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]">
+                    </td>
+                  </tr>
+                  <!-- <tr>
                     <td>1</td>
                     <td>
                       <el-select name="Visita[1]" class="vue-select" v-model="sede1"  >
@@ -142,7 +158,7 @@
                     <td>
                       <el-input v-model="input5" name="iputMercado[5]" maxlength="3"></el-input>
                     </td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -181,21 +197,33 @@
                 v-if="index.categoria == item.categoria">
                 <td>{{ index.produto }}</td>
                 <td class="ReferencesName">{{ index.medida }}</td>
-                <!-- <td class="precioName" v-html="index.productoId"></td> -->
                 <td class="ReferencesName">{{ index.precio2 }}</td>
-                <td class="precioName" v-html="index.inputColumn1"></td>
-                <td class="precioName" v-html="index.inputColumn2"></td>
+                  <td v-for="n in 5" :key="n">
+                    <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]">
+                  </td>
+                <!-- <td v-html="index.producto" ></td> -->
+                <!-- <td class="precioName" v-html="index.productoId"></td> -->
+
+                <!-- <tr v-for="item in items" :key="item.id"> -->
+                <!-- </tr> -->
+
+                <!-- <td v-for="(it,ti) in 5" :key="ti"> -->
+                  <!-- <input  type=text class="form-control" maxlength=10  /> -->
+                  <!-- <input type="text" :name="'input['  + it  + ']'" v-model="item['valor' + it ]"> -->
+                <!-- </td> -->
+                <!-- <td class="precioName" v-html="index.inputColumn1"></td> -->
+                <!-- <td class="precioName" v-html="index.inputColumn2"></td>
                 <td class="precioName" v-html="index.inputColumn3"></td>
                 <td class="precioName" v-html="index.inputColumn4"></td>
-                <td class="precioName" v-html="index.inputColumn5"></td>
-                <td v-html="index.productoId" ></td>
+                <td class="precioName" v-html="index.inputColumn5"></td> -->
+                <!-- <td v-html="index.productoId" ></td> -->
                 
               </tr>
             </tbody>
           </table>
           
         </el-card>
-        <!-- <el-button @click="submit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button> -->
+        <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button>
         <button  type="submit" class="btn btn-outline-success">Almacenar</button>
         
       </el-card>
@@ -288,20 +316,56 @@ export default {
   data() {
     return {
       Fecha: "fecha",
-      sede1: "Seleccione una Opción",
-      select2: "Seleccione una Opción",
-      select3: "Seleccione una Opción",
-      select4: "Seleccione una Opción",
-      select5: "Seleccione una Opción",
+      sedes:{
+        select1: "Seleccione una Opción",
+        select2: "Seleccione una Opción",
+        select3: "Seleccione una Opción",
+        select4: "Seleccione una Opción",
+        select5: "Seleccione una Opción",
+      },
       input1: "",
       input2: "",
       input3: "",
       input4: "",
       input5: "",
       linea: 1,
-      formInline: {},
+      formInline: {
+        idplantilla:'',
+        id_usuario:'',
+        sede1:'',
+        sede2:'',
+        sede3:'',
+        categoria:{},
+        
+        Productos:{},
+        coleccion:{}
+        
+        
+      },
       Productos:[],
-      formData:'asdf'
+      dataProductos:[],
+      formData:'asdf',
+      idVerificador:'',
+      Data1:{},
+      valor1:'',
+      inputs1:{},
+      sede:{},
+      inputMercados:{
+        mercado1:'',
+        mercado2:'',
+        mercado3:'',
+        mercado4:'',
+        mercado5:'',
+      },
+      // DataAdd:[],
+      Data:[],
+      idP:'',
+      Mercados:[]
+      // usuario:{
+      //   sede:'',
+      //   nombre:'',
+      //   id_usuario:''
+      // }
     };
   },
   mounted() {
@@ -312,7 +376,7 @@ export default {
     DataProductos: function(){
           for (let i = 0; i <= this.coleccion.length-1; i++) {
             this.Productos.push({
-              NombrePlantilla: this.coleccion[i].NombrePlantilla,
+              // NombrePlantilla: this.coleccion[i].NombrePlantilla,
               categoria: this.coleccion[i].categoria,
               created_at: this.coleccion[i].created_at,
               medida: this.coleccion[i].medida,
@@ -320,18 +384,65 @@ export default {
               produto: this.coleccion[i].produto,
               precio1: this.coleccion[i].Anterior1,
               precio2: this.coleccion[i].Anterior2,
-              inputColumn1: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn1_${ i } name=inputColumn[1][${ i }] />`,
-              inputColumn2: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn2_${ i } name=inputColumn[2][${ i }] />`,
-              inputColumn3: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn3_${ i } name=inputColumn[3][${ i }] />`,
-              inputColumn4: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn4_${ i } name=inputColumn[4][${ i }] />`,
-              inputColumn5: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn5_${ i } name=inputColumn[5][${ i }] />`,
-              productoId: `<input type=hidden class="form-control" id=idProducto_${ i } name=idProducto[${ i }]  value= ${this.coleccion[i].producto} />`,
-              medidaId: `<input type=hidden class="form-control" id=idMedida${ i } name=idMedida[${ i }]  value= ${this.coleccion[i].idmedida} />`
-              
+              medidaId: this.coleccion[i].idmedida,
+              valor1:'',
+              valor2:'',
+              valor3:'',
+              valor4:'',
+              valor5:''
             })
             // console.log(this.Productos);
         }
     },
+
+    // for (let i = 0; i <= this.coleccion.length-1; i++) {
+    //         this.Productos.push({
+    //           NombrePlantilla: this.coleccion[i].NombrePlantilla,
+    //           categoria: this.coleccion[i].categoria,
+    //           created_at: this.coleccion[i].created_at,
+    //           medida: this.coleccion[i].medida,
+    //           producto: this.coleccion[i].producto,
+    //           produto: this.coleccion[i].produto,
+    //           precio1: this.coleccion[i].Anterior1,
+    //           precio2: this.coleccion[i].Anterior2,
+    //           inputColumn1: `<input v-model=campo type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn1_${ i } name=inputColumn[${ i }] />`,
+    //           inputColumn2: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn2_${ i } name=inputColumn[2][${ i }] />`,
+    //           inputColumn3: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn3_${ i } name=inputColumn[3][${ i }] />`,
+    //           inputColumn4: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn4_${ i } name=inputColumn[4][${ i }] />`,
+    //           inputColumn5: `<input type=text onblur="mensaje(this.id,${this.coleccion[i].Anterior1},${this.coleccion[i].Anterior2},this.value)" class="form-control" maxlength=10 id=inputColumn5_${ i } name=inputColumn[5][${ i }] />`,
+    //           productoId: `<input type=text class="form-control" :model:"dataProducto" id=idProducto_${ i } name=idProducto[${ i }]  value= ${this.coleccion[i].producto} />`,
+    //           medidaId: `<input type=hidden class="form-control" id=idMedida${ i } name=idMedida[${ i }]  value= ${this.coleccion[i].idmedida} />`,
+    //           valor1:'',
+    //           valor2:'',
+    //           valor3:'',
+    //           valor4:'',
+    //           valor5:''
+    //         })
+    //         // console.log(this.Productos);
+    //     }
+    onSubmit() {
+        for(let a = 0; a <= this.coleccion.length-1; a++){
+            this.dataProductos.push({
+                idDataProducto: this.coleccion[a].producto,
+                idDataMedida: this.coleccion[a].idmedida
+            })
+        }
+
+        var url = '/mercadoCBA';
+        axios.post(url, {
+            idP: this.idplantilla,
+            Mercados: this.inputMercados,
+            Sedes:this.sedes,
+            Usuarios: this.usuario[0].id_usuario,
+            Data: this.Productos,
+        }).then(response =>{
+            console.log(response.data)
+        }).catch(error => {
+				  console.log(error.message)
+        });
+      
+        
+      }
   }
 };
 </script>

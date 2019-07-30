@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <base href="./admin">
     <meta charset="utf-8">
@@ -25,7 +25,8 @@
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-    @include('common.header')
+    {{-- @guest @yield('content') @else --}}
+     @include('common.header')  
     <div class="app-body">
         <div class="sidebar">
             @include('common.sidebar')
@@ -48,16 +49,18 @@
                     </div>
                 </li>
             </ol>
+            
             <div  class="container-fluid">
                 <div id="main">
-                    @yield('contenido')
+                     @yield('contenido')
                 </div>
             </div>
         </main>
 
     </div>
-    @include('common.footer')
-
+    
+     @include('common.footer')
+     
     <!-- Scripts -->
     
     <script src="{{ asset('js/custom.js') }}"></script>
@@ -67,7 +70,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
     @yield('Table')
-
+    {{-- @endguest  --}}
 </body>
 
 </html>

@@ -227,7 +227,7 @@ class plantillasController extends Controller
            // DB::commit(); 
         } catch (\Exceptio $e) {
             //DB::rollBack();
-            print $e;
+            print $e; 
             
         }
 
@@ -311,37 +311,33 @@ class plantillasController extends Controller
     public function vaciado(Request $request){
         
         $TIMESTAMP = Carbon::now();
-        //$r = json_decode($request->getContent(), true);
-        $valor = sizeof($request->idProducto);
-        try {
-            for ($mercado=1; $mercado < 6; $mercado++) { 
-                
-                for ($i=0; $i  < $valor ; $i++) { 
-                    
-                    $modelo = new vaciadocba;
-                $modelo->numeroLocal = $request->iputMercado[$mercado];
-                    $modelo->created_at = $TIMESTAMP;
-                    $modelo->idPlantilla = $request->idPlantilla;
-                    $modelo->idVerificador = $request->idVerificador;
-                    $modelo->tipoVerificacion = 1;
-                    $modelo->idLugarVisita = 1;
-                    $modelo->idEstablecimientoVisita = 1;
-                    
-                    $modelo->idProducto = $request->idProducto[$i];
-                    $modelo->idMedida = 1;
-                    $modelo->precioProducto = $request->inputColumn[$mercado][$i];
-                    $modelo->estado = 'A';
-                    $modelo->save();
+        $cantidadProducto = count($request->Data);
 
-                    
-                }
-                
+        try {
+            for ($ii=0; $ii <= 4 ; $ii++) { 
+                    $fila = $ii + 1;
+                    for ($i=0; $i  <= $cantidadProducto-1 ; $i++) { 
+                        $modelo = new vaciadocba;
+                        $modelo->numeroLocal = $request->get('Mercados')['mercado'.$fila];
+                        $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
+                        $modelo->created_at = $TIMESTAMP;
+                        $modelo->idPlantilla = $request->idP;
+                        $modelo->idVerificador = $request->Usuarios;
+                        $modelo->tipoVerificacion = 1;
+                        $modelo->idEstablecimientoVisita = 1;
+                        $modelo->idProducto = $request->get('Data')[$i]['producto'];
+                        $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
+                        $modelo->precioProducto = $request->get('Data')[$i]['valor'.$fila];
+                        $modelo->estado = 'A';
+                        $modelo->save();     
+                    }
             }
-        }catch (\Exceptio $e) {
-            DB::rollBack();
-            print $e;
+            print('ingresado');
         }
-        //dd($request->idPlantilla);
+        catch (\Exceptio $e) {
+            DB::rollBack();
+                print "ERROR";
+        }
     }
 
 
