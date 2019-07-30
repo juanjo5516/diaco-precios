@@ -40,6 +40,7 @@ Vue.component('inbox-component',require('./components/EdicionPlantilla/inbox.vue
 Vue.component('printer-component',require('./components/EdicionPlantilla/printer.vue').default)
 Vue.component('vaciado-component',require('./components/EdicionPlantilla/vaciado.vue').default)
 Vue.component('v-select', vSelect)
+Vue.component('clon-component',require('./components/EdicionPlantilla/clonar.vue').default)
 
 const app = new Vue({
     el: '#main'

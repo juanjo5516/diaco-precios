@@ -5,7 +5,9 @@
                 Clonar Plantillas
             </div>
             <div class="card-body">
-                
+                <clon-component 
+                    :plantillasall="{{ $Plantillas }}"
+                ></clon-component>
             </div>
             
         </div>

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 
-@section('contenido')
+@section('contenido') 
     @include('plantillas.edicion')
 @endsection
 
 @section('Table')
-    <script>
+    <script> 
         $(document).ready(function(){
             addGeneral('#vue-vaciado','addPlantillas','#vue-table-productos',false);
             // GetTablaSub('#tCategoria',"{{ url('TablaCategoria') }}");  

@@ -8,9 +8,9 @@
 @section('Table')
     <script>
         $(document).ready(function(){
-            addvue('#vue-Asignacion');
-            TablaVacia('#table-vue-asede');
-            GetTablaAsede("#table-vue-asede","{{ url('GetListaAsede') }}");
+            //addvue('#vue-Asignacion');
+            //TablaVacia('#table-vue-asede');
+            //GetTablaAsede("#table-vue-asede","{{ url('GetListaAsede') }}");
         });
     </script>
 @endsection
