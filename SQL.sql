@@ -39,3 +39,34 @@ CREATE TABLE diaco_vaciadocba(
     precioProducto decimal(18,5),
     estado VARCHAR(10)
 )
+
+
+
+-- ================================================
+-- RETORNA LOS DEPARTAMENTOS QUE TIENEN PRECIOS
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		JUAN JOSE JOLON
+-- Description:	RETORNO DE DEPARTAMENTOS
+-- =============================================
+CREATE PROCEDURE GetDepartamentos
+
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	SELECT DISTINCT USUARIO.nombre, SEDE.nombre_sede, MUNI.nombre_municipio, DEPA.nombre_departamento FROM diaco_vaciadocba VACIADO
+	INNER JOIN diaco_usuario USUARIO
+		ON USUARIO.id_usuario = VACIADO.idVerificador
+	INNER JOIN diaco_sede SEDE
+		ON SEDE.id_diaco_sede = USUARIO.id_sede_diaco
+	INNER JOIN municipio MUNI
+		ON MUNI.codigo_municipio = SEDE.codigo_municipio
+	INNER JOIN departamento DEPA
+		ON DEPA.codigo_departamento = MUNI.codigo_departamento
+END
+GO
