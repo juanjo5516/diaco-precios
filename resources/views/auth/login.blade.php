@@ -1,5 +1,7 @@
 @extends('layouts.applogin')
-
+@section('diaco_title')
+    DIACO
+@endsection
 @section('content')
 {{-- @section('contenido') --}}
 
