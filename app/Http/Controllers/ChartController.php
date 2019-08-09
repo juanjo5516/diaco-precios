@@ -16,6 +16,9 @@ class ChartController extends Controller
 	ON PRO.id_producto = VAC.id_producto
 	WHERE VAC.id_producto = 6
  */
+    public function __construct(){
+        $this->middleware('auth');
+    }
     function ChartProductos(){
         // $Producto = DB::table('vaciadoCBA')->join('productoCBA','productoCBA.id_producto','=','vaciadoCBA.id_producto')
         // ->select('vaciadoCBA.precio','productoCBA.nombre')

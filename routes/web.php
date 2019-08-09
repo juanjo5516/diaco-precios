@@ -34,7 +34,21 @@
 /----------------------------------------------------------------------------
 /
 */
-Route::get('/','menu@GetSelectMedida'); 
+Route::get('/', function () {
+    // if (Auth::check()) {
+    //     // The user is logged in...
+    //     return redirect()->intended('/home');
+        
+    // }else{
+        return view('auth.login'); 
+    
+});
+
+Auth::routes();
+
+// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'menu@GetSelectMedida')->name('home');
+// Route::get('/','menu@GetSelectMedida'); 
 Route::get('Productos','menu@GetTabla'); 
 Route::get('addProducto','menu@addProductos');
 Route::get('index','menu@GetSelectMedida');
@@ -78,9 +92,7 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('clonar','plantillasController@clon');
     Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
     Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 }); 
 
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

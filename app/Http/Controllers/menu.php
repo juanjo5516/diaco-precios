@@ -8,18 +8,25 @@ use Illuminate\Support\Facades\DB;
 use Datatables;
 use Carbon\Carbon;
 use Alert;
+use Illuminate\Support\Facades\Auth;
 
 class menu extends Controller
 {
 
     
 
-
+    public function __construct(){
+        $this->middleware('auth');
+    }
+    
     public function GetSelectMedida(){
         // $Cmedidas = DB::select('select * from medida');
         // $Ccategorias = DB::select('select * from categoriaCBA');
         // $Scategoria = DB::select('select * from subcategoriaCBA');
         //return view('admin.home',['Cmedidas' => $Cmedidas,'Ccategoria' => $Ccategorias,'s' => $Scategoria]);
+        // $user = Auth::user();
+        // $sede = DB::table('diaco_sede')->select('nombre_sede')->where('id_diaco_sede','=',$user->id_sede_diaco)->get();
+        // dd($user);
         return view('admin.home');
 
     }

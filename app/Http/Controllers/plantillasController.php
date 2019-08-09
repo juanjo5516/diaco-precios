@@ -13,6 +13,9 @@ use App\vaciadocba;
 class plantillasController extends Controller
 {
 
+    public function __construct(){
+        $this->middleware('auth');
+    }
     public function UserLogin(){
         $user = DB::table('diaco_usuario')
                     ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();

@@ -236,15 +236,20 @@
             <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                 aria-expanded="false">
                 <img class="img-avatar" src="{{ asset('images/diaco/user.png') }}" alt="admin@bootstrapmaster.com">
+                <span>{{ auth()->user()->nombre!=null ? auth()->user()->nombre : "Administrator" }}</span>
+                {{-- <div class="info">
+                    <a href="#" class="d-block"> {{ auth()->user()->nombre!=null ? auth()->user()->nombre : "Administrator" }} </a>
+                </div> --}}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-header text-center">
-                    <strong>Account</strong>
+                    <strong>Settings</strong>
                 </div>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-bell-o"></i> Updates
-                    <span class="badge badge-info">42</span>
-                </a>
+                {{-- <a class="dropdown-item" > --}}
+                    
+                    {{-- <i class="fas fa-user"></i>{{ auth()->user()->nombre!=null ? auth()->user()->nombre : "Administrator" }} --}}
+                    {{-- <span class="badge badge-info">42</span> --}}
+                {{-- </a>
                 <a class="dropdown-item" href="#">
                     <i class="fa fa-envelope-o"></i> Messages
                     <span class="badge badge-success">42</span>
@@ -274,8 +279,8 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">
-                    <i class="fa fa-shield"></i> Lock Account</a>
-                <a class="dropdown-item" href="#">
+                    <i class="fa fa-shield"></i> Lock Account</a> --}}
+                <a class="dropdown-item" href="logout">
                     <i class="fa fa-lock"></i> Logout</a>
             </div>
         </li>

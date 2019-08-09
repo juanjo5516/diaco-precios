@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -15,18 +16,20 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $primaryKey = 'id_usuario';
+    protected $rememberTokenName = false;
     protected $fillable = [
-        'name', 'email'
+        'id_usuario','name', 'email','clave'
     ];
 
-    // protected $table = 'diaco_usuario';
+    protected $table = 'diaco_usuario';
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password'
+        'clave','password'
     ];
 
     /**
