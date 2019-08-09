@@ -80,3 +80,7 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
 }); 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
