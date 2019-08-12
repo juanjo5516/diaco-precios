@@ -289,6 +289,7 @@ function AddColumna(producto2,medida2){
             '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control">'+producto2+'</select>',
             '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control">'+ medida2 +'</select>', 
             '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>'
+            
         ] ).draw( false );
  
         counter++;
@@ -329,9 +330,10 @@ function AddColumnaGeneral(producto2,medida2,tabla){
     
     t.row.add( [
         '',
-        '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control">'+producto2+'</select>',
-        '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control">'+ medida2 +'</select>', 
-        '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>'
+        '<select name="Dproducto['+ counter +']" id="Dproducto['+ counter +']" class="form-control select">'+producto2+'</select>',
+        '<select name="Dmedida['+ counter +']" id="Dmedida['+ counter +']" class="form-control select">'+ medida2 +'</select>', 
+        // '<input type="text" class="form-control" id="precio[' + counter + ']" name="precio['+ counter +']" value=""/>',
+        '<button  type="button" class="btn btn-outline-primary ">Delete</button>'
     ] ).draw( false );
 
     counter++;

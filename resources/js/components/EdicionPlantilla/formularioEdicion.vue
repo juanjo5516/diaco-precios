@@ -25,11 +25,21 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="column-title-vue">Tipo Plantilla:</td>
+                        <td>
+                            <select   name="TipoVisita" id="TipoVisita" class="form-control">
+                                <option >Seleccione una Opción</option>
+                                <option v-for="(item, idx) in DataResult" :key="idx" :value="item.id_TipoVerificacion">{{ item.nombreVerificacion}}</option>  
+                            </select>
+
+                            
+                        </td>
+                    </tr>
+                    <tr>
                         <td  class="column-title-vue">
                             Categoria:
                         </td>
                         <td>
-
                             <select   name="categoriaVaciado" id="categoriaVaciado" class="form-control">
                                 <option >Seleccione una Opción</option>
                                 <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
@@ -47,6 +57,8 @@
                                     <th>#</th>
                                     <th>Producto</th>
                                     <th>Medida</th>
+                                    <th></th>
+                                    
                                 </tr>
                             </thead>
                         </table>
@@ -65,6 +77,11 @@
 <style>
     .table td{
         border:0;
+
+    }
+
+    .select{
+        height: 85% !important;
     }
     .column-title-vue{
         text-align: right;
@@ -81,7 +98,25 @@
         props: ['fecha','coleccion'],
         data() {
             return {
-            input: ''
+            input: '',
+            DataResult:[],
+            Tipo:"Seleccione una Opción",
+            
+            }
+        },
+         mounted() {
+            this.getData();
+        },methods: {
+            getData: function(){
+              axios.get('/getTipo')
+                .then(response => {
+                  this.DataResult = response.data;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+                .finally(function () {
+                });
             }
         }
     }

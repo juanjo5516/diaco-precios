@@ -73,7 +73,7 @@ Route::get('GetTablaEstablecimiento','menu@GetTablaEstablecimiento');
 Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 /*Graficos */
-Route::get('bar-chart', 'ChartController@ChartProductos');
+Route::get('bar-chart', 'ChartController@ChartProductos'); 
 
 /* Rutas de Editor de Plantillas */
 
@@ -93,7 +93,7 @@ Route::group(['middleware' => 'cors'], function(){
     Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
     Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-
+    Route::get('getTipo','plantillasController@getTipoVisita');
 
     Route::get('check','plantillasController@check');
 }); 

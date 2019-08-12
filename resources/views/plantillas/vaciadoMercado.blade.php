@@ -5,8 +5,10 @@
                 :usuario="{{ json_encode($user) }}"
                 :coleccion="{{ json_encode($coleccion)}}"
                 :categoria="{{ json_encode($categoria)}}"
-                :establecimientos="{{ json_encode($mercado) }}"
+                :establecimientos="{{ json_encode($establecimiento) }}"
                 :idplantilla="{{ $idPlantilla }}"
+                :mercados="{{ $mercado }}"
+                :tipo="{{ $tipo }}"
                 >
             </vaciado-component>
     </div>

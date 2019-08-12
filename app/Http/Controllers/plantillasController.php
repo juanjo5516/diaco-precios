@@ -10,6 +10,7 @@ use App\NameTemplate;
 use App\ListarAsignacion;
 use App\vaciadocba;
 use Illuminate\Support\Facades\Auth;
+use App\TipoVisitaPlantilla;
 
 class plantillasController extends Controller
 {
@@ -59,6 +60,11 @@ class plantillasController extends Controller
         
     }
     
+    public function getTipoVisita(){
+        $Tipo = TipoVisitaPlantilla::all();
+        return response()->json($Tipo, 200);
+    }
+
     public function index(){
         $date = Carbon::now();
         $date = $date->format('d-m-Y');
@@ -117,6 +123,7 @@ class plantillasController extends Controller
                     $Edicion->idMedida  = $request->Dmedida[$i];
                     $Edicion->estado  = 1;
                     $Edicion->created_at = $TIMESTAMP; 
+                    $Edicion->tipoVerificacion = $request->TipoVisita;
                     $Edicion->save();
     
                 }
@@ -138,6 +145,7 @@ class plantillasController extends Controller
                     $Edicion->idMedida  = $request->Dmedida[$i];
                     $Edicion->estado  = 1;
                     $Edicion->created_at = $TIMESTAMP;
+                    $Edicion->tipoVerificacion = $request->TipoVisita;
                     $Edicion->save();
     
                 }
@@ -315,12 +323,28 @@ class plantillasController extends Controller
         return $mercado;
     }
 
+    public function getEstablecimiento(){
+        $mercado = DB::table('diaco_establecimientocba')->select('idEstablecimiento','nombreEstablecimiento as nombre')->get();
+        return $mercado;
+    }
+    
+    public function getTipoVerificacionVaciado($id){
+        $tipo = DB::table('diaco_plantillascba')
+                        ->join('diaco_name_template_cba','NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
+                        ->selectraw('distinct diaco_plantillascba.tipoVerificacion')
+                        ->where('diaco_name_template_cba.id',$id)
+                        ->get();
+        return response()->json($tipo, 200);
+    } 
+
     public function showVaciado($id){
          $fecha = $this->getFecha();
          $usuario = $this->UserLogin();
          $plantilla = $this->getPlantillas($id); 
          $categoria = $this->getCategoria($id);
-         $data = $this->getMercado();
+         $data = $this->getEstablecimiento();
+         $lugarMercado = $this->getMercado();
+         $tipo = $this->getTipoVerificacionVaciado($id);
         //dd($plantilla);
         //return response()->json($mercado);
         
@@ -331,8 +355,10 @@ class plantillasController extends Controller
                 'user' => $usuario,
                 'coleccion' => $plantilla,
                 'categoria' => $categoria,
-                'mercado' => $data,
-                'idPlantilla' => $id
+                'establecimiento' => $data,
+                'idPlantilla' => $id,
+                'mercado' => $lugarMercado,
+                'tipo' => $tipo
 
             ]
         );
@@ -349,12 +375,18 @@ class plantillasController extends Controller
                     for ($i=0; $i  <= $cantidadProducto-1 ; $i++) { 
                         $modelo = new vaciadocba;
                         $modelo->numeroLocal = $request->get('Mercados')['mercado'.$fila];
-                        $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
+                        // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
+                        $modelo->idLugarVisita = $request->get('Sedes')['mLugar']; 
                         $modelo->created_at = $TIMESTAMP;
                         $modelo->idPlantilla = $request->idP;
                         $modelo->idVerificador = $request->Usuarios;
                         $modelo->tipoVerificacion = 1;
-                        $modelo->idEstablecimientoVisita = 1;
+                        if($request->get('Sedes')['select'.$fila] == 'Seleccione una Opción'){
+                           $modelo->idEstablecimientoVisita = 0;
+                        }else{
+                            $modelo->idEstablecimientoVisita = $request->get('Sedes')['select'.$fila];
+                        }
+
                         $modelo->idProducto = $request->get('Data')[$i]['producto'];
                         $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
                         $modelo->precioProducto = $request->get('Data')[$i]['valor'.$fila];
@@ -362,8 +394,12 @@ class plantillasController extends Controller
                         $modelo->save();     
                     }
             }
-            print('ingresado');
+            $respuesta = 'ingresado';
+            DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
+            return response()->json($respuesta, 200);
+            
         }
+        
         catch (\Exceptio $e) {
             DB::rollBack();
                 print "ERROR";
@@ -421,9 +457,10 @@ class plantillasController extends Controller
 
     function check(){
         $user = $this->UserLogin();
-
-        $user2 = Auth::user()->tipo = $user->tipo;
-        dd($user2);
+        $ti = $this->getTipoVisita();
+        $tipo = $this->getTipoVerificacionVaciado();
+        // $user2 = Auth::user()->tipo = $user->tipo;
+        dd($tipo);
     }
 
 }

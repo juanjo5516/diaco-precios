@@ -8,11 +8,12 @@ class EdicionPlantilla extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'NombrePlantilla', 'idCategoria', 'idProducto', 'idMedida', 'estado','created_at'
+        'NombrePlantilla', 'idCategoria', 'idProducto', 'idMedida', 'estado','created_at','tipoVerificacion'
     ];
 
 
     protected $table = 'diaco_plantillascba';
+    
 
     
 }

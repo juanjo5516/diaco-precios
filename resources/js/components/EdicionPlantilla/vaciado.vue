@@ -18,8 +18,22 @@
           <table class="table">
             <tbody v-for="(index , ex1) in usuario" :key="ex1">
               <tr >
-                <td class="titulo">Sede:</td>
-                <td colspan="11">{{ index.sede }}</td>
+                  <td  class="titulo">Sede:</td>
+                  <td  colspan="8">{{ index.sede }}</td>
+
+                  
+                  <td v-if="tipo" class="titulo">Mercado:</td>
+
+                  <td class="selectMercado">
+                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                          <el-option
+                            v-for="(sede,index) in mercados"
+                            v-bind:key=" index "
+                            :label=" sede.nombre  " 
+                            :value=" sede.idMercado "
+                          ></el-option>
+                      </el-select>
+                  </td>
               </tr>
               <tr >
                 <td class="titulo">Verificador:</td>
@@ -50,7 +64,7 @@
                             v-for="(sede,index) in establecimientos"
                             v-bind:key=" index "
                             :label=" sede.nombre  " 
-                            :value=" sede.idMercado "
+                            :value=" sede.idEstablecimiento "
                           ></el-option>
                       </el-select>
                     </td>
@@ -224,7 +238,7 @@
           
         </el-card>
         <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button>
-        <button  type="submit" class="btn btn-outline-success">Almacenar</button>
+        <!-- <button  type="submit" class="btn btn-outline-success">Almacenar</button> -->
         
       </el-card>
     </el-form>
@@ -233,8 +247,13 @@
 
 <style>
 .titulo {
-  width: 200px;
+  width: 300px;
 }
+
+.selectMercado{
+  width: 40% !important;
+}
+
 .date {
   margin-top: -30px;
   text-align: right !important;
@@ -306,12 +325,15 @@
 .inputPaso{
   background-color: green !important;
 }
+.el-select{
+  width: 100%;
+}
 </style>
 
 <script>
 export default {
   name: "vaciado",
-  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos","idplantilla"],
+  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos","idplantilla","mercados","tipo"],
   
   data() {
     return {
@@ -322,6 +344,7 @@ export default {
         select3: "Seleccione una Opción",
         select4: "Seleccione una Opción",
         select5: "Seleccione una Opción",
+        mLugar: "Seleccione una Opción",
       },
       input1: "",
       input2: "",
@@ -429,14 +452,24 @@ export default {
         }
 
         var url = '/mercadoCBA';
+        const bandeja = '/Bandeja';
         axios.post(url, {
             idP: this.idplantilla,
             Mercados: this.inputMercados,
             Sedes:this.sedes,
             Usuarios: this.usuario[0].id_usuario,
             Data: this.Productos,
+            idSede:this.usuario[0].id
         }).then(response =>{
-            console.log(response.data)
+          const status = 
+            JSON.parse(response.status);
+
+          //redirect logic
+          if (status == '200') {
+            window.location = bandeja;
+            //this.$router.push('/Bandeja');
+          }
+            //console.log("respuesta"+response.data)
         }).catch(error => {
 				  console.log(error.message)
         });

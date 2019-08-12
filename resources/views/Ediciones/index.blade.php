@@ -16,6 +16,11 @@
             $('#addLinea').on('click',function () {
                 AddColumnaGeneral(producto2,medida2,'#vue-table-productos'); 
             });
+
+            var table = $('#vue-table-productos').DataTable();
+            $('#vue-table-productos').on("click", "button", function(){
+                table.row($(this).parents('tr')).remove().draw(false);
+            });
         })
     </script>
 @endsection

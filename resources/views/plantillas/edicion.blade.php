@@ -4,7 +4,7 @@
             <div class="card-header text-left">
                 Editor de Plantillas
             </div>
-            <div class="card-body">
+            <div class="card-body"> 
                 <formulario-component :fecha="'{{ $fecha }}'" :coleccion="{{ $collection }}" ></formulario-component>
             </div>
         </div>
