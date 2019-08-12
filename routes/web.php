@@ -35,13 +35,13 @@
 /
 */
 Route::get('/', function () {
-    // if (Auth::check()) {
-    //     // The user is logged in...
-    //     return redirect()->intended('/home');
+    if (Auth::check()) {
+        // The user is logged in...
+        return redirect()->intended('/home');
         
-    // }else{
+    }else{
         return view('auth.login'); 
-    
+    }
 });
 
 Auth::routes();
@@ -93,6 +93,9 @@ Route::group(['middleware' => 'cors'], function(){
     Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
     Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+
+    Route::get('check','plantillasController@check');
 }); 
 
 

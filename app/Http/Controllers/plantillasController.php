@@ -9,6 +9,7 @@ use App\EdicionPlantilla;
 use App\NameTemplate;
 use App\ListarAsignacion;
 use App\vaciadocba;
+use Illuminate\Support\Facades\Auth;
 
 class plantillasController extends Controller
 {
@@ -17,10 +18,19 @@ class plantillasController extends Controller
         $this->middleware('auth');
     }
     public function UserLogin(){
-        $user = DB::table('diaco_usuario')
-                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
+        // $user = DB::table('diaco_usuario')
+        //             ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
         //return response()->json($user);
-                    return $user;
+        $user2 = Auth::user();
+        $user = DB::table('diaco_usuario')
+                    ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')
+                    ->join('diaco_usuario_perfil','diaco_usuario_perfil.id_usuario','=','diaco_usuario.id_usuario')
+                    ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario','diaco_usuario_perfil.id_perfil_puesto as tipo')
+                    ->where('diaco_usuario.id_usuario', '=', $user2->id_usuario)->get();
+        
+        
+        
+        return $user;
     }
 
     public function Asede(){
@@ -145,6 +155,7 @@ class plantillasController extends Controller
                         ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
                         ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
                         ->select('diaco_name_template_cba.NombreTemplate','diaco_sede.nombre_sede','diaco_asignarsedecba.estatus','diaco_asignarsedecba.created_at')
+                        ->where('diaco_asignarsedecba.estatus','>',0)
                         ->get();
         return $Listar;
          
@@ -162,8 +173,10 @@ class plantillasController extends Controller
                         ->selectraw("diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
                         ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                         ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
+                        ->where('diaco_asignarsedecba.estatus','>','0')
                         ->get();
-        //print $buson;
+        //dd($buson);
+        
         return response()->json($buson);
     }
     public function storeLista(Request $request){
@@ -237,9 +250,21 @@ class plantillasController extends Controller
         
     }
     public function getPlantillas($id){
+        // $query = DB::table('diaco_plantillascba')
+        //                 // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
+        //                 ->selectraw("distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
+        //                 ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+        //                 ->join('diaco_productocba','id_producto','=','idProducto')
+        //                 ->join('diaco_medida','id_medida','=','idMedida')
+        //                 ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+        //                 ->where('diaco_name_template_cba.id',$id)
+        //                 ->get();
+
         $query = DB::table('diaco_plantillascba')
                         // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
-                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
+                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba 
+                        where idProducto = [diaco_productocba].id_producto 
+                            and created_at BETWEEN DATEADD(DAY,-7,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE())  ),0), 'N2') AS Anterior1")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -247,27 +272,29 @@ class plantillasController extends Controller
                         ->where('diaco_name_template_cba.id',$id)
                         ->get();
 
-        $query2 = DB::select("
-        SELECT 
-	dp.NombrePlantilla,
-	dp.created_at,
-	cb.nombre as categoria,
-	pc.nombre as produto,
-	dm.nombre as medida,
-	pc.id_producto as idProducto,
-	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,
-	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2
-		 FROM diaco_plantillascba dp
-	INNER JOIN diaco_categoriacba cb
-		ON cb.id_Categoria = dp.idCategoria
-	INNER JOIN diaco_productocba pc
-		ON pc.id_producto = dp.idProducto
-	INNER JOIN diaco_medida dm
-		ON dm.id_medida = dp.idMedida
-	INNER JOIN diaco_name_template_cba nca
-		ON nca.NombreTemplate = dp.NombrePlantilla
-	WHERE nca.id = :id
-        ",['id' => $id]);
+    //     $query2 = DB::select("
+    //     SELECT 
+	// dp.NombrePlantilla,
+	// dp.created_at,
+	// cb.nombre as categoria,
+	// pc.nombre as produto,
+	// dm.nombre as medida,
+	// pc.id_producto as idProducto,
+	// FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,
+	// FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2
+	// 	 FROM diaco_plantillascba dp
+	// INNER JOIN diaco_categoriacba cb
+	// 	ON cb.id_Categoria = dp.idCategoria
+	// INNER JOIN diaco_productocba pc
+	// 	ON pc.id_producto = dp.idProducto
+	// INNER JOIN diaco_medida dm
+	// 	ON dm.id_medida = dp.idMedida
+	// INNER JOIN diaco_name_template_cba nca
+	// 	ON nca.NombreTemplate = dp.NombrePlantilla
+	// WHERE nca.id = :id
+    //     ",['id' => $id]);
+
+    //dd($query);    
         return $query;
     }
 
@@ -289,11 +316,11 @@ class plantillasController extends Controller
     }
 
     public function showVaciado($id){
-        $fecha = $this->getFecha();
-        $usuario = $this->UserLogin();
-        $plantilla = $this->getPlantillas($id); 
-        $categoria = $this->getCategoria($id);
-        $data = $this->getMercado();
+         $fecha = $this->getFecha();
+         $usuario = $this->UserLogin();
+         $plantilla = $this->getPlantillas($id); 
+         $categoria = $this->getCategoria($id);
+         $data = $this->getMercado();
         //dd($plantilla);
         //return response()->json($mercado);
         
@@ -355,6 +382,7 @@ class plantillasController extends Controller
     public function getPlantillasAll(){
         $query = DB::table('diaco_name_template_cba')
                         ->selectraw('id,NombreTemplate')
+                        ->where('diaco_name_template_cba.estado','>',0)
                         ->get();
         
         return $query;
@@ -389,6 +417,13 @@ class plantillasController extends Controller
        }
 
         //dd($comprobar);
+    }
+
+    function check(){
+        $user = $this->UserLogin();
+
+        $user2 = Auth::user()->tipo = $user->tipo;
+        dd($user2);
     }
 
 }

@@ -383,7 +383,7 @@ export default {
               producto: this.coleccion[i].producto,
               produto: this.coleccion[i].produto,
               precio1: this.coleccion[i].Anterior1,
-              precio2: this.coleccion[i].Anterior2,
+              precio2: this.coleccion[i].Anterior1,
               medidaId: this.coleccion[i].idmedida,
               valor1:'',
               valor2:'',
