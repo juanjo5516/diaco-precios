@@ -41,6 +41,7 @@ Vue.component('printer-component',require('./components/EdicionPlantilla/printer
 Vue.component('vaciado-component',require('./components/EdicionPlantilla/vaciado.vue').default)
 Vue.component('v-select', vSelect)
 Vue.component('clon-component',require('./components/EdicionPlantilla/clonar.vue').default)
+Vue.component('propano-component',require('./components/Propano/addPropano.vue').default)
 
 const app = new Vue({
     el: '#main'

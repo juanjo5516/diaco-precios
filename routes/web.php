@@ -96,6 +96,9 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('getTipo','plantillasController@getTipoVisita');
     Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
     Route::get('check','plantillasController@check');
+    Route::get('GasPropano','menu@viewGasPropano');
+    Route::get('getPropano','PropanoController@GetPropano');
+    Route::post('AddPropano','PropanoController@addPropano');
 }); 
 
 

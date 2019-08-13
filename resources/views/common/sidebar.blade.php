@@ -24,6 +24,10 @@
                         <i class="nav-icon fas fa-angle-right"></i> Mercado</a>
             </li>
             <li class="nav-item">
+                    <a class="nav-link" href="../GasPropano">
+                            <i class="nav-icon fas fa-angle-right"></i> Gas Propano</a>
+                </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../Establecimiento">
                         <i class="nav-icon fas fa-angle-right"></i> Establecimiento</a>
             </li>

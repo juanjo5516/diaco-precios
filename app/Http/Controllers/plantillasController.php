@@ -272,9 +272,8 @@ class plantillasController extends Controller
 
         $query = DB::table('diaco_plantillascba')
                         // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
-                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba 
-                        where idProducto = [diaco_productocba].id_producto 
-                            and created_at BETWEEN DATEADD(DAY,-7,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE())  ),0), 'N2') AS Anterior1")
+                        
+                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -374,6 +373,9 @@ class plantillasController extends Controller
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
 
+        // dd($request->get('idTipo')[0]['tipoVerificacion']);
+
+
         try {
             for ($ii=0; $ii <= 4 ; $ii++) { 
                     $fila = $ii + 1;
@@ -385,7 +387,7 @@ class plantillasController extends Controller
                         $modelo->created_at = $TIMESTAMP;
                         $modelo->idPlantilla = $request->idP;
                         $modelo->idVerificador = $request->Usuarios;
-                        $modelo->tipoVerificacion = 1;
+                        $modelo->tipoVerificacion = $request->get('idTipo')[0]['tipoVerificacion'] ;
                         if($request->get('Sedes')['select'.$fila] == 'Seleccione una Opción'){
                            $modelo->idEstablecimientoVisita = 0;
                         }else{

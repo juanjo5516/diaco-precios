@@ -12,7 +12,7 @@
           <span>{{ fecha }}</span>
           
           <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
-          <input type="hidden" :value="formInline.valores" name="idValores">
+          
           
         </div>
         <div>
@@ -27,9 +27,10 @@
 
                    
                   
-                  <td v-if="tipos.tipoVerificacion === '5'" class="titulo">Mercado:</td>
-
-                  <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
+                  <td v-if="tipos.tipoVerificacion === '1'" class="titulo">Mercado:</td>
+                  <td v-else-if="tipos.tipoVerificacion === '5'" class="titulo">Gas Propano:</td>
+                      
+                  <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
                       <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
                           <el-option
                             v-for="(sede,index) in mercados"
@@ -39,6 +40,19 @@
                           ></el-option>
                       </el-select>
                   </td>
+
+                  <td v-else-if="tipos.tipoVerificacion === '5'" class="selectMercado">
+                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                          <el-option
+                            v-for="(Propano,index) in Propano"
+                            v-bind:key=" index "
+                            :label=" Propano.name  " 
+                            :value=" Propano.id "
+                          ></el-option>
+                      </el-select>
+                  </td>
+
+
               </tr>
               <tr >
                 <td class="titulo">Verificador:</td>
@@ -199,7 +213,7 @@
               <tr>
                 <th class="productoName">Producto</th>
                 <th class="medidaName">Medida</th>
-                <th class="ReferencesName" >Ref. 1</th>
+                <!-- <th class="ReferencesName" >Ref. 1</th> -->
                 <!-- <th class="ReferencesName">Ref. 2</th> -->
                 <th>1</th>
                 <th>2</th>
@@ -217,7 +231,7 @@
                 v-if="index.categoria == item.categoria">
                 <td>{{ index.produto }}</td>
                 <td class="ReferencesName">{{ index.medida }}</td>
-                <td class="ReferencesName">{{ index.precio2 }}</td>
+                <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
                   <td v-for="n in 5" :key="n">
                     <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]">
                   </td>
@@ -359,7 +373,8 @@ export default {
       input5: "",
       linea: 1,
       tipo:'',
-      IdTipo:[],
+      IdTipo:{},
+
       formInline: {
         idplantilla:'',
         id_usuario:'',
@@ -391,7 +406,9 @@ export default {
       // DataAdd:[],
       Data:[],
       idP:'',
-      Mercados:[]
+      Mercados:[],
+      Propano:[],
+      idTt:''
       // usuario:{
       //   sede:'',
       //   nombre:'',
@@ -402,6 +419,7 @@ export default {
   mounted() {
     this.DataProductos();
     this.getTipo();
+    this.getPropano();
     
   },
   methods: {
@@ -426,23 +444,35 @@ export default {
             // console.log(this.Productos);
         }
     },
-          getTipo: function(){
-            const tipos = this.idplantilla;
-              axios.get('/visitas/'+tipos)
+      
+      getTipo: function(){
+        const tipos = this.idplantilla;
+          axios.get('/visitas/'+tipos)
+            .then(response => {
+              // handle success
+              //this.DataResult = response.data;
+              this.IdTipo = response.data;
+              //console.log(this.IdTipo);
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            })
+            .finally(function () {
+              // always executed
+            });
+        },
+      getPropano: function(){
+              axios.get('/getPropano')
                 .then(response => {
-                  // handle success
-                  //this.DataResult = response.data;
-                  this.IdTipo = response.data;
-                  console.log(this.IdTipo);
+                  this.Propano = response.data;
+                 
                 })
                 .catch(function (error) {
-                  // handle error
                   console.log(error);
-                })
-                .finally(function () {
-                  // always executed
                 });
-            },
+                
+      },    
 
     // for (let i = 0; i <= this.coleccion.length-1; i++) {
     //         this.Productos.push({
@@ -479,13 +509,15 @@ export default {
 
         var url = '/mercadoCBA';
         const bandeja = '/Bandeja';
+        
         axios.post(url, {
             idP: this.idplantilla,
             Mercados: this.inputMercados,
             Sedes:this.sedes,
             Usuarios: this.usuario[0].id_usuario,
             Data: this.Productos,
-            idSede:this.usuario[0].id
+            idSede:this.usuario[0].id,
+            idTipo: this.IdTipo
         }).then(response =>{
           const status = 
             JSON.parse(response.status);

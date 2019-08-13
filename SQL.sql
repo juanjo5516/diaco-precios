@@ -70,3 +70,10 @@ BEGIN
 		ON DEPA.codigo_departamento = MUNI.codigo_departamento
 END
 GO
+
+
+CREATE TABLE diaco_propano_cba(
+    id integer not null PRIMARY key IDENTITY,
+    name varchar(200),
+    state integer not null
+)
