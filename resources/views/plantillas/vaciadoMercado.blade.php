@@ -8,7 +8,7 @@
                 :establecimientos="{{ json_encode($establecimiento) }}"
                 :idplantilla="{{ $idPlantilla }}"
                 :mercados="{{ $mercado }}"
-                :tipo="{{ $tipo }}"
+                
                 >
             </vaciado-component>
     </div>

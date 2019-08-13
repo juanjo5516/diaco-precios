@@ -94,7 +94,7 @@ Route::group(['middleware' => 'cors'], function(){
     Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::get('getTipo','plantillasController@getTipoVisita');
-
+    Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
     Route::get('check','plantillasController@check');
 }); 
 

@@ -4,7 +4,7 @@
     <el-form :inline="false" v-model="formInline" class="form" ref="formInline"  id="vue-Asignacion">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>Vaciado de Información de Mercados</span>
+          <span>Vaciado de Información</span>
           <span class="d"></span>
         </div>
         <div slot="header" class="date">
@@ -12,19 +12,24 @@
           <span>{{ fecha }}</span>
           
           <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
+          <input type="hidden" :value="formInline.valores" name="idValores">
           
         </div>
         <div>
+
+      
+
           <table class="table">
             <tbody v-for="(index , ex1) in usuario" :key="ex1">
-              <tr >
+              <tr v-for="(tipos, tp) of IdTipo" :key="tp">
                   <td  class="titulo">Sede:</td>
                   <td  colspan="8">{{ index.sede }}</td>
 
+                   
                   
-                  <td v-if="tipo" class="titulo">Mercado:</td>
+                  <td v-if="tipos.tipoVerificacion === '5'" class="titulo">Mercado:</td>
 
-                  <td class="selectMercado">
+                  <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
                       <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
                           <el-option
                             v-for="(sede,index) in mercados"
@@ -46,6 +51,7 @@
             <div slot="header" class="clearfix">
               <span>Lugares de visitas</span>
             </div>
+            
             <div>
               <table class="table table-bordered head">
                 <thead>
@@ -333,7 +339,7 @@
 <script>
 export default {
   name: "vaciado",
-  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos","idplantilla","mercados","tipo"],
+  props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos", "idplantilla", "mercados"],
   
   data() {
     return {
@@ -352,6 +358,8 @@ export default {
       input4: "",
       input5: "",
       linea: 1,
+      tipo:'',
+      IdTipo:[],
       formInline: {
         idplantilla:'',
         id_usuario:'',
@@ -393,7 +401,8 @@ export default {
   },
   mounted() {
     this.DataProductos();
-
+    this.getTipo();
+    
   },
   methods: {
     DataProductos: function(){
@@ -417,6 +426,23 @@ export default {
             // console.log(this.Productos);
         }
     },
+          getTipo: function(){
+            const tipos = this.idplantilla;
+              axios.get('/visitas/'+tipos)
+                .then(response => {
+                  // handle success
+                  //this.DataResult = response.data;
+                  this.IdTipo = response.data;
+                  console.log(this.IdTipo);
+                })
+                .catch(function (error) {
+                  // handle error
+                  console.log(error);
+                })
+                .finally(function () {
+                  // always executed
+                });
+            },
 
     // for (let i = 0; i <= this.coleccion.length-1; i++) {
     //         this.Productos.push({

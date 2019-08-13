@@ -177,12 +177,14 @@ class plantillasController extends Controller
                         ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
                         ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
                         ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                        ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                         // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                        ->selectraw("diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus")
+                        ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
                         ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                         ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
                         ->where('diaco_asignarsedecba.estatus','>','0')
                         ->get();
+
         //dd($buson);
         
         return response()->json($buson);
@@ -331,9 +333,13 @@ class plantillasController extends Controller
     public function getTipoVerificacionVaciado($id){
         $tipo = DB::table('diaco_plantillascba')
                         ->join('diaco_name_template_cba','NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
-                        ->selectraw('distinct diaco_plantillascba.tipoVerificacion')
-                        ->where('diaco_name_template_cba.id',$id)
+                        ->selectraw('top 1 diaco_plantillascba.tipoVerificacion')
+                        ->where('diaco_name_template_cba.id','=',$id)
                         ->get();
+
+        
+        
+        //return $tipo;
         return response()->json($tipo, 200);
     } 
 
@@ -344,8 +350,8 @@ class plantillasController extends Controller
          $categoria = $this->getCategoria($id);
          $data = $this->getEstablecimiento();
          $lugarMercado = $this->getMercado();
-         $tipo = $this->getTipoVerificacionVaciado($id);
-        //dd($plantilla);
+        //  $tipos = $this->getTipoVerificacionVaciado($id);
+        //dd($valores);
         //return response()->json($mercado);
         
 
@@ -357,8 +363,7 @@ class plantillasController extends Controller
                 'categoria' => $categoria,
                 'establecimiento' => $data,
                 'idPlantilla' => $id,
-                'mercado' => $lugarMercado,
-                'tipo' => $tipo
+                'mercado' => $lugarMercado
 
             ]
         );
@@ -458,9 +463,10 @@ class plantillasController extends Controller
     function check(){
         $user = $this->UserLogin();
         $ti = $this->getTipoVisita();
-        $tipo = $this->getTipoVerificacionVaciado();
+        $tipo = $this->getTipoVerificacionVaciado(20);
+        $plantilla = $this->getPlantillas(15);
         // $user2 = Auth::user()->tipo = $user->tipo;
-        dd($tipo);
+        dd($plantilla);
     }
 
 }
