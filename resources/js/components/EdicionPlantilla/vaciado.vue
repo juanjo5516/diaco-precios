@@ -21,27 +21,28 @@
 
           <table class="table">
             <tbody v-for="(index , ex1) in usuario" :key="ex1">
-              <tr v-for="(tipos, tp) of IdTipo" :key="tp">
+              <tr >
                   <td  class="titulo">Sede:</td>
                   <td  colspan="8">{{ index.sede }}</td>
 
                    
-                  
-                  <td v-if="tipos.tipoVerificacion === '1'" class="titulo">Mercado:</td>
-                  <td v-else-if="tipos.tipoVerificacion === '5'" class="titulo">Gas Propano:</td>
-                      
-                  <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
-                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
-                          <el-option
-                            v-for="(sede,index) in mercados"
-                            v-bind:key=" index "
-                            :label=" sede.nombre  " 
-                            :value=" sede.idMercado "
-                          ></el-option>
-                      </el-select>
-                  </td>
-
-                  <td v-else-if="tipos.tipoVerificacion === '5'" class="selectMercado">
+              <span  v-for="(tipos, tp) of IdTipo" :key="tp" >
+                  <span v-if="tipos.tipoVerificacion === '1'">
+                    <td  class="titulo">Mercado:</td> 
+                    <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                            <el-option
+                              v-for="(sede,index) in mercados"
+                              v-bind:key=" index "
+                              :label=" sede.nombre  " 
+                              :value=" sede.idMercado "
+                            ></el-option>
+                        </el-select>
+                    </td>
+                  </span>
+                  <span v-if="tipos.tipoVerificacion === '5'">
+                    <td class="titulo">Gas Propano:</td> 
+                    <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
                       <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
                           <el-option
                             v-for="(Propano,index) in Propano"
@@ -50,8 +51,12 @@
                             :value=" Propano.id "
                           ></el-option>
                       </el-select>
-                  </td>
-
+                    </td>
+                  </span>
+              </span>    
+      
+                 <!-- <td v-else-if="tipos.tipoVerificacion === '5'" class="titulo">Gas Propano:</td> -->
+                 
 
               </tr>
               <tr >
@@ -271,7 +276,7 @@
 }
 
 .selectMercado{
-  width: 40% !important;
+  width: 80% !important;
 }
 
 .date {
@@ -420,7 +425,7 @@ export default {
     this.DataProductos();
     this.getTipo();
     this.getPropano();
-    
+    console.log(this.usuario);
   },
   methods: {
     DataProductos: function(){
@@ -452,7 +457,7 @@ export default {
               // handle success
               //this.DataResult = response.data;
               this.IdTipo = response.data;
-              //console.log(this.IdTipo);
+              console.log(this.IdTipo);
             })
             .catch(function (error) {
               // handle error

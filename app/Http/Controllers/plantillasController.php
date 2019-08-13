@@ -25,8 +25,9 @@ class plantillasController extends Controller
         $user2 = Auth::user();
         $user = DB::table('diaco_usuario')
                     ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')
-                    ->join('diaco_usuario_perfil','diaco_usuario_perfil.id_usuario','=','diaco_usuario.id_usuario')
-                    ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario','diaco_usuario_perfil.id_perfil_puesto as tipo')
+                    // ->join('diaco_usuario_perfil','diaco_usuario_perfil.id_usuario','=','diaco_usuario.id_usuario')
+                    ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')
+                    // ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario','diaco_usuario_perfil.id_perfil_puesto as tipo')
                     ->where('diaco_usuario.id_usuario', '=', $user2->id_usuario)->get();
         
         
@@ -330,9 +331,10 @@ class plantillasController extends Controller
     }
     
     public function getTipoVerificacionVaciado($id){
+        
         $tipo = DB::table('diaco_plantillascba')
                         ->join('diaco_name_template_cba','NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
-                        ->selectraw('top 1 diaco_plantillascba.tipoVerificacion')
+                        ->selectraw('distinct top 1 diaco_plantillascba.tipoVerificacion')
                         ->where('diaco_name_template_cba.id','=',$id)
                         ->get();
 
@@ -475,7 +477,7 @@ class plantillasController extends Controller
                     ->select('diaco_perfiles_puesto.perfil')
                     ->where('diaco_usuario_perfil.id_usuario','=',$user2)
                     ->get();
-        dd($Permio);
+        dd($user);
     }
 
 }
