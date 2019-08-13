@@ -467,8 +467,15 @@ class plantillasController extends Controller
         $ti = $this->getTipoVisita();
         $tipo = $this->getTipoVerificacionVaciado(20);
         $plantilla = $this->getPlantillas(15);
-        // $user2 = Auth::user()->tipo = $user->tipo;
-        dd($plantilla);
+        $user2 = Auth::user()->id_usuario;
+
+        //$userId = auth()->user()->id_usuario;
+        $Permio = DB::table('diaco_usuario_perfil')
+                    ->join('diaco_perfiles_puesto','diaco_perfiles_puesto.id_perfil_puesto','=','diaco_usuario_perfil.id_perfil_puesto')
+                    ->select('diaco_perfiles_puesto.perfil')
+                    ->where('diaco_usuario_perfil.id_usuario','=',$user2)
+                    ->get();
+        dd($Permio);
     }
 
 }

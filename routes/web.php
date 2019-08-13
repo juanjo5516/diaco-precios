@@ -77,28 +77,31 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
 /* Rutas de Editor de Plantillas */
 
-Route::group(['middleware' => 'cors'], function(){
-    Route::get('Edicion','plantillasController@index');
-    Route::get('addPlantillas','plantillasController@store');
-    Route::get('AsignarSede','plantillasController@Asede');
-    Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
-    Route::post('aLista', 'plantillasController@storeLista');
-    Route::get('GetListaAsede','plantillasController@getAsede');
-    Route::get('Bandeja','plantillasController@showInbox');
-    Route::get('getinbox','plantillasController@getInbox');
-    Route::get('Printer/{id}','plantillasController@showprinter');
-    Route::get('vaciado/{id}','plantillasController@showVaciado'); 
-    Route::post('mercadoCBA','plantillasController@vaciado');
-    Route::get('clonar','plantillasController@clon');
-    Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
-    Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
-    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    Route::get('getTipo','plantillasController@getTipoVisita');
-    Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
-    Route::get('check','plantillasController@check');
-    Route::get('GasPropano','menu@viewGasPropano');
-    Route::get('getPropano','PropanoController@GetPropano');
-    Route::post('AddPropano','PropanoController@addPropano');
-}); 
+    Route::group(['middleware' => 'cors'], function(){
+        Route::get('Edicion','plantillasController@index');
+        Route::get('addPlantillas','plantillasController@store');
+        Route::get('AsignarSede','plantillasController@Asede');
+        Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
+        Route::post('aLista', 'plantillasController@storeLista');
+        Route::get('GetListaAsede','plantillasController@getAsede');
+        Route::get('Bandeja','plantillasController@showInbox');
+        Route::get('getinbox','plantillasController@getInbox');
+        Route::get('Printer/{id}','plantillasController@showprinter');
+        Route::get('vaciado/{id}','plantillasController@showVaciado'); 
+        Route::post('mercadoCBA','plantillasController@vaciado');
+        Route::get('clonar','plantillasController@clon');
+        Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
+        Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
+        Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+        Route::get('getTipo','plantillasController@getTipoVisita');
+        Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
+        Route::get('check','plantillasController@check');
+        Route::get('GasPropano','menu@viewGasPropano');
+        Route::get('getPropano','PropanoController@GetPropano');
+        Route::post('AddPropano','PropanoController@addPropano');
+    }); 
+// Route::group(['middleware' => ['admin']], function () {
+    
 
+// });
 
