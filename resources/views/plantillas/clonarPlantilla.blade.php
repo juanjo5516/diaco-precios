@@ -6,7 +6,7 @@
             </div>
             <div class="card-body">
                 <clon-component 
-                    :plantillasall="{{ $Plantillas }}"
+                    {{-- :plantillasall="{{ $Plantillas }}" --}}
                 ></clon-component>
             </div>
             

@@ -274,7 +274,7 @@ class plantillasController extends Controller
         $query = DB::table('diaco_plantillascba')
                         // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
                         
-                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto")
+                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -415,12 +415,10 @@ class plantillasController extends Controller
         }
     }
 
-    public function clon(){
+    public function clon(){ 
         $plantillasAll = $this->getPlantillasAll();
         //$comprobar = $this->getPlantillas($id);
-        return view('Ediciones.clon',[
-            'Plantillas' => $plantillasAll,
-        ]);
+        return view('Ediciones.clon');
         //return response()->json($comprobar);
     }
 
@@ -430,7 +428,8 @@ class plantillasController extends Controller
                         ->where('diaco_name_template_cba.estado','>',0)
                         ->get();
         
-        return $query;
+        // // return $query;
+        return response()->json($query, 200);
         
     }
     public function getDataPlantillas(Request $request){
@@ -450,6 +449,7 @@ class plantillasController extends Controller
                     $Edicion->idMedida  = $comprobar[$i]->idmedida;
                     $Edicion->estado  = 1;
                     $Edicion->created_at = $TIMESTAMP; 
+                    $Edicion->tipoVerificacion = $comprobar[$i]->tipoVerificacion;
                     $Edicion->save();
     
                 }
@@ -461,14 +461,16 @@ class plantillasController extends Controller
             }  
        }
 
-        //dd($comprobar);
+        dd($comprobar);
     }
 
     function check(){
         $user = $this->UserLogin();
         $ti = $this->getTipoVisita();
         $tipo = $this->getTipoVerificacionVaciado(20);
-        $plantilla = $this->getPlantillas(15);
+        $plantilla = $this->getPlantillas(1);
+        $all = $this->getPlantillasAll();
+        
         $user2 = Auth::user()->id_usuario;
 
         //$userId = auth()->user()->id_usuario;
@@ -477,7 +479,7 @@ class plantillasController extends Controller
                     ->select('diaco_perfiles_puesto.perfil')
                     ->where('diaco_usuario_perfil.id_usuario','=',$user2)
                     ->get();
-        dd($user);
+        dd($all);
     }
 
 }

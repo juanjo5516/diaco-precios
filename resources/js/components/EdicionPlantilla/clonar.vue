@@ -65,7 +65,7 @@
 
 <script>
 export default {
-    props: ['plantillasall'],
+    // props: ['plantillasall'],
     data() {
       return {
 
@@ -78,11 +78,14 @@ export default {
         // search: '',
         SPlantilla:'',
         dataResponse:'',
+        plantillasall:[]
         // SSede:'',
         // created_at_new:''
       }
     },
-    
+    mounted() {
+            this.getPlantillasData();
+    },
      methods: {
         verPlantilla: function(){
             
@@ -91,24 +94,20 @@ export default {
                 SPlantilla: this.getPlantilla,
                 dataResponse: this.input
             }).then(response => {
-                console.log(response.data);
+                const status = JSON.parse(response.status);
+
+          if (status == '200') {
+              this.getPlantillasData();
+          }
             })
-        }
-        ,
-      // onSubmit: function(){
-      //   var url = '/aLista';
-      //   axios.post(url, {
-      //       SPlantilla: this.select1,
-      //       SSede: this.select2,
-      //       created_at_new: new Date(),
-      //   }).then(response =>{
-      //       $('#table-vue-asede').DataTable().ajax.reload();
-      //       $("#snoAlertBox").fadeIn();
-      //       closeSnoAlertBox("#snoAlertBox");
-      //   }).catch(error => {
-			// 	console.log(error.message)
-      //   });
-      // },
+        },
+      getPlantillasData: function(){
+          var url = '/getPlantillaClon';
+          axios.get(url)
+            .then(response => {
+                this.plantillasall = response.data;
+            })
+      },
       handleEdit(index, row) {
         console.log(index, row);
       },
