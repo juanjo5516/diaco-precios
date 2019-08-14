@@ -42,6 +42,7 @@ Vue.component('vaciado-component',require('./components/EdicionPlantilla/vaciado
 Vue.component('v-select', vSelect)
 Vue.component('clon-component',require('./components/EdicionPlantilla/clonar.vue').default)
 Vue.component('propano-component',require('./components/Propano/addPropano.vue').default)
+Vue.component('historico-component',require('./components/EdicionPlantilla/historico.vue').default)
 
 const app = new Vue({
     el: '#main'

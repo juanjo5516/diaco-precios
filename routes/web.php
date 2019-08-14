@@ -99,6 +99,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('GasPropano','menu@viewGasPropano');
         Route::get('getPropano','PropanoController@GetPropano');
         Route::post('AddPropano','PropanoController@addPropano');
+        Route::get('enviados','plantillasController@showEnviados');
+        Route::get('getEnviados','plantillasController@GetEnviados');
     }); 
 // Route::group(['middleware' => ['admin']], function () {
     

@@ -470,6 +470,7 @@ class plantillasController extends Controller
         $tipo = $this->getTipoVerificacionVaciado(20);
         $plantilla = $this->getPlantillas(1);
         $all = $this->getPlantillasAll();
+        $enviado = $this->GetEnviados();
         
         $user2 = Auth::user()->id_usuario;
 
@@ -479,7 +480,34 @@ class plantillasController extends Controller
                     ->select('diaco_perfiles_puesto.perfil')
                     ->where('diaco_usuario_perfil.id_usuario','=',$user2)
                     ->get();
-        dd($all);
+        dd($enviado);
+    }
+
+    public function GetEnviados(){
+        $usuario = $this->UserLogin();
+
+        
+        $buson = DB::table('diaco_asignarsedecba')
+                        ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+                        ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+                        ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                        ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+                        // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+                        ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
+                        ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
+                        ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+                        ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
+                        ->where('diaco_asignarsedecba.estatus','=','0')
+                        ->get();
+
+        //dd($buson);
+        
+        return response()->json($buson);
+    }
+
+    public function showEnviados(){
+
+        return view('Ediciones.Enviados');
     }
 
 }

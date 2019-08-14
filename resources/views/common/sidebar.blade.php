@@ -53,6 +53,10 @@
                 <a class="nav-link" href=../Bandeja>
                     <i class="nav-icon fas fa-angle-right"></i> Bandeja</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href=../enviados>
+                    <i class="nav-icon fas fa-angle-right"></i> Enviados</a>
+            </li>
         </li>
 
         {{-- <li class="nav-title">Vaciado</li>
