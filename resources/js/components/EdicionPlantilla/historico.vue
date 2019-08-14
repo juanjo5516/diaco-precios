@@ -24,8 +24,11 @@
           label="Estatus">
         </el-table-column>
         <el-table-column
-          prop="created_at"
           label="Fecha de Envio">
+          <template slot-scope="scope">
+                <i class="el-icon-time"></i>
+                <span style="margin-left: 10px">{{ scope.row.created_at }}</span>
+            </template>
         </el-table-column>
       <el-table-column
         width="220"
