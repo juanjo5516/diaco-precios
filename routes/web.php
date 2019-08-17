@@ -102,6 +102,10 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('enviados','plantillasController@showEnviados');
         Route::get('getEnviados','plantillasController@GetEnviados');
     }); 
+
+
+
+
 // Route::group(['middleware' => ['admin']], function () {
     
 

@@ -18,3 +18,8 @@ use Illuminate\Http\Request;
 // });
 
 
+// Rutas para apiRest
+
+Route::get('apiRest','ServiciosRest@ApiRest');
+Route::get('getSedes','ServiciosRest@getSede');
+
