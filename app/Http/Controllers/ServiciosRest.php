@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Departamento;
 use App\Models\Municipio;
+use Illuminate\Support\Facades\DB;
 
 class ServiciosRest extends Controller
 {
@@ -52,21 +53,30 @@ class ServiciosRest extends Controller
             ->whereHas('sede')
             ->get();
         
+
+        
+
+        $cate = DB::select("SELECT distinct categoria.id_Categoria as code, categoria.nombre as name FROM diaco_plantillascba plantilla
+		                            INNER JOIN diaco_categoriacba categoria
+		                                    ON categoria.id_Categoria = plantilla.idCategoria
+	                                WHERE plantilla.NombrePlantilla = (SELECT NombreTemplate FROM diaco_name_template_cba
+								                WHERE id = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
+												WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))) ");
+
         $array_departamentos = [];
         
         foreach ($departamentos as $departamento) {
         	$sedes = $departamento->sede;
-        	
-           //  if( ! empty($sedes) ){
                 array_push($array_departamentos,
                 [
                     [
                         "code" => $departamento->codigo_departamento,
                         "name" => $departamento->nombre_departamento,
-                        "branch" => $sedes
+                        "branch" => $sedes,
+                        "category" => $cate
                     ]
                 ]);
-          //  }
+         
         }
         return response()->json($array_departamentos, 200); 
     }
