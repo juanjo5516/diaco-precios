@@ -92,8 +92,7 @@ class ServiciosRest extends Controller
                                                 ON vaciado.idVerificador = usuario.id_usuario
                                             WHERE id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
                                             WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
-                                                                    WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))
-                                                and estatus = 1)");
+                                                                    WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba)))");
         return $FiltroDepartamentos;
     }
     public function getApi()
