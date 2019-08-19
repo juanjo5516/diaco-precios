@@ -76,7 +76,7 @@ class ServiciosRest extends Controller
     }
 
     public function getIdDepartamento(){
-        $FiltroDepartamentos = DB::select("SELECT sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
+        $FiltroDepartamentos = DB::select("SELECT distinct sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
                                             depa.codigo_departamento,depa.nombre_departamento,
                                             coordenada.latitut, coordenada.longitud
                                         FROM diaco_sede sede
@@ -86,6 +86,10 @@ class ServiciosRest extends Controller
                                                 ON depa.codigo_departamento = muni.codigo_departamento
                                             INNER JOIN diaco_coordenadas_cba coordenada
 		                                        ON coordenada.id_sede = sede.id_diaco_sede
+                                            INNER JOIN diaco_usuario usuario
+                                                ON usuario.id_sede_diaco = sede.id_diaco_sede
+                                            INNER JOIN diaco_vaciadocba vaciado
+                                                ON vaciado.idVerificador = usuario.id_usuario
                                             WHERE id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
                                             WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
                                                                     WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))

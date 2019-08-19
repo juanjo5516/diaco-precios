@@ -1,13 +1,17 @@
---SELECT * FROM DIACO_VACIADOCBA;
+SELECT * FROM DIACO_VACIADOCBA;
 --SELECT * FROM diaco_name_template_cba
 --SELECT * FROM diaco_asignarsedecba
 SELECT * FROM diaco_plantillascba
+select * from diaco_usuario
 
 --Muestra el id de la plantilla que se encuentra dentro del vaciado
 SELECT DISTINCT idPlantilla FROM diaco_vaciadocba; 
 --obtengo el idPlantilla que se encuentra vaciado
-SELECT distinct idPlantilla FROM diaco_vaciadocba 
-	WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba);
+
+SELECT distinct vaciado.idPlantilla FROM diaco_vaciadocba vaciado
+	INNER JOIN diaco_usuario usuario 
+		ON usuario.id_usuario = vaciado.idVerificador
+	WHERE vaciado.idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba);
 
 --obtener el nombre de la plantilla que se encuentra dentro de los vaciados
 SELECT NombreTemplate FROM diaco_name_template_cba
@@ -31,7 +35,7 @@ SELECT distinct categoria.id_Categoria, categoria.nombre FROM diaco_plantillascb
 
 	
 
-select sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
+select distinct sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
 	depa.codigo_departamento,depa.nombre_departamento,
 	coordenada.latitut, coordenada.longitud
  from diaco_sede sede
@@ -40,11 +44,31 @@ select sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_mun
 	INNER JOIN departamento depa
 		ON depa.codigo_departamento = muni.codigo_departamento
 	INNER JOIN diaco_coordenadas_cba coordenada
-		ON coordenada.id_diaco_sede = sede.id_diaco_sede
-	WHERE id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
+		ON coordenada.id_sede = sede.id_diaco_sede
+	INNER JOIN diaco_usuario usuario
+		ON usuario.id_sede_diaco = sede.id_diaco_sede
+	INNER JOIN diaco_vaciadocba vaciado
+		ON vaciado.idVerificador = usuario.id_usuario
+	WHERE sede.id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
 	WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
 							WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))
 		and estatus = 1)	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 select id_diaco_sede,nombre_sede from diaco_sede;
@@ -52,13 +76,15 @@ select * from diaco_coordenadas_cba;
 
 CREATE TABLE diaco_coordenadas_cba(
     id INTEGER NOT NULL PRIMARY KEY IDENTITY,
-    id_diaco_sede INTEGER FOREIGN KEY REFERENCES diaco_sede(id_diaco_sede),
+    id_sede INTEGER FOREIGN KEY REFERENCES diaco_sede(id_diaco_sede),
     latitut VARCHAR(200),
     longitud VARCHAR(200)
 )
 
-INSERT INTO diaco_coordenadas_cba(id_diaco_sede,latitut,longitud)
-    VALUES(3,'14.287811','-89.893492'),
+INSERT INTO diaco_coordenadas_cba(id_sede,latitut,longitud)
+    VALUES(1,'14.624697','-90.516875'),
+          (2,'14.666342','-90.814882'),
+		  (3,'14.287811','-89.893492'),
           (4,'14.967276','-91.780001'),
           (5,'14.536437','-91.503565'),
           (6,'14.632954','-89.985261'),
