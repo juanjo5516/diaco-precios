@@ -135,8 +135,8 @@ class ServiciosRest extends Controller
                                     "name" => $departamento->nombre_departamento,
                                     "branch" => $idSede,
                                     "category" => $cate,
-                                    "latitud" => $key->latitut,
-                                    "longitud" => $key->longitud
+                                    "latitude" => $key->latitut,
+                                    "longitude" => $key->longitud
                                     ]
                             ]);
                         }
