@@ -23,4 +23,5 @@ use Illuminate\Http\Request;
 Route::get('apiRest','ServiciosRest@ApiRest');
 Route::get('getSedes','ServiciosRest@getSede');
 Route::get('getApi','ServiciosRest@getApi');
+Route::get('getprecio/{id}','ServiciosRest@getPrecioSedeActual');
 

@@ -1,6 +1,6 @@
 SELECT * FROM DIACO_VACIADOCBA;
---SELECT * FROM diaco_name_template_cba
---SELECT * FROM diaco_asignarsedecba
+SELECT * FROM diaco_name_template_cba
+SELECT * FROM diaco_asignarsedecba
 SELECT * FROM diaco_plantillascba
 select * from diaco_usuario
 
@@ -51,9 +51,9 @@ select distinct sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.n
 		ON vaciado.idVerificador = usuario.id_usuario
 	WHERE sede.id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
 	WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
-							WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))
-		and estatus = 1)	
+							WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba)))	
 
+		and estatus = 1
 
 
 
