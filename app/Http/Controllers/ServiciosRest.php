@@ -77,12 +77,15 @@ class ServiciosRest extends Controller
 
     public function getIdDepartamento(){
         $FiltroDepartamentos = DB::select("SELECT sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
-                                            depa.codigo_departamento,depa.nombre_departamento
+                                            depa.codigo_departamento,depa.nombre_departamento,
+                                            coordenada.latitut, coordenada.longitud
                                         FROM diaco_sede sede
                                             INNER JOIN municipio muni
                                                 ON muni.codigo_municipio = sede.codigo_municipio
                                             INNER JOIN departamento depa
                                                 ON depa.codigo_departamento = muni.codigo_departamento
+                                            INNER JOIN diaco_coordenadas_cba coordenada
+		                                        ON coordenada.id_sede = sede.id_diaco_sede
                                             WHERE id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
                                             WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
                                                                     WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))
@@ -127,7 +130,9 @@ class ServiciosRest extends Controller
                                     "code" => $departamento->codigo_departamento,
                                     "name" => $departamento->nombre_departamento,
                                     "branch" => $idSede,
-                                    "category" => $cate
+                                    "category" => $cate,
+                                    "latitud" => $key->latitut,
+                                    "longitud" => $key->longitud
                                     ]
                             ]);
                         }
