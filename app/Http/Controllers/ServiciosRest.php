@@ -7,6 +7,12 @@ use App\Models\Departamento;
 use App\Models\Municipio;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Transformers\PricesData;
+use League\Fractal;
+use App\User;
+// use League\Fractal\Resource\Collection;
+use App\Models\pricesModel;
+use Illuminate\Support\Collection;
 
 class ServiciosRest extends Controller
 {
@@ -56,6 +62,12 @@ class ServiciosRest extends Controller
     }
 
 
+    // function __construct( )
+    // {
+    //     $this->fractal = new Fractal\Manager();
+    //     $this->dataTransformer = new PricesData;
+    // }
+
     public function getPriceLast($id,$idCatetoria){
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
@@ -69,12 +81,12 @@ class ServiciosRest extends Controller
                         ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                         ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
                         ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
-                        ->selectraw('diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->selectraw('diaco_categoriacba.id_Categoria as idCategoria,diaco_categoriacba.nombre as categoria,diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
                         ->where('diaco_vaciadocba.created_at','<=', $date_last)
                         ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
                         ->where('diaco_sede.id_diaco_sede','=',$id)
-                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre')
-                        ->orderByRaw('diaco_productocba.nombre')
+                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_categoriacba.id_Categoria','diaco_categoriacba.nombre')
+                        ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
     
         // return response()->json($last_price, 200);
@@ -93,12 +105,12 @@ class ServiciosRest extends Controller
                         ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                         ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
                         ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
-                        ->selectraw('diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,DATEADD(hour,-3,getdate()) as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->selectraw('diaco_productocba.id_producto as code,DATEADD(hour,-3,getdate()) as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
                         ->where('diaco_vaciadocba.created_at','<=', $date_previous)
                         ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
                         ->where('diaco_sede.id_diaco_sede','=',$id)
-                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre')
-                        ->orderByRaw('diaco_productocba.nombre')
+                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto')
+                        ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
     
         // return response()->json($previous_price, 200);
@@ -106,26 +118,40 @@ class ServiciosRest extends Controller
     }
 
     public function apiPrice($id,$idCategoria){
-        $array_price = [];
+
         $last = $this->getPriceLast($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
+
+        
+
+        $array_price = [];
+
         foreach ($last as $prices) {
             foreach($previous as $prev){
-                array_push($array_price,
-                [
+                if($prices->code == $prev->code){
+                    array_push($array_price,
                     [
-                        'article' => $prices->articulo,
-                        'measure' => $prices->medida,
-                        'current_date' => $prices->fecha_Actual,
-                        'actual_price' => $prices->price,
-                        'previous_date' => $prev->fecha_Actual,
-                        'previous_price' => $prev->price
-                    ]
-                ]);
+                        
+                        [
+                            'code' =>$prices->idCategoria,
+                            'name' => $prices->categoria,
+                            'articulo' =>
+                                [
+                                    'code' =>$prices->code,
+                                    'name' => $prices->articulo,
+                                    'uom' => $prices->medida,
+                                    'current_date' => $prices->fecha_Actual,
+                                    'actual_price' => $prices->price  ,
+                                    'previous_date' => $prev->fecha_Actual
+                                ]
+                        ]
+                    ]);
+                }
             }
         }
-
+        
         return response()->json($array_price, 200);
+
     }
 
     // apirest de diaco
