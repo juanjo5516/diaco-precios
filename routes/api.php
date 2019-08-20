@@ -23,5 +23,8 @@ use Illuminate\Http\Request;
 Route::get('apiRest','ServiciosRest@ApiRest');
 Route::get('getSedes','ServiciosRest@getSede');
 Route::get('getApi','ServiciosRest@getApi');
-Route::get('getprecio/{id}','ServiciosRest@getPrecioSedeActual');
+Route::get('getprecio/{id}/{categoria}','ServiciosRest@getPriceLast');
+Route::get('price/{id}/{categoria}','ServiciosRest@apiPrice');
+
+Route::get('fecha', 'ServiciosRest@getfechas');
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Departamento;
 use App\Models\Municipio;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ServiciosRest extends Controller
 {
@@ -25,27 +26,6 @@ class ServiciosRest extends Controller
         }
         return response()->json($array_departamentos, 200);      
     }
-
-    // public function getSede(){
-    //     $departamentos = Departamento::all();
-    //     $array_departamentos = [];
-        
-    //     foreach ($departamentos as $key => $departamento) {
-    //         if($departamento->sede()->select('id_diaco_sede as code','nombre_sede as name')->get() == ""){
-    //             array_push($array_departamentos,
-    //             [
-    //                 [
-    //                     "code" => $departamento->codigo_departamento,
-    //                     "name" => $departamento->nombre_departamento,
-    //                     "locations" => $departamento->sede()
-    //                                     ->select('id_diaco_sede as code','nombre_sede as name')
-    //                                     ->get()
-    //                 ]
-    //             ]);
-    //         }
-    //     }
-    //     return response()->json($array_departamentos, 200); 
-    // }
     
     public function getSede()
     {
@@ -76,29 +56,79 @@ class ServiciosRest extends Controller
     }
 
 
-    public function getPrecioSedeActual($id){
-        $precio = DB::select('SELECT 
-                                    precio.nombre as articulo,
-                                    medida.nombre as medida,
-                                    getdate() as fecha_actual,
-                                    -- convert(time,vaciado.created_at) as fecha_actual,
-                                    avg(vaciado.precioProducto) as Precio_actual
-                                FROM diaco_vaciadocba vaciado
-                                    INNER JOIN diaco_productocba precio
-                                        ON precio.id_producto = vaciado.idProducto 
-                                    INNER JOIN diaco_medida medida
-                                        ON medida.id_medida = vaciado.idMedida
-                                    INNER JOIN diaco_usuario usuario
-                                        ON usuario.id_usuario = vaciado.idVerificador
-                                    INNER JOIN diaco_sede sede
-                                        ON sede.id_diaco_sede = usuario.id_sede_diaco 
-                                WHERE convert(time,vaciado.created_at) between DATEADD(hour,-2,convert(time,vaciado.created_at)) and  convert(time,vaciado.created_at)
-                                    AND sede.id_diaco_sede = 21
-                                GROUP BY precio.nombre, medida.nombre,vaciado.created_at
-                            ORDER BY precio.nombre
-                            ');
-        return response()->json($precio, 200);
+    public function getPriceLast($id,$idCatetoria){
+        $date = Carbon::now('America/Guatemala');
+        $date->toDateTimeString();
+
+        $date_last = $date->addDay(1);
+
+        $last_price = DB::table('diaco_vaciadocba')
+                        ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                        ->join('diaco_usuario','diaco_usuario.id_usuario','=','diaco_vaciadocba.idVerificador')
+                        ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                        ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
+                        ->selectraw('diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->where('diaco_vaciadocba.created_at','<=', $date_last)
+                        ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                        ->where('diaco_sede.id_diaco_sede','=',$id)
+                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre')
+                        ->orderByRaw('diaco_productocba.nombre')
+                        ->get();
+    
+        // return response()->json($last_price, 200);
+        return $last_price;
     }
+
+    public function getPricePrevious($id,$idCatetoria){
+        $date = Carbon::now('America/Guatemala');
+        $date->toDateTimeString();
+        $date_previous = $date->subHours(3);
+        
+        $previous_price = DB::table('diaco_vaciadocba')
+                        ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                        ->join('diaco_usuario','diaco_usuario.id_usuario','=','diaco_vaciadocba.idVerificador')
+                        ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                        ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
+                        ->selectraw('diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,DATEADD(hour,-3,getdate()) as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->where('diaco_vaciadocba.created_at','<=', $date_previous)
+                        ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                        ->where('diaco_sede.id_diaco_sede','=',$id)
+                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre')
+                        ->orderByRaw('diaco_productocba.nombre')
+                        ->get();
+    
+        // return response()->json($previous_price, 200);
+        return $previous_price;
+    }
+
+    public function apiPrice($id,$idCategoria){
+        $array_price = [];
+        $last = $this->getPriceLast($id,$idCategoria);
+        $previous = $this->getPricePrevious($id,$idCategoria);
+        foreach ($last as $prices) {
+            foreach($previous as $prev){
+                array_push($array_price,
+                [
+                    [
+                        'article' => $prices->articulo,
+                        'measure' => $prices->medida,
+                        'current_date' => $prices->fecha_Actual,
+                        'actual_price' => $prices->price,
+                        'previous_date' => $prev->fecha_Actual,
+                        'previous_price' => $prev->price
+                    ]
+                ]);
+            }
+        }
+
+        return response()->json($array_price, 200);
+    }
+
+    // apirest de diaco
     public function getIdDepartamento(){
         $FiltroDepartamentos = DB::select("SELECT distinct sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
                                             depa.codigo_departamento,depa.nombre_departamento,
@@ -139,12 +169,6 @@ class ServiciosRest extends Controller
         
         foreach ($departamentos as $departamento) {
             $sedes = $departamento->sede;
-
-            
-                // array_push($array_sede,[
-                //     // "v" => $departamento->sede()->select('id_diaco_sede')->get()
-                //     "v" => $k->code
-                // ]);
             
             foreach ($dep as $key) {
                 foreach($sedes as $idSede){
@@ -173,7 +197,7 @@ class ServiciosRest extends Controller
         return response()->json($array_departamentos, 200);
         // return response()->json($array_departamentos, 200); 
     }
-
+    // *********************************************
 
     
 
