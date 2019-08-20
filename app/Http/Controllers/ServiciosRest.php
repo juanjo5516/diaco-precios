@@ -81,11 +81,11 @@ class ServiciosRest extends Controller
                         ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                         ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
                         ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
-                        ->selectraw('diaco_categoriacba.id_Categoria as idCategoria,diaco_categoriacba.nombre as categoria,diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->selectraw('diaco_medida.id_medida as idMedida, diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
                         ->where('diaco_vaciadocba.created_at','<=', $date_last)
                         ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
                         ->where('diaco_sede.id_diaco_sede','=',$id)
-                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_categoriacba.id_Categoria','diaco_categoriacba.nombre')
+                        ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_medida.id_medida')
                         ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
     
@@ -121,29 +121,30 @@ class ServiciosRest extends Controller
 
         $last = $this->getPriceLast($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
-
-        
+   
 
         $array_price = [];
 
         foreach ($last as $prices) {
+            $nivel2 = $last->where('code',$prices->code);
             foreach($previous as $prev){
                 if($prices->code == $prev->code){
                     array_push($array_price,
                     [
                         
                         [
-                            'code' =>$prices->idCategoria,
-                            'name' => $prices->categoria,
-                            'articulo' =>
                                 [
                                     'code' =>$prices->code,
                                     'name' => $prices->articulo,
-                                    'uom' => $prices->medida,
-                                    'current_date' => $prices->fecha_Actual,
-                                    'actual_price' => $prices->price,
-                                    'previous_price' =>$prev->price,
-                                    'previous_date' => $prev->fecha_Actual
+                                    'uom' => $nivel2
+                                    // [
+                                    //     'code' => $prices->idMedida,
+                                    //     'name' => $prices->medida,
+                                    //     'current_date' => $prices->fecha_Actual,
+                                    //     'actual_price' => $prices->price,
+                                    //     'previous_price' =>$prev->price,
+                                    //     'previous_date' => $prev->fecha_Actual
+                                    // ]
                                 ]
                         ]
                     ]);
