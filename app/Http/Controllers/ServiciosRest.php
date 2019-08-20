@@ -141,7 +141,8 @@ class ServiciosRest extends Controller
                                     'name' => $prices->articulo,
                                     'uom' => $prices->medida,
                                     'current_date' => $prices->fecha_Actual,
-                                    'actual_price' => $prices->price  ,
+                                    'actual_price' => $prices->price,
+                                    'previous_price' =>$prev->price,
                                     'previous_date' => $prev->fecha_Actual
                                 ]
                         ]
