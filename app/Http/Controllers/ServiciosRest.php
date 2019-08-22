@@ -237,8 +237,8 @@ class ServiciosRest extends Controller
     public function apiPrice($id,$idCategoria){
 
         $last = $this->getPriceNivel2($id,$idCategoria);
-        // $previous = $this->getPricePrevious($id,$idCategoria);
-        // $n2 = $this->getPriceLast($id,$idCategoria);
+        $previous = $this->getPricePrevious($id,$idCategoria);
+        $n2 = $this->getPriceLast($id,$idCategoria);
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
         $convert = collect($getDataPrices);
         
