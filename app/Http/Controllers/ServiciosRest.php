@@ -308,7 +308,7 @@ class ServiciosRest extends Controller
             ->toArray();
 
             
-        return response()->json($fractal, 200);
+        // return response()->json($fractal, 200);
 
     }
 
