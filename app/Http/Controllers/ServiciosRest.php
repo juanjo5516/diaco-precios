@@ -237,15 +237,11 @@ class ServiciosRest extends Controller
     public function apiPrice($id,$idCategoria){
 
         $last = $this->getPriceNivel2($id,$idCategoria);
-        $previous = $this->getPricePrevious($id,$idCategoria);
-        $n2 = $this->getPriceLast($id,$idCategoria);
-   
-
+        // $previous = $this->getPricePrevious($id,$idCategoria);
+        // $n2 = $this->getPriceLast($id,$idCategoria);
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
-
         $convert = collect($getDataPrices);
         
-       
         $array_price = array();
         $array_n2 = array();
         foreach ($last as $nivel1) {
@@ -268,38 +264,14 @@ class ServiciosRest extends Controller
         }
 
         $codigo = $this->array_unique2($array_n2);
+     
+        return fractal()
+            ->collection($codigo)
+            ->transformWith(new PricesData())
+            ->includeCharacters()
+            ->toArray();
 
-
-        // foreach ($last as $prices) {
-        //     //  $nivel2 = $last->where('code',$prices->code);
-        //     // foreach($previous as $prev){
-        //         // foreach($n2 as $nivel){
-        //             // if($prices->code == $prev->code){
-        //                 // if($prices->code ==$nivel->code ){  
-        //                     array_push($array_price,
-        //                     [
-                                
-        //                             'code' =>$prices->code,
-        //                             'name' => $prices->articulo,
-        //                             // 'uom' => 
-        //                             // [
-        //                             //     'code' => $nivel->idMedida,
-        //                             //     'name' => $nivel->medida,
-        //                             //     'current_date' => $nivel->fecha_Actual,
-        //                             //     'actual_price' => $nivel->price,
-        //                             //     // 'previous_price' =>$prev->price,
-        //                             //     // 'previous_date' => $prev->fecha_Actual
-        //                             // ]
-                                
-                                
-        //                     ]);
-        //                 // }
-        //             // }
-        //         // }
-        //     // }
-        // }
-        
-        return response()->json($codigo, 200);
+        // return response()->json($codigo, 200);
 
     }
 

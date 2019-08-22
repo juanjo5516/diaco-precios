@@ -22,17 +22,15 @@ class PricesData extends TransformerAbstract
      public function transform($last)
     {
 
-        //  $user = $this->getPriceLast(1,1);
-        // $colecion = new Collection($user);
-        // $collection = Collection::make($last);
-        // $resource = json_encode($last);
-        
         return [
-                        'item' => $last->item
-                        // 'medida' => $last['last']['oum'],
-                        // 'fecha' => $last['last']['current_date']
-                        // 'precio' => $last-price,
-                        // 'otro' => $previous->price
+            'code' => $last['code'],
+            'name' => $last['name'],
+            'uom'  => fractal($last['uom'], new UomCodeTransformer())
+            
+
+            // 'uom'  => [
+            //     'code' => fractal($last['uom'], new UomCodeTransformer())
+            // ]
                         
         ];
     }
