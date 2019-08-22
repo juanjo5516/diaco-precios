@@ -268,7 +268,7 @@ class ServiciosRest extends Controller
         }
 
         $codigo = $this->array_unique2($array_n2);
-
+        
 
         // foreach ($last as $prices) {
         //     //  $nivel2 = $last->where('code',$prices->code);
@@ -300,13 +300,14 @@ class ServiciosRest extends Controller
         // }
         
 
-        $fractal = fractal()
-        // return fractal()
+        //$fractal = fractal()
+         return fractal()
             ->collection($codigo)
             ->transformWith(new PricesData())
             ->includeCharacters()
             ->toArray();
 
+            
         return response()->json($fractal, 200);
 
     }
