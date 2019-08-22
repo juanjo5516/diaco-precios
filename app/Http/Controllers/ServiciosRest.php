@@ -167,7 +167,72 @@ class ServiciosRest extends Controller
         return $previous_price;
     }
 
+    public function getPriceLastPrevious($id,$idCatetoria){
+        $price = DB::select("SELECT  
+                                    t1.code as code,
+                                    t1.idMedida,
+                                    t1.medida,
+                                    t1.fecha_actual,
+                                    t1.Precio_actual,
+                                    t2.fecha_actual as fecha_anterior,
+                                    t2.Precio_actual2 as precio_anterior
+                        FROM 
+                           (SELECT 
+                                    precio.id_producto as code,
+                                    precio.nombre as articulo,
+                                    medida.id_medida as idMedida,
+                                    medida.nombre as medida,
+                                    CONVERT(DATE,getdate()) as fecha_actual,
+                                    avg(vaciado.precioProducto) as Precio_actual
+                            FROM diaco_vaciadocba vaciado          
+                            INNER JOIN diaco_productocba precio
+                                ON precio.id_producto = vaciado.idProducto 
+                            INNER JOIN diaco_medida medida
+                                ON medida.id_medida = vaciado.idMedida
+                            INNER JOIN diaco_usuario usuario
+                                ON usuario.id_usuario = vaciado.idVerificador
+                            INNER JOIN diaco_sede sede
+                                ON sede.id_diaco_sede = usuario.id_sede_diaco 
+                            INNER JOIN diaco_plantillascba plantilla
+                                ON plantilla.idProducto = vaciado.idProducto
+                            INNER JOIN diaco_categoriacba categorias
+                                ON categorias.id_Categoria = plantilla.idCategoria
+                            WHERE convert(date,vaciado.created_at) <= '2019-08-21'
+                                AND sede.id_diaco_sede = ".$id."
+                                and categorias.id_Categoria = ".$idCatetoria."
+                            GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida)  t1
+                    full outer JOIN 
+                            (SELECT 
+                                    precio.id_producto as code,
+                                    precio.nombre as articulo,
+                                    medida.id_medida as idMedida,
+                                    medida.nombre as medida,
+                                    DATEADD(DAY,-1,CONVERT(DATE,getdate())) as fecha_actual,
+                                    avg(vaciado.precioProducto) as Precio_actual2
+                            FROM diaco_vaciadocba vaciado          
+                            INNER JOIN diaco_productocba precio
+                                ON precio.id_producto = vaciado.idProducto 
+                            INNER JOIN diaco_medida medida
+                                ON medida.id_medida = vaciado.idMedida
+                            INNER JOIN diaco_usuario usuario
+                                ON usuario.id_usuario = vaciado.idVerificador
+                            INNER JOIN diaco_sede sede
+                                ON sede.id_diaco_sede = usuario.id_sede_diaco 
+                            INNER JOIN diaco_plantillascba plantilla
+                                ON plantilla.idProducto = vaciado.idProducto
+                            INNER JOIN diaco_categoriacba categorias
+                                ON categorias.id_Categoria = plantilla.idCategoria
+                            WHERE convert(date,vaciado.created_at) <= '2019-08-19'
+                                AND sede.id_diaco_sede = ".$id."
+                                and categorias.id_Categoria = ".$idCatetoria."
+                            GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida) t2
+                    ON t1.code = t2.code
+                
+        ");
+
+    return $price;
     
+    }
 
     public function apiPrice($id,$idCategoria){
 
@@ -176,28 +241,33 @@ class ServiciosRest extends Controller
         $n2 = $this->getPriceLast($id,$idCategoria);
    
 
+        $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
+
+        $convert = collect($getDataPrices);
+        
        
-        // $array_price = array();
-        // $array_n2 = array();
-        // foreach ($last as $nivel1) {
-        //     foreach($n2 as $nivel2){
-        //         // foreach($array_price as $array){
-        //             if($nivel1->code  == $nivel2->code){
-        //                 $data = $n2->where('code',$nivel1->code);
+        $array_price = array();
+        $array_n2 = array();
+        foreach ($last as $nivel1) {
+            foreach($getDataPrices as $nivel2){
+                // foreach($array_price as $array){
+                    
+                    if($nivel1->code  == $nivel2->code){
+                        $data = $convert->where('code',$nivel1->code);
                         
-        //                         array_push($array_n2,[
-        //                             'code' =>$nivel1->code,
-        //                             'name' => $nivel1->articulo,
-        //                             'uom' => $data
+                                array_push($array_n2,[
+                                    'code' =>$nivel1->code,
+                                    'name' => $nivel1->articulo,
+                                    'uom' => $data
                                         
-        //                         ]);
+                                ]);
 
-        //             }
-        //         // }
-        //     }
-        // }
+                    }
+                // }
+            }
+        }
 
-        // $codigo = $this->array_unique2($array_n2);
+        $codigo = $this->array_unique2($array_n2);
 
 
         // foreach ($last as $prices) {
@@ -229,7 +299,7 @@ class ServiciosRest extends Controller
         //     // }
         // }
         
-        return response()->json($n2, 200);
+        return response()->json($codigo, 200);
 
     }
 
