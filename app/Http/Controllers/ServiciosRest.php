@@ -68,9 +68,56 @@ class ServiciosRest extends Controller
     //     $this->dataTransformer = new PricesData;
     // }
 
+    public function getPriceNivel2($id,$idCatetoria){
+        $date = Carbon::now('America/Guatemala');
+        $date->toDateTimeString();
+
+        $date_last = $date->addDay(1);
+
+        $last_price = DB::table('diaco_vaciadocba')
+                        ->distinct()
+                        ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                        ->join('diaco_usuario','diaco_usuario.id_usuario','=','diaco_vaciadocba.idVerificador')
+                        ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                        ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
+                        ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
+                        // ->selectraw('diaco_medida.id_medida as idMedida, diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                        ->selectraw('diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo')
+                        ->where('diaco_vaciadocba.created_at','<=', $date_last)
+                        ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                        ->where('diaco_sede.id_diaco_sede','=',$id)
+                        ->groupBy('diaco_productocba.nombre','diaco_productocba.id_producto')
+                        ->orderByRaw('diaco_productocba.id_producto')
+                        ->get();
+    
+        // return response()->json($last_price, 200);
+        return $last_price;
+    }
+
     public function getPriceLast($id,$idCatetoria){
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
+
+
+        $date_previous = $date->subHours(3);
+                        
+        $previous_price = DB::table('diaco_vaciadocba')
+                            ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                            ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                            ->join('diaco_usuario','diaco_usuario.id_usuario','=','diaco_vaciadocba.idVerificador')
+                            ->join('diaco_sede','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                            ->join('diaco_plantillascba','diaco_plantillascba.idProducto','=','diaco_vaciadocba.idProducto')
+                            ->join('diaco_categoriacba','diaco_categoriacba.id_Categoria','=','diaco_plantillascba.idCategoria')
+                            // ->selectraw('diaco_productocba.id_producto as code,DATEADD(hour,-3,getdate()) as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
+                            ->selectraw('diaco_medida.id_medida as idMedida, diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price2')
+                            ->where('diaco_vaciadocba.created_at','<=', $date_previous)
+                            ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                            ->where('diaco_sede.id_diaco_sede','=',$id)
+                            // ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto')
+                            ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_medida.id_medida')
+                            ->orderByRaw('diaco_productocba.id_producto');
+                            // ->get();
 
         $date_last = $date->addDay(1);
 
@@ -86,13 +133,16 @@ class ServiciosRest extends Controller
                         ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
                         ->where('diaco_sede.id_diaco_sede','=',$id)
                         ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_medida.id_medida')
-                        ->orderByRaw('diaco_productocba.id_producto')
+                        // ->orderByRaw('diaco_productocba.id_producto')
+                        ->union($previous_price)
                         ->get();
+
+
     
+                                        
         // return response()->json($last_price, 200);
         return $last_price;
     }
-
     public function getPricePrevious($id,$idCatetoria){
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
@@ -117,42 +167,69 @@ class ServiciosRest extends Controller
         return $previous_price;
     }
 
+    
+
     public function apiPrice($id,$idCategoria){
 
-        $last = $this->getPriceLast($id,$idCategoria);
+        $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
+        $n2 = $this->getPriceLast($id,$idCategoria);
    
 
-        $array_price = [];
-
-        foreach ($last as $prices) {
-            $nivel2 = $last->where('code',$prices->code);
-            foreach($previous as $prev){
-                if($prices->code == $prev->code){
-                    array_push($array_price,
-                    [
+       
+        // $array_price = array();
+        // $array_n2 = array();
+        // foreach ($last as $nivel1) {
+        //     foreach($n2 as $nivel2){
+        //         // foreach($array_price as $array){
+        //             if($nivel1->code  == $nivel2->code){
+        //                 $data = $n2->where('code',$nivel1->code);
                         
-                        [
-                                [
-                                    'code' =>$prices->code,
-                                    'name' => $prices->articulo,
-                                    'uom' => $nivel2
-                                    // [
-                                    //     'code' => $prices->idMedida,
-                                    //     'name' => $prices->medida,
-                                    //     'current_date' => $prices->fecha_Actual,
-                                    //     'actual_price' => $prices->price,
-                                    //     'previous_price' =>$prev->price,
-                                    //     'previous_date' => $prev->fecha_Actual
-                                    // ]
-                                ]
-                        ]
-                    ]);
-                }
-            }
-        }
+        //                         array_push($array_n2,[
+        //                             'code' =>$nivel1->code,
+        //                             'name' => $nivel1->articulo,
+        //                             'uom' => $data
+                                        
+        //                         ]);
+
+        //             }
+        //         // }
+        //     }
+        // }
+
+        // $codigo = $this->array_unique2($array_n2);
+
+
+        // foreach ($last as $prices) {
+        //     //  $nivel2 = $last->where('code',$prices->code);
+        //     // foreach($previous as $prev){
+        //         // foreach($n2 as $nivel){
+        //             // if($prices->code == $prev->code){
+        //                 // if($prices->code ==$nivel->code ){  
+        //                     array_push($array_price,
+        //                     [
+                                
+        //                             'code' =>$prices->code,
+        //                             'name' => $prices->articulo,
+        //                             // 'uom' => 
+        //                             // [
+        //                             //     'code' => $nivel->idMedida,
+        //                             //     'name' => $nivel->medida,
+        //                             //     'current_date' => $nivel->fecha_Actual,
+        //                             //     'actual_price' => $nivel->price,
+        //                             //     // 'previous_price' =>$prev->price,
+        //                             //     // 'previous_date' => $prev->fecha_Actual
+        //                             // ]
+                                
+                                
+        //                     ]);
+        //                 // }
+        //             // }
+        //         // }
+        //     // }
+        // }
         
-        return response()->json($array_price, 200);
+        return response()->json($n2, 200);
 
     }
 
@@ -227,6 +304,11 @@ class ServiciosRest extends Controller
     }
     // *********************************************
 
-    
+    function array_unique2($a) 
+    { 
+        $n = array(); 
+        foreach ($a as $k=>$v) if (!in_array($v,$n))$n[$k]=$v; 
+        return $n; 
+    }
 
 }
