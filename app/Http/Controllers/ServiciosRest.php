@@ -325,22 +325,23 @@ class ServiciosRest extends Controller
     // apirest de diaco
     public function getIdDepartamento(){
         $FiltroDepartamentos = DB::select("SELECT distinct sede.id_diaco_sede,sede.codigo_municipio,sede.nombre_sede,muni.nombre_municipio,
-                                            depa.codigo_departamento,depa.nombre_departamento,
-                                            coordenada.latitut, coordenada.longitud
-                                        FROM diaco_sede sede
-                                            INNER JOIN municipio muni
-                                                ON muni.codigo_municipio = sede.codigo_municipio
-                                            INNER JOIN departamento depa
-                                                ON depa.codigo_departamento = muni.codigo_departamento
-                                            INNER JOIN diaco_coordenadas_cba coordenada
-		                                        ON coordenada.id_sede = sede.id_diaco_sede
-                                            INNER JOIN diaco_usuario usuario
-                                                ON usuario.id_sede_diaco = sede.id_diaco_sede
-                                            INNER JOIN diaco_vaciadocba vaciado
-                                                ON vaciado.idVerificador = usuario.id_usuario
-                                            WHERE id_diaco_sede in (SELECT idSede FROM diaco_asignarsedecba
-                                            WHERE idPlantilla = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
-                                                                    WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba)))");
+        depa.codigo_departamento,depa.nombre_departamento,
+        coordenada.latitut, coordenada.longitud
+    FROM diaco_sede sede
+        INNER JOIN municipio muni
+            ON muni.codigo_municipio = sede.codigo_municipio
+        INNER JOIN departamento depa
+            ON depa.codigo_departamento = muni.codigo_departamento
+        INNER JOIN diaco_coordenadas_cba coordenada
+		    ON coordenada.id_sede = sede.id_diaco_sede
+        INNER JOIN diaco_usuario usuario
+            ON usuario.id_sede_diaco = sede.id_diaco_sede
+        INNER JOIN diaco_vaciadocba vaciado
+            ON vaciado.idVerificador = usuario.id_usuario
+        WHERE id_diaco_sede in (
+		SELECT distinct idSede FROM diaco_asignarsedecba asig
+		INNER JOIN diaco_vaciadocba vv
+		ON vv.idPlantilla = asig.idPlantilla)");
         return $FiltroDepartamentos;
     }
     public function getApi()
@@ -348,18 +349,21 @@ class ServiciosRest extends Controller
         $departamentos = Departamento::with('sede')
             ->whereHas('sede')
             ->get();
-        $cate = DB::select("SELECT distinct categoria.id_Categoria as code, categoria.nombre as name FROM diaco_plantillascba plantilla
-		                            INNER JOIN diaco_categoriacba categoria
-		                                    ON categoria.id_Categoria = plantilla.idCategoria
-	                                WHERE plantilla.NombrePlantilla = (SELECT NombreTemplate FROM diaco_name_template_cba
-								                WHERE id = (SELECT distinct idPlantilla FROM diaco_vaciadocba 
-                                                WHERE idPlantilla = (SELECT DISTINCT idPlantilla FROM diaco_vaciadocba))) ");
+        $cate = DB::select("SELECT distinct categoria.id_Categoria as code, categoria.nombre as name 
+                                    FROM diaco_plantillascba plantilla
+                                    INNER JOIN diaco_categoriacba categoria
+                                    ON categoria.id_Categoria = plantilla.idCategoria
+                                    WHERE plantilla.NombrePlantilla in 
+                                    (SELECT distinct NombreTemplate FROM diaco_name_template_cba template
+                                    INNER JOIN diaco_vaciadocba vaciado
+                                        ON template.id = vaciado.idPlantilla) ");
                                                 
         $dep = $this->getIdDepartamento();
 
         $array_departamentos = [];
         $array_sede= [];
 
+        // dd($cate);
         
         foreach ($departamentos as $departamento) {
             $sedes = $departamento->sede;

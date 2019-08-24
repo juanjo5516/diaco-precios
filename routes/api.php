@@ -25,7 +25,7 @@ Route::get('getSedes','ServiciosRest@getSede');
 Route::get('getApi','ServiciosRest@getApi');
 Route::get('getprecio/{id}/{categoria}','ServiciosRest@getPricePrevious');
 Route::get('getprecios/{id}/{categoria}','ServiciosRest@getPriceLast');
-Route::get('price/{id}/{categoria}','ServiciosRest@apiPrice');
+Route::get('price/{id}/{categoria}','ServiciosRest@apiPrice'); 
 
 Route::get('fecha/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 Route::get('prueba/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');

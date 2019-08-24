@@ -53,7 +53,7 @@ SELECT
 		ON plantilla.idProducto = vaciado.idProducto
 	INNER JOIN diaco_categoriacba categorias
 		ON categorias.id_Categoria = plantilla.idCategoria
-    WHERE convert(date,vaciado.created_at) <= '2019-08-19'
+    WHERE convert(date,vaciado.created_at) <= '2019-08-23'
         AND sede.id_diaco_sede = 1
 		and categorias.id_Categoria = 1
     GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida
