@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 
 Route::get('apiRest','ServiciosRest@ApiRest');
 Route::get('getSedes','ServiciosRest@getSede');
-Route::get('getApi','ServiciosRest@getApi');
+Route::get('categories','ServiciosRest@getApi');
 Route::get('getprecio/{id}/{categoria}','ServiciosRest@getPricePrevious');
 Route::get('getprecios/{id}/{categoria}','ServiciosRest@getPriceLast');
 Route::get('price/{id}/{categoria}','ServiciosRest@apiPrice'); 
