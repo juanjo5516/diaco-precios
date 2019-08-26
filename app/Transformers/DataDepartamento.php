@@ -24,8 +24,7 @@ class DataDepartamento extends TransformerAbstract
                                     fractal()->collection($data['sedes'])
                                     ->transformWith(new dataSede())
                                     ->includeCharacters()
-                                    ->toArray(),
-                            // 'categories'        =>  fractal($data['categorias'], new categories())  
+                                    ->toArray(), 
                             ]
             
         ];

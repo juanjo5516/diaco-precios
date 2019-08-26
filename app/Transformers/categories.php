@@ -14,7 +14,6 @@ class categories extends TransformerAbstract
     public function transform($data)
     {
         
-        // dd($data);
         return [
             'code'      =>  $data->idCategoria,
             'name'      =>  $data->nombre
