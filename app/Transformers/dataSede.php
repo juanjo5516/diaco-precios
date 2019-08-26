@@ -21,12 +21,21 @@ class dataSede extends TransformerAbstract
     public function transform($data)
     {
         // dd($this->clubId);
+        // dd($data);
         
         return [
-            'code'              =>  $data->code,
-            'name'              =>  $data->name,
-            'latitude'          =>  $data->latitut,
-            'longitude'         =>  $data->longitud,
+            'sede'  => [
+                'code'              =>  $data['dataS']->code,
+                'name'              =>  $data['dataS']->name,
+                'latitude'          =>  $data['dataS']->latitut,
+                'longitude'         =>  $data['dataS']->longitud,
+            ],
+            'categories'        =>  fractal($data['cateS'], new categories())  
+            // 'categoria'         =>
+            //         [
+            //             'code'      =>  $data['cateS']->idCategoria,
+            //             'name'      =>  $data['cateS']->nombre
+            //         ]  
             
         ];
     }

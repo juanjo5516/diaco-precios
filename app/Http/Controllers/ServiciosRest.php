@@ -414,17 +414,21 @@ class ServiciosRest extends Controller
     public function collectionCategoria(){
 
         $categoria = DB::select("SELECT distinct 
-                                plantilla.idCategoria,
-                                categoria.nombre
-                                FROM diaco_vaciadocba vaciado
-                                INNER JOIN diaco_usuario usuario
-                                    on usuario.id_usuario = vaciado.idVerificador
-                                INNER JOIN diaco_name_template_cba template
-                                    ON template.id = vaciado.idPlantilla
-                                INNER JOIN diaco_plantillascba plantilla
-                                    ON plantilla.NombrePlantilla = template.NombreTemplate
-                                INNER JOIN diaco_categoriacba categoria 
-                                    ON categoria.id_Categoria = plantilla.idCategoria");
+                                    plantilla.idCategoria,
+                                    categoria.nombre,
+                                    sede.id_diaco_sede as sede_id,
+                                    sede.nombre_sede as name_sede
+                                    FROM diaco_vaciadocba vaciado
+                                    INNER JOIN diaco_usuario usuario
+                                        on usuario.id_usuario = vaciado.idVerificador
+                                    INNER JOIN diaco_name_template_cba template
+                                        ON template.id = vaciado.idPlantilla
+                                    INNER JOIN diaco_plantillascba plantilla
+                                        ON plantilla.NombrePlantilla = template.NombreTemplate
+                                    INNER JOIN diaco_categoriacba categoria 
+                                        ON categoria.id_Categoria = plantilla.idCategoria
+                                    INNER JOIN diaco_sede sede
+                                        ON sede.id_diaco_sede = usuario.id_sede_diaco");
         return $categoria;
 
     } 
@@ -434,36 +438,53 @@ class ServiciosRest extends Controller
         $depa = $this->collectionDepartamento();
         $sede = $this->collectionSede();
         $categoria = $this->collectionCategoria();
-
+        // dd($categoria);
         $convert = collect($sede);
+        $ccategoria = collect($categoria);
         $array_data = [];
         $array_sede_categoria = [];
+        $array_categorias = [];
+        
         
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
                 $dataSede = $convert->where('code_depa',$departamento->code_muni);
-                foreach ($categoria as $cate) {
                 array_push($array_sede_categoria,[
                     'sede' => $dataSede,
-                    'categoria' => $cate
+                    // 'categoria' => $sedes_data
                 ]);
-                }
             }
         }
 
         $array_sede = $this->array_unique2($array_sede_categoria);
+        // $dconvert = collect($array_sede);
+        foreach($categoria as $sedes_data){
+            foreach ($sede as $data_sede) {
+                $d = $ccategoria->where('sede_id',$data_sede->code);
+                array_push($array_categorias,[
+                    'dataS'     =>  $data_sede,
+                    'cateS'     =>  $d
+                ]);
+            }
+        }
+
+        $infoSede = $this->array_unique2($array_categorias);
+        
 
         $array_sede = collect($array_sede);
+        
 
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
                 $dataSede = $convert->where('code_depa',$departamento->code_muni);
+                // $sedes_data = $dconvert->where('sede_id',$dsede->code);
                 foreach ($categoria as $cate) {
                     array_push($array_data,[
-                                'code' => $departamento->code,
-                                'name' => $departamento->name,
-                                'sedes' => $dataSede,
-                                'categorias' =>$cate      
+                                'code'  => $departamento->code,
+                                'name'  => $departamento->name,
+                                'sedes' => $infoSede,
+                                            // 'categorias' =>$sedes_data  
+                                                
                     ]);
                 }
             }
