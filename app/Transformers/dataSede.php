@@ -27,8 +27,9 @@ class dataSede extends TransformerAbstract
                 'name'              =>  $data['dataS']->name,
                 'latitude'          =>  $data['dataS']->latitut,
                 'longitude'         =>  $data['dataS']->longitud,
+                'categories'        =>  fractal($data['cateS'], new categories())
             ],
-            'categories'        =>  fractal($data['cateS'], new categories())              
+                          
         ];
     }
 }
