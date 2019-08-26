@@ -437,21 +437,38 @@ class ServiciosRest extends Controller
 
         $convert = collect($sede);
         $array_data = [];
+        $array_sede_categoria = [];
         
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
                 $dataSede = $convert->where('code_depa',$departamento->code_muni);
                 foreach ($categoria as $cate) {
-                    array_push($array_data,[
-                        'code' => $departamento->code,
-                        'name' => $departamento->name,
-                        'branches' =>$dataSede,
-                        'categories' =>$cate
-                    ]);
+                array_push($array_sede_categoria,[
+                    'sede' => $dataSede,
+                    'categoria' => $cate
+                ]);
                 }
             }
         }
 
+        $array_sede = $this->array_unique2($array_sede_categoria);
+
+        $array_sede = collect($array_sede);
+
+        foreach ($depa as $departamento) {
+            foreach ($sede as $sedes) {
+                $dataSede = $convert->where('code_depa',$departamento->code_muni);
+                foreach ($categoria as $cate) {
+                    array_push($array_data,[
+                                'code' => $departamento->code,
+                                'name' => $departamento->name,
+                                'sedes' => $dataSede,
+                                'categorias' =>$cate      
+                    ]);
+                }
+            }
+        }
+        //     
         $codigo = $this->array_unique2($array_data);
 
         return fractal()
