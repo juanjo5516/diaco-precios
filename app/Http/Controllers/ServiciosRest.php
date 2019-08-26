@@ -8,6 +8,7 @@ use App\Models\Municipio;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Transformers\PricesData;
+use App\Transformers\DataDepartamento;
 use League\Fractal;
 use App\User;
 // use League\Fractal\Resource\Collection;
@@ -249,73 +250,33 @@ class ServiciosRest extends Controller
         $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
         $n2 = $this->getPriceLast($id,$idCategoria);
-   
 
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
 
         $convert = collect($getDataPrices);
-        
-       
         $array_price = array();
         $array_n2 = array();
         foreach ($last as $nivel1) {
-            foreach($getDataPrices as $nivel2){
-                // foreach($array_price as $array){
-                    
+            foreach($getDataPrices as $nivel2){                    
                     if($nivel1->code  == $nivel2->code){
                         $data = $convert->where('code',$nivel1->code);
                         
                                 array_push($array_n2,[
                                     'code' =>$nivel1->code,
                                     'name' => $nivel1->articulo,
-                                    'uom' => $data
-                                        
+                                    'uom' => $data  
                                 ]);
 
                     }
-                // }
             }
         }
 
         $codigo = $this->array_unique2($array_n2);
-        
-
-        // foreach ($last as $prices) {
-        //     //  $nivel2 = $last->where('code',$prices->code);
-        //     // foreach($previous as $prev){
-        //         // foreach($n2 as $nivel){
-        //             // if($prices->code == $prev->code){
-        //                 // if($prices->code ==$nivel->code ){  
-        //                     array_push($array_price,
-        //                     [
-                                
-        //                             'code' =>$prices->code,
-        //                             'name' => $prices->articulo,
-        //                             // 'uom' => 
-        //                             // [
-        //                             //     'code' => $nivel->idMedida,
-        //                             //     'name' => $nivel->medida,
-        //                             //     'current_date' => $nivel->fecha_Actual,
-        //                             //     'actual_price' => $nivel->price,
-        //                             //     // 'previous_price' =>$prev->price,
-        //                             //     // 'previous_date' => $prev->fecha_Actual
-        //                             // ]
-                                
-                                
-        //                     ]);
-        //                 // }
-        //             // }
-        //         // }
-        //     // }
-        // }
-        
-
-        //$fractal = fractal()
-         return fractal()
-            ->collection($codigo)
-            ->transformWith(new PricesData())
-            ->includeCharacters()
-            ->toArray();
+        return fractal()
+        ->collection($codigo)
+        ->transformWith(new PricesData())
+        ->includeCharacters()
+        ->toArray();
 
             
         // return response()->json($fractal, 200);
@@ -344,6 +305,7 @@ class ServiciosRest extends Controller
 		ON vv.idPlantilla = asig.idPlantilla)");
         return $FiltroDepartamentos;
     }
+
     public function getApi()
     {
         $departamentos = Departamento::with('sede')
@@ -367,27 +329,30 @@ class ServiciosRest extends Controller
         
         foreach ($departamentos as $departamento) {
             $sedes = $departamento->sede;
-            
-            foreach ($dep as $key) {
-                foreach($sedes as $idSede){
-                    if($departamento->codigo_departamento == $key->codigo_departamento)  {
-                        if($idSede->code == $key->id_diaco_sede){
+            array_push($array_departamentos,[
+                "asdf" => $sedes
+            ]);
+
+            // foreach ($dep as $key) {
+            //     foreach($sedes as $idSede){
+            //         if($departamento->codigo_departamento == $key->codigo_departamento)  {
+            //             if($idSede->code == $key->id_diaco_sede){
                             
-                            array_push($array_departamentos,
-                            [
-                                [
-                                    "code" => $departamento->codigo_departamento,
-                                    "name" => $departamento->nombre_departamento,
-                                    "branch" => $idSede,
-                                    "category" => $cate,
-                                    "latitude" => $key->latitut,
-                                    "longitude" => $key->longitud
-                                    ]
-                            ]);
-                        }
-                    }  
-                }  
-            }
+            //                 array_push($array_departamentos,
+            //                 [
+            //                     [
+            //                         "code" => $departamento->codigo_departamento,
+            //                         "name" => $departamento->nombre_departamento,
+            //                         "branch" => $idSede,
+            //                         "category" => $cate
+            //                         // "latitude" => $key->latitut,
+            //                         // "longitude" => $key->longitud
+            //                         ]
+            //                 ]);
+            //             }
+            //         }  
+            //     }  
+            // }
 
         }
 
@@ -404,4 +369,100 @@ class ServiciosRest extends Controller
         return $n; 
     }
 
+    public function collectionDepartamento(){
+       
+       $departamento = DB::select("SELECT distinct 
+                                    depa.codigo_departamento as code,
+                                    depa.nombre_departamento as name,
+                                    muni.codigo_municipio as code_muni
+                                    FROM diaco_vaciadocba vaciado
+                                    INNER JOIN diaco_usuario usuario
+                                        on usuario.id_usuario = vaciado.idVerificador
+                                    INNER JOIN diaco_sede sede
+                                        ON sede.id_diaco_sede = usuario.id_sede_diaco
+                                    INNER JOIN municipio muni
+                                        ON muni.codigo_municipio = sede.codigo_municipio
+                                    INNER JOIN departamento depa
+                                        ON depa.codigo_departamento = muni.codigo_departamento
+                                    ");
+        return $departamento;
+    }
+    
+    public function collectionSede(){
+
+        $sede = DB::select("SELECT distinct 
+                                sede.id_diaco_sede as code,
+                                sede.nombre_sede as name,
+                                sede.codigo_municipio as code_depa,
+                                coordenada.latitut,
+	                            coordenada.longitud
+                                FROM diaco_vaciadocba vaciado
+                                INNER JOIN diaco_usuario usuario
+                                    on usuario.id_usuario = vaciado.idVerificador
+                                INNER JOIN diaco_sede sede
+                                    ON sede.id_diaco_sede = usuario.id_sede_diaco
+                                INNER JOIN municipio muni
+                                    ON muni.codigo_municipio = sede.codigo_municipio
+                                INNER JOIN departamento depa
+                                    ON depa.codigo_departamento = muni.codigo_departamento
+                                INNER JOIN diaco_coordenadas_cba coordenada
+		                                ON coordenada.id_sede = sede.id_diaco_sede");
+        return $sede;
+
+    }
+
+    public function collectionCategoria(){
+
+        $categoria = DB::select("SELECT distinct 
+                                plantilla.idCategoria,
+                                categoria.nombre
+                                FROM diaco_vaciadocba vaciado
+                                INNER JOIN diaco_usuario usuario
+                                    on usuario.id_usuario = vaciado.idVerificador
+                                INNER JOIN diaco_name_template_cba template
+                                    ON template.id = vaciado.idPlantilla
+                                INNER JOIN diaco_plantillascba plantilla
+                                    ON plantilla.NombrePlantilla = template.NombreTemplate
+                                INNER JOIN diaco_categoriacba categoria 
+                                    ON categoria.id_Categoria = plantilla.idCategoria");
+        return $categoria;
+
+    } 
+
+
+    public function collectionDataApi(){
+        $depa = $this->collectionDepartamento();
+        $sede = $this->collectionSede();
+        $categoria = $this->collectionCategoria();
+
+        $convert = collect($sede);
+        $array_data = [];
+        
+        foreach ($depa as $departamento) {
+            foreach ($sede as $sedes) {
+                $dataSede = $convert->where('code_depa',$departamento->code_muni);
+                foreach ($categoria as $cate) {
+                    array_push($array_data,[
+                        'code' => $departamento->code,
+                        'name' => $departamento->name,
+                        'branches' =>$dataSede,
+                        'categories' =>$cate
+                    ]);
+                }
+            }
+        }
+
+        $codigo = $this->array_unique2($array_data);
+
+        return fractal()
+            ->collection($codigo)
+            ->transformWith(new DataDepartamento())
+            ->includeCharacters()
+            ->toArray();
+
+
+
+        // return response()->json($codigo, 200);
+
+    }
 }

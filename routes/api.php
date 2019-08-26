@@ -30,3 +30,7 @@ Route::get('price/{id}/{categoria}','ServiciosRest@apiPrice');
 Route::get('fecha/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 Route::get('prueba/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 
+
+Route::get('data', 'ServiciosRest@collectionDataApi');
+    
+
