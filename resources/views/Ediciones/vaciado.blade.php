@@ -20,7 +20,7 @@
  
 @section('Ruta')
     <li class="breadcrumb-item">
-        Asignación de Plantillas
+        Vaciado de Información
     </li>
 @endsection
 @section('diaco_title')

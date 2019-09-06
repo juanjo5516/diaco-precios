@@ -77,6 +77,12 @@ CREATE TABLE diaco_propano_cba(
     name varchar(200),
     state integer not null
 )
+CREATE TABLE diaco_smercado_cba(
+    id integer not null PRIMARY key IDENTITY,
+    name varchar(200),
+    address varchar(200),
+    status integer not null
+)
 
 CREATE TABLE diaco_coordenadas_cba(
     id INTEGER NOT NULL PRIMARY KEY IDENTITY,

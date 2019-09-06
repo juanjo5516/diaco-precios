@@ -40,26 +40,61 @@
                         </el-select>
                     </td>
                   </span>
+                  <span v-if="tipos.tipoVerificacion === '2'">
+                    <td  class="titulo">Super Mercado:</td> 
+                    <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                            <el-option
+                              v-for="(sede,index) in mercados"
+                              v-bind:key=" index "
+                              :label=" sede.nombre  " 
+                              :value=" sede.idMercado "
+                            ></el-option>
+                        </el-select>
+                    </td>
+                  </span>
+                  <span v-if="tipos.tipoVerificacion === '3'">
+                    <td  class="titulo">Tienda de Barrio:</td> 
+                    <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                            <el-option
+                              v-for="(sede,index) in mercados"
+                              v-bind:key=" index "
+                              :label=" sede.nombre  " 
+                              :value=" sede.idMercado "
+                            ></el-option>
+                        </el-select>
+                    </td>
+                  </span>
+                  <span v-if="tipos.tipoVerificacion === '4'">
+                    <td  class="titulo">Canasta Básica Alimentaria:</td> 
+                    <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                            <el-option
+                              v-for="(sede,index) in mercados"
+                              v-bind:key=" index "
+                              :label=" sede.nombre  " 
+                              :value=" sede.idMercado "
+                            ></el-option>
+                        </el-select>
+                    </td>
+                  </span>
                   <span v-if="tipos.tipoVerificacion === '5'">
                     <td class="titulo">Gas Propano:</td> 
                     <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
                       <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
                           <el-option
-                            v-for="(Propano,index) in Propano"
+                            v-for="(sede,index) in mercados"
                             v-bind:key=" index "
-                            :label=" Propano.name  " 
-                            :value=" Propano.id "
+                            :label=" sede.nombre  " 
+                            :value=" sede.idMercado "
                           ></el-option>
                       </el-select>
                     </td>
                   </span>
               </span>    
-      
-                 <!-- <td v-else-if="tipos.tipoVerificacion === '5'" class="titulo">Gas Propano:</td> -->
-                 
-
               </tr>
-              <tr >
+              <tr>
                 <td class="titulo">Verificador:</td>
                 <td colspan="11">{{ index.nombre }}</td>
                 <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
@@ -70,8 +105,7 @@
             <div slot="header" class="clearfix">
               <span>Lugares de visitas</span>
             </div>
-            
-            <div>
+            <div >
               <table class="table table-bordered head">
                 <thead>
                   <tr>
@@ -97,107 +131,6 @@
                       <input type="text" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]">
                     </td>
                   </tr>
-                  <!-- <tr>
-                    <td>1</td>
-                    <td>
-                      <el-select name="Visita[1]" class="vue-select" v-model="sede1"  >
-                        <el-option
-                          v-for="(sede,index) in establecimientos"
-                          v-bind:key=" index "
-                          :label=" sede.nombre  " 
-                          :value=" sede.idMercado "
-                        ></el-option>
-                      </el-select>
-                    </td>
-                    <td>
-                       <el-input v-model="input1" name="iputMercado[1]" maxlength="3"></el-input> 
-                    </td>
-                  </tr>
-                  
-                   <tr>
-                    <td>2</td>
-                    <td>
-                      <el-select
-                        name="Visita[2]"
-                        class="vue-select"
-                        v-model="select2"
-                        placeholder="Plantillas"
-                      >
-                        <el-option
-                          v-for="(item0,idx2) in establecimientos"
-                          :key="idx2"
-                          :label=" item0.nombre "
-                          :value=" item0.idMecado "
-                        ></el-option>
-                      </el-select>
-                    </td>
-                    <td>
-                      <el-input v-model="input2" name="iputMercado[2]" maxlength="3"></el-input>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>
-                      <el-select
-                        name="Visita[3]"
-                        class="vue-select"
-                        v-model="select3"
-                        placeholder="Plantillas"
-                      >
-                        <el-option
-                          v-for="(item1,idx3) in establecimientos"
-                          :key="idx3"
-                          :label=" item1.nombre "
-                          :value=" item1.idMecado "
-                        ></el-option>
-                      </el-select>
-                    </td>
-                    <td>
-                      <el-input v-model="input3" name="iputMercado[3]" maxlength="3"></el-input>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>
-                      <el-select
-                        name="Visita[4]"
-                        class="vue-select"
-                        v-model="select4"
-                        placeholder="Plantillas"
-                      >
-                        <el-option
-                          v-for="(item2,idx4) in establecimientos"
-                          :key="idx4"
-                          :label=" item2.nombre "
-                          :value=" item2.idMercado "
-                        ></el-option>
-                      </el-select>
-                    </td>
-                    <td>
-                      <el-input v-model="input4" name="iputMercado[4]" maxlength="3"></el-input>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>
-                      <el-select
-                        name="Visita[5]"
-                        class="vue-select"
-                        v-model="select5"
-                        placeholder="Plantillas"
-                      >
-                        <el-option
-                          v-for="(item3,idx5) in establecimientos"
-                          :key="idx5"
-                          :label=" item3.nombre "
-                          :value=" item3.idMercado "
-                        ></el-option>
-                      </el-select>
-                    </td>
-                    <td>
-                      <el-input v-model="input5" name="iputMercado[5]" maxlength="3"></el-input>
-                    </td>
-                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -262,7 +195,7 @@
           </table>
           
         </el-card>
-        <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" plain>Almacenar</el-button>
+        <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button> 
         <!-- <button  type="submit" class="btn btn-outline-success">Almacenar</button> -->
         
       </el-card>
@@ -413,7 +346,9 @@ export default {
       idP:'',
       Mercados:[],
       Propano:[],
-      idTt:''
+      idTt:'',
+      SMercado: [],
+      fullscreenLoading: false,
       // usuario:{
       //   sede:'',
       //   nombre:'',
@@ -426,6 +361,7 @@ export default {
     this.getTipo();
     this.getPropano();
     console.log(this.usuario);
+    this.getSMercado();
   },
   methods: {
     DataProductos: function(){
@@ -467,6 +403,17 @@ export default {
               // always executed
             });
         },
+      getSMercado: function(){
+          axios.get('/findAllSmarket')
+            .then(response => {
+              this.SMercado = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .finally(function () {
+            });
+        },
       getPropano: function(){
               axios.get('/getPropano')
                 .then(response => {
@@ -505,6 +452,7 @@ export default {
     //         // console.log(this.Productos);
     //     }
     onSubmit() {
+      this.fullscreenLoading = true;
         for(let a = 0; a <= this.coleccion.length-1; a++){
             this.dataProductos.push({
                 idDataProducto: this.coleccion[a].producto,
@@ -530,10 +478,12 @@ export default {
           //redirect logic
           if (status == '200') {
             window.location = bandeja;
+            this.fullscreenLoading = false;
             //this.$router.push('/Bandeja');
           }
             //console.log("respuesta"+response.data)
         }).catch(error => {
+          this.fullscreenLoading = false;
 				  console.log(error.message)
         });
       

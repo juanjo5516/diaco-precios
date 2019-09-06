@@ -43,7 +43,13 @@ Vue.component('v-select', vSelect)
 Vue.component('clon-component',require('./components/EdicionPlantilla/clonar.vue').default)
 Vue.component('propano-component',require('./components/Propano/addPropano.vue').default)
 Vue.component('historico-component',require('./components/EdicionPlantilla/historico.vue').default)
-
+Vue.component('table-category', require('./components/catalogos/category.vue').default)
+Vue.component('content-product', require('./components/catalogos/product.vue').default)
+Vue.component('content-subcategory', require('./components/catalogos/subcategory.vue').default)
+Vue.component('content-measure', require('./components/catalogos/measure.vue').default)
+Vue.component('content-market', require('./components/catalogos/market.vue').default)
+Vue.component('content-local', require('./components/catalogos/local.vue').default)
+Vue.component('content-smarket', require('./components/lugares/SuperMercado.vue').default)
 const app = new Vue({
     el: '#main'
 });

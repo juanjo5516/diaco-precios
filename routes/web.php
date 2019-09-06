@@ -60,6 +60,7 @@ Route::get('SubCategorias','menu@viewSubCategoria');
 Route::get('TablaSubCategoria','menu@GetTablaS');
 Route::get('AddSubCategoria','menu@addSCategorias');
 Route::get('Mercado','menu@VaciadoMercado');
+Route::get('SMercados','menu@viewSuperMercado');
 Route::get('Medida','menu@viewMedida');
 Route::get('Medidas','menu@addMedidas');
 Route::get('TablaMedida','menu@GetTablaM');
@@ -101,6 +102,52 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('AddPropano','PropanoController@addPropano');
         Route::get('enviados','plantillasController@showEnviados');
         Route::get('getEnviados','plantillasController@GetEnviados');
+
+    //-----------------------------------------------------------------------------------------    
+        // Categoria
+        Route::get('getCategory','catalogos@dataCategory');
+        Route::post('addCategory','catalogos@addCategory');
+        Route::put('deleteCategory','catalogos@deleteByIdCategory');
+        Route::put('UpdateCategory','catalogos@UpdateById');
+        // -------------
+        // Producto
+        Route::get('findAllProducto','catalogos@findAllProduct');
+        Route::post('addProducto','catalogos@addProducto');
+        Route::put('deleteProducto','catalogos@deleteByIdProduct');
+        Route::put('UpdateProduct','catalogos@updateByIdProduct');
+        // -------------
+        // SubCategoria
+        Route::get('findAllSubCategory','catalogos@findAllSubCategory');
+        Route::post('addSubCategory','catalogos@addSubCategory');
+        Route::put('deleteSubCategory','catalogos@deleteByIdSubCategory');
+        Route::put('UpdateSubCategory','catalogos@updateByIdSubCategory');
+        // -------------
+        // Medida
+        Route::get('findAllmeasure','catalogos@findAllmeasure');
+        Route::post('addmeasure','catalogos@addmeasure');
+        Route::put('deleteByIdmeasure','catalogos@deleteByIdmeasure');
+        Route::put('updateByIdmeasure','catalogos@updateByIdmeasure');
+        // -------------
+        // Mercados
+        Route::get('findAllMarket','catalogos@findAllMarket');
+        Route::post('addMarket','catalogos@addMarket');
+        Route::put('deleteByIdMarket','catalogos@deleteByIdMarket');
+        Route::put('updateByIdmarket','catalogos@updateByIdMarket');
+        // -------------
+        // Establecimiento
+        Route::get('findAllLocal','catalogos@findAllLocal');
+        Route::post('addLocal','catalogos@addLocal');
+        Route::put('deleteByIdLocal','catalogos@deleteByIdLocal');
+        Route::put('updateByIdLocal','catalogos@updateByIdLocal');
+        // -------------
+        // Super Mercado
+        Route::get('findAllSmarket','catalogos@findAllSmarket');
+        Route::post('addSmarket','catalogos@addSmarket');
+        Route::put('deleteByIdSmarket','catalogos@deleteByIdSmarket');
+        Route::put('updateByIdSmarket','catalogos@updateByIdSmarket');
+        // -------------
+
+    //------------------------------------------------------------------------------------------
     }); 
 
 

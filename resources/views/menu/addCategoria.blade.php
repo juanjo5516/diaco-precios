@@ -1,17 +1,15 @@
 @extends('layouts.app')
-
-
 @section('contenido')
     @include('plantillas.Detalle_categoria')
 @endsection
 
 @section('Table')
-    <script>
+    {{-- <script>
         $(document).ready(function(){
             addGeneral('#addCategorias','categorias','#tCategoria',true);
             GetTablaSub('#tCategoria',"{{ url('TablaCategoria') }}");  
         })
-    </script>
+    </script> --}}
 @endsection
 
 @section('Ruta')

@@ -34,3 +34,5 @@ Route::get('prueba/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 Route::get('categories', 'ServiciosRest@collectionDataApi');
     
 
+
+

@@ -279,6 +279,10 @@ class menu extends Controller
         return view ('menu.addDetalleMercado');
     }
 
+    public function viewSuperMercado(){
+        return view ('menu.addSMercados');
+    }
+
     public function viewGasPropano(){
         return view('GasPropano.templateGasPropano');
     }

@@ -38,9 +38,9 @@
         width="180">
         </el-table-column>
         <el-table-column
-        prop="NombreTemplate"
-        label="Nombre"
-    >
+          prop="NombreTemplate"
+          label="Nombre"
+        >
         </el-table-column>
         <el-table-column
       label="Operaciones"
