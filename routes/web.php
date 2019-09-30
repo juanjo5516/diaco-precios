@@ -84,7 +84,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('AsignarSede','plantillasController@Asede');
         Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
         Route::post('aLista', 'plantillasController@storeLista');
-        Route::get('GetListaAsede','plantillasController@getAsede');
+        // Route::get('GetListaAsede','plantillasController@getAsede');
+        Route::get('GetListaAsede','plantillasController@getAsedeJson');
         Route::get('Bandeja','plantillasController@showInbox');
         Route::get('getinbox','plantillasController@getInbox');
         Route::get('Printer/{id}','plantillasController@showprinter');
@@ -102,6 +103,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('AddPropano','PropanoController@addPropano');
         Route::get('enviados','plantillasController@showEnviados');
         Route::get('getEnviados','plantillasController@GetEnviados');
+        Route::put('DeleteAsginacionById','plantillasController@deleteByIdAsignacion');
 
     //-----------------------------------------------------------------------------------------    
         // Categoria

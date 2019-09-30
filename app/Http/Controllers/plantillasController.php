@@ -39,6 +39,9 @@ class plantillasController extends Controller
         
         $Plantillas = DB::table('diaco_name_template_cba')->select('id','NombreTemplate')->get();
         $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
+        
+
+       
      
         return view('Ediciones.sedes',
         [
@@ -59,6 +62,12 @@ class plantillasController extends Controller
             print $e;
         }
         
+    }
+    public function getAsedeJson(){
+        
+        $Lista = $this->ListarAsignaciones();
+        return response()->json($Lista, 200);
+  
     }
     
     public function getTipoVisita(){
@@ -163,28 +172,48 @@ class plantillasController extends Controller
         $Listar = DB::table('diaco_asignarsedecba')
                         ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
                         ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
-                        ->select('diaco_name_template_cba.NombreTemplate','diaco_sede.nombre_sede','diaco_asignarsedecba.estatus','diaco_asignarsedecba.created_at')
+                        // ->select('diaco_name_template_cba.NombreTemplate','diaco_sede.nombre_sede','diaco_asignarsedecba.estatus','diaco_asignarsedecba.created_at')
+                        ->selectraw("diaco_asignarsedecba.id_Asignacion,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,diaco_asignarsedecba.created_at")
                         ->where('diaco_asignarsedecba.estatus','>',0)
                         ->get();
         return $Listar;
          
     }
 
+    public function deleteByIdAsignacion(Request $request){
+        $deleteById = ListarAsignacion::where('id_Asignacion', $request->id)->update(['estatus' => 0]);
+        return response()->json($deleteById, 200);
+    }
+
     public function getInbox(){
         $usuario = $this->UserLogin();
 
-        
-        $buson = DB::table('diaco_asignarsedecba')
-                        ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
-                        ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
-                        ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
-                        ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
-                        // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                        ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
-                        ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
-                        ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
-                        ->where('diaco_asignarsedecba.estatus','>','0')
-                        ->get();
+        if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda'){
+                $buson = DB::table('diaco_asignarsedecba')
+                                ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+                                ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+                                ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                                ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+                                // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+                                ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
+                                ->where('diaco_asignarsedecba.estatus','>','0')
+                                ->get();
+        }else{
+             $buson = DB::table('diaco_asignarsedecba')
+                                ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+                                ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+                                ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+                                ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+                                // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+                                // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
+                                ->where('diaco_asignarsedecba.estatus','>','0')
+                                ->get();
+        }
+        // dd($usuario);
 
         //dd($buson);
         
@@ -197,12 +226,13 @@ class plantillasController extends Controller
         $Lista->idSede  = $request->SSede;
         $Lista->created_at  = $request->created_at_new;
         $Lista->estatus  = 1;
+        $Lista->idUsuario = Auth()->user()->id_usuario;
         $Lista->save();
         return 1;
     }
 
     public function showInbox(){
-        return view('Ediciones.bandejaEntrada');
+        return view('Ediciones.bandejaEntrada'); 
     }
 
     public function showprinter($id){
@@ -486,19 +516,35 @@ class plantillasController extends Controller
     public function GetEnviados(){
         $usuario = $this->UserLogin();
 
-        
-        $buson = DB::table('diaco_asignarsedecba')
-                        ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
-                        ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
-                        ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
-                        ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
-                        // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                        ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
-                        ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
-                        ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
-                        ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
-                        ->where('diaco_asignarsedecba.estatus','=','0')
-                        ->get();
+
+        if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda'){
+            $buson = DB::table('diaco_asignarsedecba')
+            ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+            ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+            ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+            ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+            // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+            ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
+            ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
+            // ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+            // ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
+            ->where('diaco_asignarsedecba.estatus','=','0')
+            ->get();
+        }else{
+
+            $buson = DB::table('diaco_asignarsedecba')
+            ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+            ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+            ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+            ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+            // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
+            ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
+            ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
+            ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
+            ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
+            ->where('diaco_asignarsedecba.estatus','=','0')
+            ->get();
+        }
 
         //dd($buson);
         
