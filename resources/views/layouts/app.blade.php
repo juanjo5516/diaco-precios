@@ -36,7 +36,7 @@
         <main  class="main">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
-                @if (Auth()->user()->nombre == 'Juan José Jolón Granados' )
+                @if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda')
                 <li class="breadcrumb-item">
                     <a href="./">Admin</a>
                 </li>
