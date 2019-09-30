@@ -48,9 +48,10 @@ class LoginController extends Controller
     
 
     protected function login(Request $request){
-        // dd($request);
         $this->validateLogin($request);
-        $user = User::where('email',$request->email)->first();
+        // $user = User::where('email',$request->email)->first();
+        $user = User::where('login',$request->email)->orWhere('email',$request->email)->first();
+        // dd($user);
         if($user){
             $PassIn = $request->password;
             $hashedPassIn = hash('sha256', $PassIn, false);
