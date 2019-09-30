@@ -120,9 +120,10 @@
             created_at_new: new Date(),
             
         }).then(response =>{
-            $('#table-vue-asede').DataTable().ajax.reload();
+            // $('#table-vue-asede').DataTable().ajax.reload();
             $("#snoAlertBox").fadeIn();
             closeSnoAlertBox("#snoAlertBox");
+            this.getAsignaciones();
         }).catch(error => {
 				console.log(error.message)
         });
