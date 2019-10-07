@@ -11,6 +11,8 @@ use App\ListarAsignacion;
 use App\vaciadocba;
 use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
+use App\Models\Departamento;
+use App\Models\Municipio;
 
 class plantillasController extends Controller
 {
@@ -402,6 +404,7 @@ class plantillasController extends Controller
 
     public function vaciado(Request $request){
         
+        
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
 
@@ -554,6 +557,17 @@ class plantillasController extends Controller
     public function showEnviados(){
 
         return view('Ediciones.Enviados');
+    }
+
+
+    public function getDepartament(){
+            $Departamento = Departamento::all();
+            return response()->json($Departamento, 200);
+    }
+
+    public function getMunicipioById(Request $request){
+        $municipio = Municipio::where('codigo_departamento','=',$request->id)->get();
+        return response()->json($municipio, 200);
     }
 
 }

@@ -148,6 +148,15 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::put('deleteByIdSmarket','catalogos@deleteByIdSmarket');
         Route::put('updateByIdSmarket','catalogos@updateByIdSmarket');
         // -------------
+        // Reset Pasword User
+        Route::get('changePasswordUser','PasswordResetController@reset');
+        Route::post('changePassword','PasswordResetController@changePassword')->name('changePassword');
+        // -------------
+
+        // Get Data Departamento and Municipio
+        Route::get('getDepartamento','plantillasController@getDepartament');
+        Route::post('getMunicipio','plantillasController@getMunicipioById');
+        // -------------
 
     //------------------------------------------------------------------------------------------
     }); 

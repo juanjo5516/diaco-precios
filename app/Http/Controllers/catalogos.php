@@ -99,13 +99,20 @@ class catalogos extends Controller
         return response()->json($updateById, 200);
     }
     public function findAllMarket(){
-        $product = market::select('idMercado as code','nombreMercado as name','direccionMercado as address')->where('status','=','A')->get();
+        $product = market::select('idMercado as code','nombreMercado as name','direccionMercado as address','departamento.nombre_departamento as departamento','municipio.nombre_municipio as municipio')
+                                        ->join('departamento','departamento_id','=','departamento.codigo_departamento')
+                                        ->join('municipio','municipio_id','=','municipio.codigo_municipio')
+                                        ->where('status','=','A')->get();
+                                        // ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
         return response()->json($product, 200);
     }
     public function addMarket(Request $request){
+
         $data = new market;
         $data->nombreMercado = $request->names;
         $data->direccionMercado = $request->address;
+        $data->departamento_id = $request->departamento_id;
+        $data->municipio_id =  $request->municipio_id;
         $data->status = $request->status;
         if($data->save()){
             return response()->json($data, 200);
@@ -116,12 +123,15 @@ class catalogos extends Controller
         return response()->json($deleteById, 200);
     }
     public function updateByIdMarket(Request $request){
-        $updateById = market::where('idMercado', $request->id)->update(['nombreMercado' => $request->name, 'direccionMercado' => $request->address]);
+        $updateById = market::where('idMercado', $request->id)->update(['nombreMercado' => $request->name, 'direccionMercado' => $request->address, 'departamento_id' => $request->departamento, 'municipio_id' => $request->municipio]);
         return response()->json($updateById, 200);
     }
 
     public function findAllLocal(){
-        $product = local::select('idEstablecimiento as code','nombreEstablecimiento as name','direccionEstablecimiento as address')->where('status','=','A')->get();
+        $product = local::select('idEstablecimiento as code','nombreEstablecimiento as name','direccionEstablecimiento as address','departamento.nombre_departamento as departamento','municipio.nombre_municipio as municipio')
+                                    ->join('departamento','departamento_id','=','departamento.codigo_departamento')
+                                    ->join('municipio','municipio_id','=','municipio.codigo_municipio')                            
+                                    ->where('status','=','A')->get();
         return response()->json($product, 200);
     }
 
@@ -129,6 +139,8 @@ class catalogos extends Controller
         $data = new local;
         $data->nombreEstablecimiento = $request->names;
         $data->direccionEstablecimiento = $request->address;
+        $data->departamento_id = $request->departamento_id;
+        $data->municipio_id = $request->municipio_id;
         $data->status = $request->status;
         if($data->save()){
             return response()->json($data, 200);
@@ -140,7 +152,7 @@ class catalogos extends Controller
     }
 
     public function updateByIdLocal(Request $request){
-        $updateById = local::where('idEstablecimiento', $request->id)->update(['nombreEstablecimiento' => $request->name, 'direccionEstablecimiento' => $request->address]);
+        $updateById = local::where('idEstablecimiento', $request->id)->update(['nombreEstablecimiento' => $request->name, 'direccionEstablecimiento' => $request->address,  'departamento_id' => $request->departamento, 'municipio_id' => $request->municipio]);
         return response()->json($updateById, 200);
     }
     public function findAllSmarket(){
