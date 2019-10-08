@@ -50,6 +50,7 @@ Vue.component('content-measure', require('./components/catalogos/measure.vue').d
 Vue.component('content-market', require('./components/catalogos/market.vue').default)
 Vue.component('content-local', require('./components/catalogos/local.vue').default)
 Vue.component('content-smarket', require('./components/lugares/SuperMercado.vue').default)
+Vue.component('pdf-componente', require('./components/pdf/pdfDemo.vue').default)
 const app = new Vue({
     el: '#main'
 });

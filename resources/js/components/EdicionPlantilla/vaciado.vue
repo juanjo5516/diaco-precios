@@ -220,27 +220,13 @@
                   <td>{{ index.produto }}</td>
                   <td class="ReferencesName">{{ index.medida }}</td>
                   <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
-                   <td v-for="n in 6" :key="n">
+                   <td v-for="n in 5" :key="n">
                         <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
                       <!-- <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"> -->
                    </td>
-                  <!-- <td v-html="index.producto" ></td> -->
-                  <!-- <td class="precioName" v-html="index.productoId"></td> -->
-
-                  <!-- <tr v-for="item in items" :key="item.id"> -->
-                  <!-- </tr> -->
-
-                  <!-- <td v-for="(it,ti) in 5" :key="ti"> -->
-                    <!-- <input  type=text class="form-control" maxlength=10  /> -->
-                    <!-- <input type="text" :name="'input['  + it  + ']'" v-model="item['valor' + it ]"> -->
-                  <!-- </td> -->
-                  <!-- <td class="precioName" v-html="index.inputColumn1"></td> -->
-                  <!-- <td class="precioName" v-html="index.inputColumn2"></td>
-                  <td class="precioName" v-html="index.inputColumn3"></td>
-                  <td class="precioName" v-html="index.inputColumn4"></td>
-                  <td class="precioName" v-html="index.inputColumn5"></td> -->
-                  <!-- <td v-html="index.productoId" ></td> -->
-                  
+                   <td >
+                        <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
+                   </td>
                  </tr>
               </tbody> 
             </table> 

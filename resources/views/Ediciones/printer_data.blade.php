@@ -73,7 +73,14 @@
                 margin-bottom: 0 !important;
             }
             
+            .tableData{
+                padding-bottom: 25px;
+                /* border:1px solid $000; */
+            }
     
+            .tableData td{
+                border:1px solid #000;
+            }
         /* .border th {
             border: 1px solid #ccc;
     
@@ -87,10 +94,20 @@
 
    
    
-    <div >
-            <div class="card">
-                
-                <div class="card-body">
+    {{-- <div > --}}
+            {{-- <div class="card">
+                <div class="card-body"> --}}
+    <table class="tableData">
+        <tr>
+            <td style="">
+            {{-- <img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco"  style="width: 30rem;"> --}}
+            {{-- <img src="" alt="diaco" > --}}
+           <img src="https://www.diaco.gob.gt/site/images/2018/LOGO/2018/Ndiaco.jpg" width="200" height="200">
+            </td>
+            <td>b</td>
+            <td>c</td>
+        </tr>
+    </table>
                         <table class="table" >
                                 <tr >
                                     <td colspan="12">
@@ -116,8 +133,8 @@
                                     </tr>
                                 @endforeach
                             </table>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
 
             @foreach ($categoria as $dataCategoria)
                 
@@ -193,7 +210,7 @@
             </div>
 
             @endforeach
-    </div>
+    {{-- </div> --}}
 
     {{-- <table>
             @if(!isset($header))

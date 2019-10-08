@@ -272,15 +272,25 @@ class plantillasController extends Controller
             //     'categoria' => $categorias
             // ]);
 
-                
+               
+            // return view('Ediciones.pdfdata');
+            // return view('Ediciones.printer_data',[
+            //     'id' => $id,
+            //     'fecha' => $fecha,
+            //     'usuario' => $usuario,
+            //     'coleccion' => $query,
+            //      'categoria' => $categorias 
+            // ]);
             $pdf = \PDF::loadView('Ediciones.printer_data',[
                 'id' => $id,
                 'fecha' => $fecha,
                 'usuario' => $usuario,
                 'coleccion' => $query,
-                 'categoria' => $categorias
+                 'categoria' => $categorias 
             ]);
             return $pdf->stream();
+
+
             // return $pdf->download('Ediciones.pdf');
             
            // DB::commit(); 
