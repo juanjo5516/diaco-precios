@@ -1,12 +1,19 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<style>
-    @page { margin: 70px 20px; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pdf</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        @page { margin: 50px 6px 50px 5px; }
         
-        html{
+        /* html{
            font-family: verdana !important;
             font-size: 12px;
-        }
-        .font-lg {
+        } */
+        /* .font-lg {
             font-size: 13px;
             font-weight:bold;
             text-align: center;
@@ -21,8 +28,8 @@
         .w-number {
             width: 20px;
             text-align: center !important;
-        }
-        table {
+        } */
+        .table {
             font-family: verdana !important;
             font-size: 12px;
             width: 100%;
@@ -31,7 +38,7 @@
             border: 1px solid #ccc;
             margin-bottom: none !important;
         }
-        .card {
+         .card {
             position: relative;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -54,105 +61,117 @@
             flex: 1 1 auto;
             padding: 1.25rem;
             }
-            .card-header {
+        
+        /*    .card-header {
             padding: 0.75rem 1.25rem;
             margin-bottom: 0;
             background-color: rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-            }
+            } */
 
-            .card-header:first-child {
+            /* .card-header:first-child {
             border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
             }
 
             .card-header + .list-group .list-group-item:first-child {
             border-top: 0;
             }
+             */
             
-            .table {
-                margin-bottom: 0 !important;
-            }
             
             .tableData{
-                padding-bottom: 25px;
+                padding-bottom: 10px;
                 /* border:1px solid $000; */
             }
     
-            .tableData td{
+            /* .tableData td{
                 border:1px solid #000;
+            } */
+
+            .tableData img{
+                padding: 0 auto;
+                margin:0 auto;
+                width:200px;
+                
+            }
+            .tableData td p{
+                width: 250;
+                font-size: 12px;
+                text-align: center;
             }
         /* .border th {
             border: 1px solid #ccc;
     
-        }
-       .header{
+        } */
+       
+       /* .header{
             background-color: #dddddd !important;
            height:25px ;
-        }  */
+        }   */
     </style>
-
-
-   
-   
-    {{-- <div > --}}
-            {{-- <div class="card">
-                <div class="card-body"> --}}
-    <table class="tableData">
+</head>
+<body>
+    <div>
+    <table class="table tableData" witdh="90%">
         <tr>
-            <td style="">
-            {{-- <img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco"  style="width: 30rem;"> --}}
-            {{-- <img src="" alt="diaco" > --}}
-           <img src="https://www.diaco.gob.gt/site/images/2018/LOGO/2018/Ndiaco.jpg" width="200" height="200">
+            <td><img src="img/Ndiaco.jpg" alt="diaco"  ></td>
+            {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco"  ></td> --}}
+            <td>
+                <p>
+                    Dirección de Atención y Asistencia al Consumidor -DIACO-
+                </p> <br>
+                <p>Ministerio de Economia</p>
             </td>
-            <td>b</td>
-            <td>c</td>
+            <td><img src="img/Ndiaco.jpg" alt="diaco" ></td>
+            {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco" ></td> --}}
         </tr>
     </table>
-                        <table class="table" >
-                                <tr >
-                                    <td colspan="12">
-                                        Fecha: <span>{{ $fecha }}</span>
-                                            <input type="hidden" name="fechaVaciado" value="12-25-25">
-                                    </td>
-                                </tr>
-                                @foreach ($usuario as $item)
-                                <tr>
-                                        <td>
-                                            Sede:
-                                        </td>
-                                        <td colspan="5"  >
-                                            {{ $item->sede }}
-                                        </td>
-                                        <td >
-                                            Verificador:
-                                        </td>
-                                        <td colspan="5"  >
-                                            {{ $item->nombre }} 
-                                            
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </table>
+    {{-- <div class="card">
+            <div class="card-body"> --}}
+                <table class="table" >
+                    <tr >
+                    <td colspan="12">
+                        Fecha: <span>{{ $fecha }}</span>
+                        <input type="hidden" name="fechaVaciado" value="12-25-25">
+                    </td>
+                </tr>
+                @foreach ($usuario as $item)
+                <tr>
+                    <td>
+                        Sede:
+                    </td>
+                    <td colspan="5"  >
+                        {{ $item->sede }}
+                    </td>
+                    <td >
+                        Verificador:
+                    </td>
+                    <td colspan="5"  >
+                        {{ $item->nombre }} 
+                        
+                    </td>
+                </tr>
+                                    @endforeach
+            </table>               
                 {{-- </div>
-            </div> --}}
-
+        </div> --}}
             @foreach ($categoria as $dataCategoria)
-                
+            
             
             <div class="card">
-                    
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
+                
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
                                 <td>
-                                        {{ $dataCategoria->categoria }}
+                                    {{ $dataCategoria->categoria }}
                                 </td>
                             </tr>
                         </table>
-                            <table class="table table-bordered descripcion" >
-                                    <thead>
-                                            <tr>
-                                                <th>
+                        <table class="table table-bordered descripcion" >
+                            <thead>
+                                <tr>
+                                    <th>
                                                     Producto
                                                 </th>
                                                 <th>
@@ -179,11 +198,11 @@
                                             @foreach ($coleccion as $item)
                                             @if ($item->categoria == $dataCategoria->categoria)
                                             <tr >
-                                                    <td >
-                                                        {{ $item->produto }}
-                                                    </td>
-                                                    <td >
-                                                        {{ $item->medida }}
+                                                <td >
+                                                    {{ $item->produto }}
+                                                </td>
+                                                <td >
+                                                    {{ $item->medida }}
                                                     </td>
                                                     <td >
                                                         &nbsp;
@@ -205,16 +224,16 @@
                                             @endforeach
                                             
                                         </tbody>
-                            </table>
-                    </div>
-            </div>
+                                    </table>
+                                </div>
+                            </div>
 
-            @endforeach
+                            @endforeach
     {{-- </div> --}}
-
+    
     {{-- <table>
-            @if(!isset($header))
-            <tr>
+        @if(!isset($header))
+        <tr>
                 <th colspan="7" class="text-center font-lg">RELACION DE CLIENTES</th>
             </tr>
             @endif
@@ -228,11 +247,11 @@
                 <th class="text-left header">Telefonos</th>
             </tr>
             @php
-                $i =0;
+            $i =0;
             @endphp
             @foreach ($rows as $clients)
-
-                <tr>
+            
+            <tr>
                     <td class="text-left">{{$i}}</td>
                     <td class="text-left">{{ $clients['name']}}</td>
                     <td class="text-left">{{ $clients['surnames']}}</td>
@@ -241,5 +260,8 @@
                     <td class="text-left">{{ $clients['address']}}</td>
                     <td class="text-left">{{ $clients['telephone']}}</td>
                 </tr>
-            @endforeach
-    </table> --}}
+                @endforeach
+            </table> --}}
+        </div>
+        </body>
+        </html>

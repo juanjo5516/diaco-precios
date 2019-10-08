@@ -157,7 +157,14 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getDepartamento','plantillasController@getDepartament');
         Route::post('getMunicipio','plantillasController@getMunicipioById');
         // -------------
-
+        
+        // Get Data Pdf Generate
+        Route::get('get-pdf/{id}','PdfController@getPdf');
+        Route::get('getInfoUser','PdfController@getInfoUser');
+        Route::post('getCategoriaPdf', 'PdfController@getCategoria');
+        Route::post('getProductosPdf','PdfController@getPlantillas');
+        // -------------
+        
     //------------------------------------------------------------------------------------------
     }); 
 

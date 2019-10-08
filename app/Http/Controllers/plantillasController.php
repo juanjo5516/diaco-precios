@@ -288,10 +288,10 @@ class plantillasController extends Controller
                 'coleccion' => $query,
                  'categoria' => $categorias 
             ]);
-            return $pdf->stream();
+            return $pdf->download('Ediciones.pdf');
+            // return $pdf->stream();
 
 
-            // return $pdf->download('Ediciones.pdf');
             
            // DB::commit(); 
         } catch (\Exceptio $e) {
