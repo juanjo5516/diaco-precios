@@ -51,6 +51,17 @@
                     <i class="nav-icon fas fa-angle-right"></i> Clonar plantillas
                 </a>
             </li>
+            <li class="nav-title">Reporte</li>
+            <li class="nav-item nav-dropdown">
+                {{-- <li class="nav-item">
+                    <a class="nav-link" href=../Bandeja>
+                        <i class="nav-icon fas fa-angle-right"></i> Bandeja</a>
+                </li> --}}
+                {{-- <li class="nav-item">
+                    <a class="nav-link" href=../enviados>
+                        <i class="nav-icon fas fa-angle-right"></i> Enviados</a>
+                </li> --}}
+            </li>
         @endif
         <li class="nav-title">Vaciado</li>
         <li class="nav-item nav-dropdown">

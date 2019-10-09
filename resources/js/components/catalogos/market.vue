@@ -4,9 +4,40 @@
       <el-form-item label="Nombre: " prop="name">
         <el-input v-model="formInline.name"></el-input>
       </el-form-item>
-      <el-form-item label="Direcciòn: " prop="address">
+      <el-form-item label="Dirección: " prop="address">
         <el-input v-model="formInline.address"></el-input>
       </el-form-item>
+
+      <el-row :gutter="30">
+        <el-col :span="12">
+            <el-form-item label="Departamento: " prop="departamento_value">
+              <el-select v-model="formInline.departamento_value" placeholder="Departamento" filterable @change="municipios">
+                  <el-option
+                    v-for="(item,index) in departamento"
+                    :key="index"
+                    :label="item.nombre_departamento"
+                    :value="item.codigo_departamento">
+                  </el-option>
+              </el-select>
+
+              <!-- <el-input v-model="formInline.address"></el-input> -->
+            </el-form-item>
+        </el-col>
+        <el-col :span="12">
+            <el-form-item label="Municipio: " prop="municipio_value">
+                <el-select v-model="formInline.municipio_value" placeholder="Municipio" filterable >
+                    <el-option
+                      v-for="(item,index) in municipio"
+                      :key="index"
+                      :label="item.nombre_municipio"
+                      :value="item.codigo_municipio">
+                    </el-option>
+                </el-select>
+              <!-- <el-input v-model="formInline.address"></el-input> -->
+            </el-form-item>
+        </el-col>
+      </el-row>
+      
       <el-form-item>
         <el-button
           @click="onSubmit('formInline')"
@@ -24,6 +55,8 @@
       <el-table-column prop="code" label="#" width="50"></el-table-column>
       <el-table-column prop="name" label="Nombre"></el-table-column>
       <el-table-column prop="address" label="Dirección"></el-table-column>
+      <el-table-column prop="departamento" label="Departamento"></el-table-column>
+      <el-table-column prop="municipio" label="Municipio"></el-table-column>
       <el-table-column label="Operaciones" width="200">
         <template slot="header" slot-scope="scope">
           <el-input
@@ -58,6 +91,26 @@
         <el-form-item label="Direccion" :label-width="formLabelWidth">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="Departamento" :label-width="formLabelWidth">
+            <el-select v-model="form.departamento" placeholder="Departamento" filterable @change="municipios">
+                  <el-option
+                    v-for="(item,index) in departamento"
+                    :key="index"
+                    :label="item.nombre_departamento"
+                    :value="item.codigo_departamento">
+                  </el-option>
+              </el-select>
+        </el-form-item>
+        <el-form-item label="Departamento" :label-width="formLabelWidth">
+            <el-select v-model="form.municipio" placeholder="Municipio" filterable >
+                    <el-option
+                      v-for="(item,index) in municipio"
+                      :key="index"
+                      :label="item.nombre_municipio"
+                      :value="item.codigo_municipio">
+                    </el-option>
+                </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancelar</el-button>
@@ -73,14 +126,17 @@ export default {
   data() {
     return {
       plantillasall: [],
+      departamento:[],
+      municipio:[],
       total: 0,
       currentPage: 1,
       pagesize: 10,
       formInline: {
         name: "",
-        address:""
+        address:"",
+        departamento_value:'',
+        municipio_value: "",
       },
-
       names: "",
       fullscreenLoading: false,
       loading: false,
@@ -98,6 +154,21 @@ export default {
             message: "Ingrese una Dirección",
             trigger: "blur"
           }
+        ],
+        departamento_value: [
+          {
+            required: true,
+            message: "Seleccione un Departamento",
+            trigger: "blur"
+          }
+        
+        ],
+        municipio_value: [
+          {
+            required: true,
+            message: "Seleccione un Municipio",
+            trigger: "blur"
+          }
         ]
       },
       search: '',
@@ -106,6 +177,8 @@ export default {
       form: {
           name: '',
           address: '',
+          departamento:"",
+          municipio:""
         },
         formLabelWidth: '120px',
         codeEdit:0
@@ -113,6 +186,7 @@ export default {
   },
   mounted() {
     this.getPlantillasData();
+    this.dataDepartamento();
   },
   methods: {
     getPlantillasData: function() {
@@ -132,6 +206,8 @@ export default {
             .post(url, {
               names: this.formInline.name,
               address: this.formInline.address,
+              departamento_id: this.formInline.departamento_value,
+              municipio_id: this.formInline.municipio_value,
               status: 'A'
             })
             .then(response => {
@@ -139,11 +215,14 @@ export default {
               if (status == "200") {
                 this.$message({
                   message: h("p", null, [
-                    h("i", { style: "color: teal" }, "Mercado Agregado!")
+                    h("i", { style: "color: teal" }, "Lugar de Visita Agregada!")
                   ]),
                   type: 'success'
                 });
                 this.formInline.name = "";
+                this.formInline.address = "";
+                this.municipio_value = "";
+                this.departamento_value = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
               }
@@ -224,7 +303,9 @@ export default {
         .put(url, {
             id: this.codeEdit,
             name: this.form.name,
-            address: this.form.address
+            address: this.form.address,
+            departamento: this.form.departamento,
+            municipio: this.form.municipio,
         },config
         )
         .then(response => {            
@@ -248,10 +329,27 @@ export default {
                 h("i", { style: "color: red" }, 'Error, servidor no encontrado')
                 ])
             });
-        });
-        
-
-        
+        });   
+    },
+    dataDepartamento(){
+      var url = '/getDepartamento';
+      axios.get(url).then(response => {
+        this.departamento = response.data;
+        // console.log(this.departamento);
+        // this.total = response.data.length;
+      });
+    },
+    dataMunicipio(dato){
+      this.municipio = dato;
+    },
+    municipios(dato){
+      var url = '/getMunicipio';
+      this.municipio_value = "";
+      axios.post(url,{
+              id: dato
+            }).then(response =>{
+              this.dataMunicipio(response.data);
+            })
     }
   }
 };

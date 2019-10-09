@@ -2,10 +2,10 @@
     display: block;
 }
 
-input,
-select {
+/* input, */
+/* select {
     background-color: #e6eeff !important;
-}
+} */
 
 .tData {
     margin-top: 25px;

@@ -245,43 +245,10 @@
                 <div class="dropdown-header text-center">
                     <strong>Settings</strong>
                 </div>
-                {{-- <a class="dropdown-item" > --}}
-                    
-                    {{-- <i class="fas fa-user"></i>{{ auth()->user()->nombre!=null ? auth()->user()->nombre : "Administrator" }} --}}
-                    {{-- <span class="badge badge-info">42</span> --}}
-                {{-- </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-envelope-o"></i> Messages
-                    <span class="badge badge-success">42</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-tasks"></i> Tasks
-                    <span class="badge badge-danger">42</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-comments"></i> Comments
-                    <span class="badge badge-warning">42</span>
-                </a>
-                <div class="dropdown-header text-center">
-                    <strong>Settings</strong>
-                </div>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-user"></i> Profile</a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-wrench"></i> Settings</a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-usd"></i> Payments
-                    <span class="badge badge-dark">42</span>
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-file"></i> Projects
-                    <span class="badge badge-primary">42</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
-                    <i class="fa fa-shield"></i> Lock Account</a> --}}
                 <a class="dropdown-item" href="../logout">
                     <i class="fa fa-lock"></i> Logout</a>
+                <a class="dropdown-item" href="../changePasswordUser">
+                    <i class="fa fa-lock"></i> Change Password</a>
             </div>
         </li>
     </ul>

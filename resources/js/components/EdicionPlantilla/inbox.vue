@@ -45,6 +45,15 @@
               >Imprimir 
             </el-button>
           </el-link>
+          <!-- <el-link :underline=false v-bind:href="'/get-pdf/'+scope.row.id" :id=scope.row.id_Asignacion>
+            <el-button
+              size="small"
+              type="warning"
+              icon="el-icon-printer"
+              plain
+              >Imprimir 2
+            </el-button>
+          </el-link> -->
           
           <!-- <el-button
             size="small"
@@ -69,6 +78,7 @@
 
 
 <script>
+// import pdfData from "./components/pdf/pdfDemo.vue";
     export default {
         data() {
             return {

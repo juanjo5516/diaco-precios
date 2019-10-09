@@ -30,7 +30,7 @@
                   <span v-if="tipos.tipoVerificacion === '1'">
                     <td  class="titulo">Mercado:</td> 
                     <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
                             <el-option
                               v-for="(sede,index) in mercados"
                               v-bind:key=" index "
@@ -43,7 +43,7 @@
                   <span v-if="tipos.tipoVerificacion === '2'">
                     <td  class="titulo">Super Mercado:</td> 
                     <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                             <el-option
                               v-for="(sede,index) in mercados"
                               v-bind:key=" index "
@@ -56,7 +56,7 @@
                   <span v-if="tipos.tipoVerificacion === '3'">
                     <td  class="titulo">Tienda de Barrio:</td> 
                     <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                             <el-option
                               v-for="(sede,index) in mercados"
                               v-bind:key=" index "
@@ -69,7 +69,7 @@
                   <span v-if="tipos.tipoVerificacion === '4'">
                     <td  class="titulo">Canasta Básica Alimentaria:</td> 
                     <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                             <el-option
                               v-for="(sede,index) in mercados"
                               v-bind:key=" index "
@@ -82,7 +82,7 @@
                   <span v-if="tipos.tipoVerificacion === '5'">
                     <td class="titulo">Gas Propano:</td> 
                     <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
-                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']">
+                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                           <el-option
                             v-for="(sede,index) in mercados"
                             v-bind:key=" index "
@@ -118,7 +118,7 @@
                   <tr v-for="n in 5" :key="n">
                     <td>{{ n }}</td>
                     <td >
-                      <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]">
+                      <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]" filterable>
                           <el-option
                             v-for="(sede,index) in establecimientos"
                             v-bind:key=" index "
@@ -128,6 +128,7 @@
                       </el-select>
                     </td>
                     <td >
+                        
                       <input type="text" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]">
                     </td>
                   </tr>
@@ -141,64 +142,101 @@
     
 <!-- <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion"> -->
       <!-- Vaciado -->
+    <!-- <el-container  > -->
       <el-card class="box-card">
         <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
           <div slot="header" class="clearfix">
             <span>{{ item.categoria }}</span>
           </div>
-          <table class="table table-bordered head" id="vue">
-            <thead>
-              <tr>
-                <th class="productoName">Producto</th>
-                <th class="medidaName">Medida</th>
-                <!-- <th class="ReferencesName" >Ref. 1</th> -->
-                <!-- <th class="ReferencesName">Ref. 2</th> -->
-                <th>1</th>
-                <th>2</th>
-                <th>3</th>
-                <th>4</th>
-                <th>5</th>
-                <th></th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(index, ix) of Productos "
-                :key="ix"
-                v-if="index.categoria == item.categoria">
-                <td>{{ index.produto }}</td>
-                <td class="ReferencesName">{{ index.medida }}</td>
-                <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
-                  <td v-for="n in 5" :key="n">
-                    <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]">
-                  </td>
-                <!-- <td v-html="index.producto" ></td> -->
-                <!-- <td class="precioName" v-html="index.productoId"></td> -->
+          <!-- <el-main> -->
 
-                <!-- <tr v-for="item in items" :key="item.id"> -->
-                <!-- </tr> -->
+            <!-- Table ElementUI -->
 
-                <!-- <td v-for="(it,ti) in 5" :key="ti"> -->
-                  <!-- <input  type=text class="form-control" maxlength=10  /> -->
-                  <!-- <input type="text" :name="'input['  + it  + ']'" v-model="item['valor' + it ]"> -->
-                <!-- </td> -->
-                <!-- <td class="precioName" v-html="index.inputColumn1"></td> -->
-                <!-- <td class="precioName" v-html="index.inputColumn2"></td>
-                <td class="precioName" v-html="index.inputColumn3"></td>
-                <td class="precioName" v-html="index.inputColumn4"></td>
-                <td class="precioName" v-html="index.inputColumn5"></td> -->
-                <!-- <td v-html="index.productoId" ></td> -->
-                
-              </tr>
-            </tbody>
-          </table>
-          
+            <!-- <el-table :data="Productos" style="width: 100%;">
+              <el-table-column prop="produto" label="Producto" width="180">
+              </el-table-column>
+              <el-table-column prop="medida" label="Medida" width="180">
+              </el-table-column>
+              <el-table-column v-for="n in 5" :key="n" :label="''  + n  + ''">
+              <template slot-scope="scope">
+                       <el-input type="text" size="small"  :name="'inputs['  + n  + ']'"  :v-model="scope['valor' + n ]"></el-input> 
+                        <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="scope['valor' + n ]">
+              </template>
+
+              </el-table-column>
+            </el-table> -->
+
+            <!-- <table class="table table-bordered head" id="vue">
+              <thead>
+                <tr>
+                  <th class="productoName">Producto</th>
+                  <th class="medidaName">Medida</th>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th></th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(index, ix) of Productos "
+                  :key="ix"
+                  v-if="index.categoria == item.categoria">
+                  <td>{{ index.produto }}</td>
+                  <td class="ReferencesName">{{ index.medida }}</td>
+                    <td v-for="n in 5" :key="n">
+                      <el-input size="small"  :name="'inputs['  + n  + ']'" ></el-input>
+                    </td>
+                </tr>
+              </tbody>
+             </table>  -->
+
+            <!-- Tabla normal -->
+            
+            <table class="table table-bordered head" id="vue">
+              <thead>
+                <tr>
+                  <th class="productoName">Producto</th>
+                  <th class="medidaName">Medida</th>
+                  <!-- <th class="ReferencesName" >Ref. 1</th> -->
+                  <!-- <th class="ReferencesName">Ref. 2</th> -->
+                 <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>Obs.</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(index, ix) of Productos "
+                  :key="ix"
+                  v-if="index.categoria == item.categoria">
+                  <td>{{ index.produto }}</td>
+                  <td class="ReferencesName">{{ index.medida }}</td>
+                  <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
+                   <td v-for="n in 5" :key="n">
+                        <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
+                      <!-- <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"> -->
+                   </td>
+                   <td >
+                        <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
+                   </td>
+                 </tr>
+              </tbody> 
+            </table> 
+          <!-- </el-main> -->
         </el-card>
         <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button> 
         <!-- <button  type="submit" class="btn btn-outline-success">Almacenar</button> -->
         
       </el-card>
+    <!-- </el-container> -->
     </el-form>
   </div>
 </template>
@@ -312,6 +350,7 @@ export default {
       linea: 1,
       tipo:'',
       IdTipo:{},
+     
 
       formInline: {
         idplantilla:'',
@@ -360,7 +399,7 @@ export default {
     this.DataProductos();
     this.getTipo();
     this.getPropano();
-    console.log(this.usuario);
+    // console.log(this.usuario);
     this.getSMercado();
   },
   methods: {
@@ -382,7 +421,7 @@ export default {
               valor4:'',
               valor5:''
             })
-            // console.log(this.Productos);
+            console.log(this.Productos);
         }
     },
       
@@ -393,7 +432,7 @@ export default {
               // handle success
               //this.DataResult = response.data;
               this.IdTipo = response.data;
-              console.log(this.IdTipo);
+              // console.log(this.IdTipo);
             })
             .catch(function (error) {
               // handle error
