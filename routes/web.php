@@ -164,6 +164,10 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getCategoriaPdf', 'PdfController@getCategoria');
         Route::post('getProductosPdf','PdfController@getPlantillas');
         // -------------
+
+        // Count Column
+        Route::post('getCountColumn','plantillasController@getCountColumn');
+        //---------------
         
     //------------------------------------------------------------------------------------------
     }); 

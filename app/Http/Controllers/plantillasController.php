@@ -93,7 +93,7 @@ class plantillasController extends Controller
         ]);
     }
 
-    public function VerificarIdTemplate($nombre){
+    public function VerificarIdTemplate($nombre, $columnas){
        
         if (NameTemplate::where('NombreTemplate', '=', $nombre)->exists()){
             return 0;
@@ -101,9 +101,15 @@ class plantillasController extends Controller
             try {
                 $Template = new NameTemplate;
                 $Template->NombreTemplate = $nombre ;
+                $Template->cantidadColmna = $columnas;
                 $Template->estado = 1;
                 $Template->save();
+
+                
+                
                 return $TemplateId = $Template->id;
+                // $TemplateId = $Template->id;
+                // dd($TemplateId);
             } catch (\Exceptio $e) {
                 return $e;
             }
@@ -122,7 +128,7 @@ class plantillasController extends Controller
         DB::beginTransaction();
         $valor = sizeof($request->Dproducto);
         
-        $validar = $this->VerificarIdTemplate($request->Nplantilla);
+        $validar = $this->VerificarIdTemplate($request->Nplantilla, $request->NColumna);
         if ($validar != 0) {
             try {
                 for ($i=0; $i < $valor; $i++) { 
@@ -139,6 +145,7 @@ class plantillasController extends Controller
                     $Edicion->save();
     
                 }
+                
                 print 1;
                 DB::commit();     
             } catch (\Exceptio $e) {
@@ -578,6 +585,13 @@ class plantillasController extends Controller
     public function getMunicipioById(Request $request){
         $municipio = Municipio::where('codigo_departamento','=',$request->id)->get();
         return response()->json($municipio, 200);
+    }
+
+    public function getCountColumn(Request $request){
+        $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$request->id)->get();
+
+        return (int)$cantidad[0]->Columna;
+        // return response()->json($cantidad, 200);
     }
 
 }

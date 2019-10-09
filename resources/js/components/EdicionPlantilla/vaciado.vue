@@ -115,7 +115,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="n in 5" :key="n">
+                  <tr v-for="n in nColumna" :key="n">
                     <td>{{ n }}</td>
                     <td >
                       <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]" filterable>
@@ -203,11 +203,8 @@
                   <th class="medidaName">Medida</th>
                   <!-- <th class="ReferencesName" >Ref. 1</th> -->
                   <!-- <th class="ReferencesName">Ref. 2</th> -->
-                 <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
+                 <th v-for="n in nColumna" :key="n">{{ n }}</th>
+                  
                   <th>Obs.</th>
                   
                 </tr>
@@ -220,7 +217,7 @@
                   <td>{{ index.produto }}</td>
                   <td class="ReferencesName">{{ index.medida }}</td>
                   <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
-                   <td v-for="n in 5" :key="n">
+                   <td v-for="n in nColumna" :key="n">
                         <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
                       <!-- <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"> -->
                    </td>
@@ -348,6 +345,7 @@ export default {
       input4: "",
       input5: "",
       linea: 1,
+      n:"",
       tipo:'',
       IdTipo:{},
      
@@ -388,6 +386,7 @@ export default {
       idTt:'',
       SMercado: [],
       fullscreenLoading: false,
+      nColumna:0,
       // usuario:{
       //   sede:'',
       //   nombre:'',
@@ -401,6 +400,7 @@ export default {
     this.getPropano();
     // console.log(this.usuario);
     this.getSMercado();
+    this.getColumnas();
   },
   methods: {
     DataProductos: function(){
@@ -421,7 +421,7 @@ export default {
               valor4:'',
               valor5:''
             })
-            console.log(this.Productos);
+            // console.log(this.Productos);
         }
     },
       
@@ -446,6 +446,19 @@ export default {
           axios.get('/findAllSmarket')
             .then(response => {
               this.SMercado = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+            .finally(function () {
+            });
+        },
+      getColumnas: function(){
+          axios.post('/getCountColumn',{id: this.idplantilla})
+            .then(response => {
+              this.nColumna = response.data;
+              // console.log(this.nColumna);
+              // console.log(response.data);
             })
             .catch(function (error) {
               console.log(error);
