@@ -5,63 +5,62 @@
                 <table class="table" >
                     <tr>
                         <td colspan="3" class="fecha">
-                            Fecha: <span> {{ fecha }}   </span>
-                            
-                            <input type="hidden" name="fechaVaciado" :value=" fecha ">
-                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="column-title-vue">
-                            Nombre Plantilla:
-                        </td>
-                        <td>
-                            <el-input
-                                placeholder="Ingrese Nombre"
-                                v-model="input"
-                                clearable
-                                name="Nplantilla">
-                            </el-input>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="column-title-vue">Tipo Plantilla:</td>
-                        <td>
-                            <select   name="TipoVisita" id="TipoVisita" class="form-control">
-                                <option >Seleccione una Opción</option>
-                                <option v-for="(item, idx) in DataResult" :key="idx" :value="item.id_TipoVerificacion">{{ item.nombreVerificacion}}</option>  
-                            </select>
-
-                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="column-title-vue">
-                            Categoria:
-                        </td>
-                        <td>
-                            <select   name="categoriaVaciado" id="categoriaVaciado" class="form-control">
-                                <option >Seleccione una Opción</option>
-                                <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
-                            </select>
-                        </td>
-                        <td class="btn-vue">
-                            <button type="button" class="btn btn-primary" id="addLinea">Ingresar Producto</button>
+                            Fecha: <span> {{ fecha }}   </span> 
+                            <input type="hidden" name="fechaVaciado" :value=" fecha ">  
                         </td>
                     </tr>
                 </table>
-                    
-                        <table class="table" id="vue-table-productos">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Producto</th>
-                                    <th>Medida</th>
-                                    <th></th>
-                                    
-                                </tr>
-                            </thead>
-                        </table>
+                <el-container>
+                    <el-main>
+                        <el-row :gutter="15">
+                            <el-col :span="6">
+                                <div class="sub-title">Nombre de la Plantilla:</div>
+                                <el-input
+                                    placeholder="Ingrese Nombre"
+                                    v-model="input"
+                                    clearable
+                                    name="Nplantilla">
+                                </el-input>
+                            </el-col>
+                            <el-col :span="6">
+                                <div class="sub-title">Tipo de Plantilla:</div>
+                                <select   name="TipoVisita" id="TipoVisita" class="form-control">
+                                    <option >Seleccione una Opción</option>
+                                    <option v-for="(item, idx) in DataResult" :key="idx" :value="item.id_TipoVerificacion">{{ item.nombreVerificacion}}</option>  
+                                </select>
+                            </el-col>
+                            <el-col :span="6">
+                                <div class="sub-title">Categoria:</div>
+                                <select   name="categoriaVaciado" id="categoriaVaciado" class="form-control">
+                                    <option >Seleccione una Opción</option>
+                                    <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
+                                </select>
+                            </el-col>
+                            <el-col :span="6">
+                                <div class="sub-title"># de Columnas:</div>
+                                <!-- <el-input
+                                    placeholder="# columna"
+                                    v-model="input2"
+                                    clearable
+                                    class="NColumna"
+                                    name="NColumna">
+                                </el-input> -->
+                                <input type="text" class="NColumna form-control" name="NColumna" placeholder="# Columna"  >
+                            </el-col>
+                        </el-row>
+                    </el-main>
+                </el-container>
+                <button type="button" class="btn btn-primary" id="addLinea">Ingresar Producto</button>
+                <table class="table" id="vue-table-productos">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Producto</th>
+                            <th>Medida</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
                     
                     <div class="fecha">
                             <button type="submit" class="btn btn-success" id="almacenar">Almacenar Boleta</button>
@@ -99,8 +98,15 @@
         data() {
             return {
             input: '',
+            input2: '',
+            input3: '',
             DataResult:[],
             Tipo:"Seleccione una Opción",
+            tableData: [{
+            date: '2016-05-03'
+          }],
+          TipoVisita:"",
+          categoriaVaciado:""
             
             }
         },
@@ -111,6 +117,7 @@
               axios.get('/getTipo')
                 .then(response => {
                   this.DataResult = response.data;
+
                 })
                 .catch(function (error) {
                   console.log(error);

@@ -23,6 +23,8 @@ function addGeneral(form,link,tabla,tipo) {
                         $(tabla).DataTable().clear().destroy();
                         counter = 0;
                         TablaVacia(tabla);
+                        $('.NColumna').prop("disabled", true);
+                        // $('.NColumna').val("disabled");
                         LimpiarSelect();
                         $("#snoAlertBox").fadeIn();
                         closeSnoAlertBox("#snoAlertBox");
