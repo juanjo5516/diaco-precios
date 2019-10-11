@@ -1,87 +1,70 @@
 <template>
   <div>
-    <button @click="downloadWithCSS">Download PDF WITH CSS</button>
-    <br>
-    <br>
-    <button @click="download">Download PDF WITHOUT CSS</button>
-    <div ref="content">
-      <p style="background-color: red;">Hello Vue in CodeSandbox!</p>
-      <h3>Installed CLI Plugins</h3>
-      <ul>
-        <li>
-          <a
-            href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-            target="_blank"
-            rel="noopener"
-          >babel</a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-            target="_blank"
-            rel="noopener"
-          >eslint</a>
-        </li>
-      </ul>
-      <h3>Essential Links</h3>
-      <h3>Ecosystem</h3>
+    
+    <div class="sheet">
+      <table class="table tableData" witdh="80%"> 
+        <tr>
+            <td><img src="img/Ndiaco.jpg" alt="diaco"  ></td>
+            
+            <td>
+                <p>
+                    Dirección de Atención y Asistencia al Consumidor -DIACO-
+                </p> <br>
+                <p>Ministerio de Economia</p>
+            </td>
+            <td><img src="img/Ndiaco.jpg" alt="diaco" ></td>
+           
+        </tr>
+    </table>
     </div>
   </div>
 </template>
 
+<style >
+  
+  .table {
+            font-family: verdana !important;
+            font-size: 12px;
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+            margin-bottom: none !important;
+        }
+
+
+          .tableData{
+                padding-bottom: 10px;
+                /* border:1px solid $000; */
+            }
+    
+            /* .tableData td{
+                border:1px solid #000;
+            } */
+
+            .tableData img{
+                padding: 0 auto;
+                margin:0 auto;
+                width:200px;
+                
+            }
+            .tableData td p{
+                width: 250;
+                font-size: 12px;
+                text-align: center;
+            }
+</style>
+
 <script>
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas"
 
 export default {
-   
-  name: "prueba",
-//   props: {
-//     msg: String
-//   },
 
 
         data() {
             return {
-                html:`
-                    <table class="tableData">
-                        <tr>
-                            <td>
-                        asdf
-                            </td>
-                            <td>b</td>
-                            <td>c</td>
-                        </tr>
-                    </table>
-                `,
+               n:0
             
             }
           },
-
-  methods: {
-    downloadWithCSS() {
-         var html = '<h1>hello</h1>';
-      const doc = new jsPDF();
-      /** WITH CSS */
-      var canvasElement = document.createElement('canvas');
-    //   html2canvas(this.$refs.content, { canvas: canvasElement }).then(function (canvas) {
-      html2canvas(html, { canvas: canvasElement }).then(function (canvas) {
-        // const img = canvas.toDataURL("image/jpeg", 0.8);
-        // doc.addImage(img,'JPEG',20,20);
-        doc.save("sample.pdf");
-      });
-    },
-    download() {
-      const doc = new jsPDF();
-      
-      /** WITHOUT CSS */
-      const contentHtml = this.html2;
-    //   const contentHtml = this.$refs.content.innerHTML;
-      doc.fromHTML(contentHtml, 15, 15, {
-          width: 170
-        });
-      doc.save("sample.pdf");
-    }
-  }
 };
 </script>

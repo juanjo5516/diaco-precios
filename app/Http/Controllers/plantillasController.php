@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
 use App\Models\Departamento;
 use App\Models\Municipio;
+use Illuminate\Support\Str;
 
 class plantillasController extends Controller
 {
@@ -20,7 +21,7 @@ class plantillasController extends Controller
     public function __construct(){
         $this->middleware('auth');
     }
-    public function UserLogin(){
+    public function UserLogin(){ 
         // $user = DB::table('diaco_usuario')
         //             ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
         //return response()->json($user);
@@ -198,13 +199,13 @@ class plantillasController extends Controller
         $usuario = $this->UserLogin();
 
         if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda'){
-                $buson = DB::table('diaco_asignarsedecba')
+            $buson = DB::table('diaco_asignarsedecba')
                                 ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
                                 ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
                                 ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                                 ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                                ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
@@ -216,7 +217,7 @@ class plantillasController extends Controller
                                 ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                                 ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                                ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
@@ -229,27 +230,42 @@ class plantillasController extends Controller
         return response()->json($buson);
     }
     public function storeLista(Request $request){
+
         $Lista = new ListarAsignacion;
-     
+        
         $Lista->idPlantilla = $request->SPlantilla;
         $Lista->idSede  = $request->SSede;
         $Lista->created_at  = $request->created_at_new;
         $Lista->estatus  = 1;
         $Lista->idUsuario = Auth()->user()->id_usuario;
         $Lista->save();
+        
+        $ListaId = $Lista->id;
+        $Ncorrelativo = $this->createCorrelative($ListaId);
+        ListarAsignacion::where('id_Asignacion','=',$ListaId)
+                                    ->update(['correlativo' => $Ncorrelativo]);
+        // $Lista->correlativo = $Ncorrelativo;
+        // $Lista->correlativo = "125";
+        // $Lista->save();
+        
         return 1;
+
     }
 
     public function showInbox(){
         return view('Ediciones.bandejaEntrada'); 
     }
 
-    public function showprinter($id){
+    public function showprinter($id,$correlativo){ 
+
+        
        // DB::beginTransaction();
         try {
 
             $fecha = $this->getFecha();
             $usuario = $this->UserLogin();
+            $columna = $this->getCountColumnfindId($id);
+            // dd($columna);
             
             $query = DB::table('diaco_plantillascba')
                             ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida') 
@@ -293,7 +309,9 @@ class plantillasController extends Controller
                 'fecha' => $fecha,
                 'usuario' => $usuario,
                 'coleccion' => $query,
-                 'categoria' => $categorias 
+                'categoria' => $categorias,
+                'Ncolumna' => $columna,
+                'correlativo' => $correlativo
             ]);
             return $pdf->download('Ediciones.pdf');
             // return $pdf->stream();
@@ -568,7 +586,7 @@ class plantillasController extends Controller
 
         //dd($buson);
         
-        return response()->json($buson);
+        return response()->json($buson); 
     }
 
     public function showEnviados(){
@@ -593,5 +611,37 @@ class plantillasController extends Controller
         return (int)$cantidad[0]->Columna;
         // return response()->json($cantidad, 200);
     }
+    public function getCountColumnfindId($id){
+        $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$id)->get();
+
+        return (int)$cantidad[0]->Columna;
+        // return response()->json($cantidad, 200);
+    }
+
+    public function createCorrelative($id){
+            
+            $sede = ListarAsignacion::select('diaco_sede.nombre_sede as sede','diaco_tipoverificacioncba.nombreVerificacion as tipo')
+                                                    ->join('diaco_sede','idSede','=','diaco_sede.id_diaco_sede')
+                                                    ->join('diaco_name_template_cba','idPlantilla','=','diaco_name_template_cba.id')
+                                                    ->join('diaco_plantillascba','diaco_name_template_cba.NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
+                                                    ->join('diaco_tipoverificacioncba','diaco_plantillascba.tipoVerificacion','=','diaco_tipoverificacioncba.id_TipoVerificacion')
+                                                    ->where('diaco_asignarsedecba.id_Asignacion','=',$id)
+                                                    ->get();
+            
+            $Nsede = Str::substr($sede[0]->sede,0,2);
+            $Ntipo = Str::substr($sede[0]->tipo,0,2);
+            $date = Carbon::now('America/Guatemala');
+            $date->toDateTimeString();
+            $date->format('Y');
+            $correlativo = $Nsede . '-' . $Ntipo . '-' . $date->isoFormat('Y') . '-' . $id;
+            $correlativo = strtoupper($correlativo);
+            return $correlativo;
+            // return response()->json($correlativo, 200);
+    }
+
+    // public function getCorrelativo($id){
+    //     $correlativo = ListarAsignaciones::select('correlativo')
+    //                                                         ->where()
+    // }
 
 }

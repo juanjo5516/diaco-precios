@@ -111,7 +111,7 @@
     </style>
 </head>
 <body>
-    <div>
+    <div class="A4">
     <table class="table tableData" witdh="90%">
         <tr>
             <td><img src="img/Ndiaco.jpg" alt="diaco"  ></td>
@@ -126,13 +126,15 @@
             {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco" ></td> --}}
         </tr>
     </table>
-    {{-- <div class="card">
-            <div class="card-body"> --}}
                 <table class="table" >
                     <tr >
-                    <td colspan="12">
+                    <td colspan="7">
                         Fecha: <span>{{ $fecha }}</span>
                         <input type="hidden" name="fechaVaciado" value="12-25-25">
+                    </td>
+                    <td colspan="5">
+                        Boleta No.: <span style="color:red;font-size:1.2em;"> {{ $correlativo }}</span>
+                        
                     </td>
                 </tr>
                 @foreach ($usuario as $item)
@@ -153,13 +155,8 @@
                 </tr>
                                     @endforeach
             </table>               
-                {{-- </div>
-        </div> --}}
             @foreach ($categoria as $dataCategoria)
-            
-            
             <div class="card">
-                
                 <div class="card-body">
                     <table class="table">
                         <tr>
@@ -177,21 +174,9 @@
                                                 <th>
                                                     Medida
                                                 </th>
-                                                <th>
-                                                    1
-                                                </th>
-                                                <th>
-                                                    2
-                                                </th>
-                                                <th>
-                                                    3
-                                                </th>
-                                                <th>
-                                                    4
-                                                </th>
-                                                <th>
-                                                    5
-                                                </th>
+                                            @for ($i = 1; $i <= $Ncolumna; $i++)
+                                                    <th > Visita {{ $i }} </th>
+                                            @endfor
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -204,21 +189,12 @@
                                                 <td >
                                                     {{ $item->medida }}
                                                     </td>
+                                                @for ($i = 1; $i <= $Ncolumna; $i++)
+                                                    
                                                     <td >
                                                         &nbsp;
                                                     </td>
-                                                    <td >
-                                                        &nbsp;
-                                                    </td>
-                                                    <td >
-                                                        &nbsp;
-                                                    </td>
-                                                    <td >
-                                                        &nbsp;
-                                                    </td>
-                                                    <td >
-                                                        &nbsp;
-                                                    </td>
+                                                @endfor
                                             </tr> 
                                             @endif
                                             @endforeach
@@ -227,41 +203,7 @@
                                     </table>
                                 </div>
                             </div>
-
                             @endforeach
-    {{-- </div> --}}
-    
-    {{-- <table>
-        @if(!isset($header))
-        <tr>
-                <th colspan="7" class="text-center font-lg">RELACION DE CLIENTES</th>
-            </tr>
-            @endif
-            <tr class="border">
-                <th class="w-number header">N°</th>
-                <th class="text-left header">Nombre</th>
-                <th class="text-left header">Apellidos</th>
-                <th class="w-60 header">N° DNI</th>
-                <th class="w-60 header">Email</th>
-                <th class="text-left header">Dirección</th>
-                <th class="text-left header">Telefonos</th>
-            </tr>
-            @php
-            $i =0;
-            @endphp
-            @foreach ($rows as $clients)
-            
-            <tr>
-                    <td class="text-left">{{$i}}</td>
-                    <td class="text-left">{{ $clients['name']}}</td>
-                    <td class="text-left">{{ $clients['surnames']}}</td>
-                    <td class="text-left">{{ $clients['number']}}</td>
-                    <td class="text-left">{{ $clients['email']}}</td>
-                    <td class="text-left">{{ $clients['address']}}</td>
-                    <td class="text-left">{{ $clients['telephone']}}</td>
-                </tr>
-                @endforeach
-            </table> --}}
         </div>
         </body>
         </html>

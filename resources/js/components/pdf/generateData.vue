@@ -3,17 +3,17 @@
         <el-container>
             <el-main>
                 <!-- <el-row :gutter="20"> -->
-            <pdf ref="myPdfComponent">
+            <!-- <pdf ref="myPdfComponent">
             
         
-                <table class="tables" width="100%">
+                <table class="tables" width="100%"> 
                     <tr>
                         <td>a</td>
                         <td>s</td>
                         <td>d</td>
                     </tr>
                 </table>
-            </pdf>
+            </pdf> -->
                 <!-- <el-button @click="download" type="success" icon="el-icon-folder-add" >PDF</el-button>  -->
                 <button @click="logContent">print</button>
                 
@@ -45,11 +45,9 @@
 
 <script>
 
+
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
-import pdf from 'vue-pdf';
-
   export default {
        name: "prueba",
       props: ['id'],
@@ -66,9 +64,7 @@ import pdf from 'vue-pdf';
         
       }
     },
-    components: {
-        pdf
-    },
+  
     mounted(){
             this.getData();
             this.getCategoria();
