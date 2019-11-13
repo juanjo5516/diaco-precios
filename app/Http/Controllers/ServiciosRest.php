@@ -170,7 +170,7 @@ class ServiciosRest extends Controller
     }
 
     public function getPriceLastPrevious($id,$idCatetoria){
-
+       
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
 
@@ -178,6 +178,7 @@ class ServiciosRest extends Controller
         $date_previous = $date->subDay(1)->format('Y-m-d');
         $date_last = $date->addDay(1)->format('Y-m-d');
         
+     
         $price = DB::select("SELECT  
                                     t1.code as code,
                                     t1.idMedida,
@@ -232,8 +233,8 @@ class ServiciosRest extends Controller
                                 ON plantilla.idProducto = vaciado.idProducto
                             INNER JOIN diaco_categoriacba categorias
                                 ON categorias.id_Categoria = plantilla.idCategoria
-                            WHERE convert(date,vaciado.created_at) <= '".$date_previous."'
-                                AND sede.id_diaco_sede = ".$id."
+                            WHERE  convert(date,vaciado.created_at) <= '".$date_previous."'
+                                    AND sede.id_diaco_sede = ".$id."
                                 and categorias.id_Categoria = ".$idCatetoria."
                             GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida) t2
                     ON t1.code = t2.code
@@ -250,8 +251,9 @@ class ServiciosRest extends Controller
         $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
         $n2 = $this->getPriceLast($id,$idCategoria);
-
+        
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
+       
 
         $convert = collect($getDataPrices);
         $array_price = array();
@@ -456,6 +458,7 @@ class ServiciosRest extends Controller
             }
         }
 
+        
         $array_sede = $this->array_unique2($array_sede_categoria);
         // $dconvert = collect($array_sede);
         foreach($categoria as $sedes_data){
