@@ -9,7 +9,7 @@
           @click="onSubmit('formInline')"
           type="primary"
           class="btn btn-success"
-          v-loading.fullscreen.lock="fullscreenLoading"
+          v-loading.fullscreen.lock="fullscreenLoading" 
         >Guardar</el-button>
       </el-form-item>
     </el-form>

@@ -2,7 +2,7 @@
 
 
 @section('contenido') 
-    @include('plantillas.edicion') 
+    @include('plantillas.edicion')  
 @endsection
 
 @section('Table')

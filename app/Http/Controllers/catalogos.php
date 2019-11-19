@@ -10,6 +10,7 @@ use App\Models\measure;
 use App\Models\market;
 use App\Models\local;
 use App\Models\smarket;
+use App\responseData;
 use Illuminate\Support\Facades\DB;
 
 class catalogos extends Controller
@@ -38,6 +39,12 @@ class catalogos extends Controller
     public function findAllProduct(){
         $product = product::select('id_producto as code','nombre as name')->where('status','=','A')->get();
         return response()->json($product, 200);
+    }
+
+    public function findByIdProduct($producto){
+        $product = product::select('id_producto as code','nombre as name')->where('status','=','A')->where('id_producto','=',$producto)->get();
+        return response()->json($product, 200);
+        // return json_encode($product);
     }
 
     public function addProducto(Request $request){
@@ -81,6 +88,12 @@ class catalogos extends Controller
     public function findAllmeasure(){
         $product = measure::select('id_medida as code','nombre as name')->where('status','=','A')->get();
         return response()->json($product, 200);
+    }
+
+    public function findByIdmeasure($medida){
+        $measure = measure::select('id_medida as codeMeasure','nombre as nameMeasure')->where('status','=','A')->where('id_medida','=',$medida)->get();
+        return response()->json($measure, 200);
+        // return json_encode($measure);
     }
 
     public function addmeasure(Request $request){
@@ -178,4 +191,21 @@ class catalogos extends Controller
         $updateById = smarket::where('code', $request->id)->update(['name' => $request->name, 'address' => $request->address]);
         return response()->json($updateById, 200);
     }
+
+
+    public function getProductoAndMeasure(Request $request){
+        $producto = $this->findByIdProduct($request->producto);
+        $medida = $this->findByIdmeasure($request->medida);
+        $array = array();
+        for ($i=0; $i < 1; $i++) { 
+             array_push($array,[
+                'codeProducto' => $producto->original[0]->code,
+                'nameProducto' => $producto->original[0]->name,
+                'codeMedida' => $medida->original[0]->codeMeasure,
+                'nameMedida' => $medida->original[0]->nameMeasure,
+             ]);
+        }
+        return response()->json($array, 200);
+    }
+    
 }

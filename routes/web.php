@@ -118,6 +118,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('addProducto','catalogos@addProducto');
         Route::put('deleteProducto','catalogos@deleteByIdProduct');
         Route::put('UpdateProduct','catalogos@updateByIdProduct');
+        Route::post('findByIdProduct','catalogos@findByIdProduct');
         // -------------
         // SubCategoria
         Route::get('findAllSubCategory','catalogos@findAllSubCategory');
@@ -130,6 +131,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('addmeasure','catalogos@addmeasure');
         Route::put('deleteByIdmeasure','catalogos@deleteByIdmeasure');
         Route::put('updateByIdmeasure','catalogos@updateByIdmeasure');
+        Route::post('findByIdmeasure','catalogos@findByIdmeasure');
         // -------------
         // Mercados
         Route::get('findAllMarket','catalogos@findAllMarket');
@@ -170,6 +172,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getCountColumn','plantillasController@getCountColumn');
         Route::get('getCorrelativo','plantillasController@createCorrelative');
         //---------------
+
+        Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
         
     //------------------------------------------------------------------------------------------
     }); 
