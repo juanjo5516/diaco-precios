@@ -80,7 +80,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
     Route::group(['middleware' => 'cors'], function(){
         Route::get('Edicion','plantillasController@index');
-        Route::get('addPlantillas','plantillasController@store');
+        // Route::get('addPlantillas','plantillasController@store'); 
+        Route::post('addPlantillas','plantillasController@store');
         Route::get('AsignarSede','plantillasController@Asede');
         Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
         Route::post('aLista', 'plantillasController@storeLista');

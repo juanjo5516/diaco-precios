@@ -4,7 +4,7 @@ function addGeneral(form,link,tabla,tipo) {
     $(form).submit(function(e) {
         e.preventDefault();
         let parametros = $(this).serialize();
-        $.ajax({
+        $.ajax({ 
             data: parametros,
             url: link,
             type: "get",
