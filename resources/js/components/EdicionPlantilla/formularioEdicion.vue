@@ -10,108 +10,184 @@
                         </td>
                     </tr>
                 </table>
-                <el-container>
-                    <el-main>
-                        <el-row :gutter="15">
-                            <el-col :span="6">
-                                <div class="sub-title">Nombre de la Plantilla:</div>
+                        <el-row :gutter="10">
+                            <el-col :xs="25" :sm="6" :md="8" :lg="6" :xl="10">
+                                <div >Plantilla: <strong>*</strong></div>
                                 <el-input
                                     placeholder="Ingrese Nombre"
                                     v-model="input"
                                     clearable
+                                    :autofocus="focus"
                                     name="Nplantilla">
                                 </el-input>
                             </el-col>
-                            <el-col :span="6">
-                                <div class="sub-title">Tipo de Plantilla:</div>
-                                <select   name="TipoVisita" id="TipoVisita" class="form-control">
+
+                            <el-col :xs="25" :sm="6" :md="8" :lg="6" :xl="10">
+                                <div class="sub-title">Tipo de Plantilla: <strong>*</strong></div>
+
+                                <!-- <select   name="TipoVisita" id="TipoVisita" class="form-control">
                                     <option >Seleccione una Opción</option>
                                     <option v-for="(item, idx) in DataResult" :key="idx" :value="item.id_TipoVerificacion">{{ item.nombreVerificacion}}</option>  
-                                </select>
+                                </select> -->
+                                <el-select v-model="selectTPlantilla" placeholder="Tipo Plantilla">
+                                    <el-option
+                                    v-for="item in DataResult"
+                                    :key="item.id_TipoVerificacion"
+                                    :label="item.nombreVerificacion"
+                                    :value="item.id_TipoVerificacion">
+                                    </el-option>
+                                </el-select>
                             </el-col>
-                            <el-col :span="6">
-                                <div class="sub-title">Categoria:</div>
-                                <select   name="categoriaVaciado" id="categoriaVaciado" class="form-control">
+                           
+
+                            <el-col :xs="25" :sm="6" :md="8" :lg="6" :xl="10">
+                                <div class="sub-title">Categoria: <strong>*</strong></div>
+
+                                <!-- <select   name="categoriaVaciado" id="categoriaVaciado" class="form-control">
                                     <option >Seleccione una Opción</option>
                                     <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
-                                </select>
+                                </select> -->
+
+                                <el-select v-model="selectCategoria" placeholder="Categoria">
+                                    <el-option
+                                    v-for="item in coleccion"
+                                    :key="item.id"
+                                    :label="item.nombre"
+                                    :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-col>
-                            <el-col :span="6">
-                                <div class="sub-title"># de Columnas:</div>
-                                <!-- <el-input
-                                    placeholder="# columna"
-                                    v-model="input2"
+
+
+                            <el-col :xs="25" :sm="6" :md="8" :lg="6" :xl="10">
+                                <div class="sub-title"># de Columnas: <strong>*</strong></div>
+                                <el-input
+                                    placeholder="# Columna"
+                                    v-model="nColumnas"
                                     clearable
-                                    class="NColumna"
+                                    :disabled='activado'
                                     name="NColumna">
-                                </el-input> -->
-                                <input type="text" class="NColumna form-control" name="NColumna" placeholder="# Columna"  >
-                            </el-col>
+                                </el-input>
+                            </el-col> 
                         </el-row>
-                    </el-main>
-                </el-container>
-                <button type="button" class="btn btn-primary" id="addLinea">Ingresar Producto</button>
-                <table class="table" id="vue-table-productos">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Producto</th>
-                            <th>Medida</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                </table>
-                    
-                    <div class="fecha">
-                            <button type="submit" class="btn btn-success" id="almacenar">Almacenar Boleta</button>
-                    </div>
+            </el-card>
+            
+            <el-card class="box-card">
                 
-                <div id="snoAlertBox" class="alert alert-warning" data-alert="alert">Plantilla Almacenada.</div>
-                <div id="snoAlertBoxE" class="alert alert-danger" data-alert="alert">Error al ingresar la Boleta.</div>
+                    <el-row :gutter="20" class="my-3">
+                        <el-col :xs="25" :sm="12" :md="8" :lg="9" :xl="10">
+                            <div>Producto: <strong>*</strong></div>
+                            <el-select v-model="NewProducto" placeholder="Nuevo Producto" >
+                                <el-option
+                                v-for="item in ListadoProducto"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="25" :sm="12" :md="8" :lg="9" :xl="10">
+                            <div>Medida: <strong>*</strong></div>
+                            <el-select v-model="NewMeasure" placeholder="Nueva Medida">
+                                <el-option
+                                v-for="item in ListadoMedidas"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :xs="25" :sm="8" :md="8" :lg="6" :xl="10">
+                            <div>Accion:</div>
+                            <el-button
+                            @click="guardar"
+                            type="success"
+                            size="medium"
+                            :loading=load
+                            >Añadir</el-button>
+                        </el-col>
+                    </el-row>
+
+
+                    <el-table
+                    :data="respuestaMedida"
+                    style="width: 100%"
+                    border>
+                        <el-table-column  type="index" width="50"></el-table-column>
+                        <el-table-column  prop="nameProducto"  label="Producto" ></el-table-column>
+                        <el-table-column  prop="nameMedida"  label="Medida" ></el-table-column>
+                        <el-table-column
+                            width="150"
+                            label="Operaciones">
+                            <template slot-scope="scope">
+                                <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">Eliminar</el-button>
+                            </template>
+                            </el-table-column>
+                    </el-table>
+                            <!-- <button type="submit" class="btn btn-success" id="almacenar"  v-loading.fullscreen.lock="fullscreenLoading">Almacenar Boleta</button> -->
+                    <el-button
+                    @click="submit"
+                    type="primary"
+                    class="my-4" 
+                    v-loading.fullscreen.lock="fullscreenLoading"
+                    >Almacenar Boleta</el-button>
+
+                    <el-button
+                    @click="newData"
+                    type="primary"
+                    class="my-4" 
+                    v-loading.fullscreen.lock="fullscreenLoading2"
+                    >Nueva Boleta</el-button>
         </el-card>
     </form> 
 </div>
 </template>
 
-<style>
-    .table td{
-        border:0;
-
-    }
-
-    .select{
-        height: 85% !important;
-    }
-    .column-title-vue{
-        text-align: right;
-        font-weight: bold;
-        width:20%;
-    }
-    .btn-vue{
-        text-align: right;
+<style lang="css" scoped>
+    strong{
+        color:red;
     }
 </style>
 
 <script>
     export default {
-        props: ['fecha','coleccion'],
+        props: ['fecha','coleccion'], 
         data() {
             return {
+            ListadoProducto:[],
+            ListadoMedidas:[],
+            DataProducto:[],
+            selectTPlantilla:"",
+            selectCategoria:"",
+            NewProducto:"",
+            NewMeasure:"",
+            respuestaMedida:[],
+            load:false,
+            medida:"",
             input: '',
             input2: '',
             input3: '',
+            nColumnas:"",
             DataResult:[],
             Tipo:"Seleccione una Opción",
-            tableData: [{
-            date: '2016-05-03'
-          }],
-          TipoVisita:"",
-          categoriaVaciado:""
-            
+            fullscreenLoading: false,
+            fullscreenLoading2: false,
+           TipoVisita:"",
+           categoriaVaciado:"",
+
+           datos:[],
+           activado: false,
+           focus: true
+                   
             }
         },
          mounted() {
             this.getData();
+            this.getAllProduct();
+            this.getAllmeasure();
         },methods: {
             getData: function(){
               axios.get('/getTipo')
@@ -124,7 +200,127 @@
                 })
                 .finally(function () {
                 });
-            }
+            },
+            getAllProduct: function() {
+                axios.get("/findAllProducto")
+                .then(res => {
+                    this.ListadoProducto = res.data;
+                })
+                .catch(function(err){
+                    console.log(err)
+                })
+            },
+            getAllmeasure: function(){
+                axios.get("/findAllmeasure")
+                .then(res => {
+                    this.ListadoMedidas = res.data;
+                })
+                .catch(function(err){
+                    console.log(err)
+                })
+            },
+            guardar: function() {
+                if(this.NewMeasure === "" || this.NewProducto === ""){
+                        this.$notify.error({
+                                title: 'Datos Vacios',
+                                message: 'Por favor complete los campos requeridos',
+                                duration: 2000
+                        });
+                }else{
+                    this.load = true;
+                    const h = this.$createElement;
+                    axios.post('/getProductoAndMeasure',{producto: this.NewProducto, medida: this.NewMeasure})
+                    .then(res => {
+                        this.respuestaMedida.push({
+                                codeProducto:res.data[0].codeProducto,
+                                nameProducto:res.data[0].nameProducto,
+                                codeMedida:res.data[0].codeMedida,
+                                nameMedida:res.data[0].nameMedida,
+                            });
+
+                            const status = JSON.parse(res.status);
+                            if (status == "200") {
+                                
+                                this.$notify({
+                                    title: 'Exitoso',
+                                    message: 'Producto Añadido',
+                                    type: 'success',
+                                    duration: 2000
+                                });
+                                this.load = false;
+                                this.NewProducto = "";
+                                this.NewMeasure = "";
+                                // console.log(this.respuestaMedida);
+                                
+                            }
+                    }); 
+                }
+            },
+            handleDelete(row) {
+                this.respuestaMedida.splice(row,1);
+                this.$notify({
+                    title: 'Eliminación',
+                    message: 'Registro Eliminado, con exito!',
+                    position: 'bottom-right'
+                });
+             },
+             submit() {
+                 if(this.input === "" || this.nColumnas === "" || this.selectTPlantilla === "" || this.selectCategoria === ""){
+                        
+                        this.$message({
+                            showClose: true,
+                            message: 'Por favor complete los campos requeridos.',
+                            type: 'error',
+                            center: true
+                        });
+                 }else{
+                     const h = this.$createElement;
+                     this.fullscreenLoading = true;
+                     var url = '/addPlantillas';
+                     axios.post(url,{
+                         Nplantilla: this.input,
+                         TipoVisita: this.selectTPlantilla,
+                         categoriaVaciado: this.selectCategoria,
+                         NColumna: this.nColumnas,
+                         Dproducto: this.respuestaMedida
+                     })
+                     .then(response => {
+                         const status = response.status;
+                        if (status == "200") {
+                            this.$message({
+                            message: h("p", null, [
+                                h("i", { style: "color: teal" }, "Plantilla Almacenada!")
+                            ]),
+                            type: 'success'
+                            });
+                            this.fullscreenLoading = false;
+                            this.clear();
+                        }
+                     })
+                     
+                 }
+             },
+             clear() {
+                 this.respuestaMedida = [];
+                //  this.input = "",
+                 this.selectTPlantilla = "";
+                 this.selectCategoria = "";
+                this. activado = true
+             },
+             newData() {
+                //  this.fullscreenLoading2 = true;
+                 this.respuestaMedida = [];
+                 this.input = "";
+                 this.selectTPlantilla = "";
+                 this.selectCategoria = "";
+                 this.nColumnas = "";
+                 this.$notify({
+                    title: 'Nuevo',
+                    message: 'Nueva Plantilla',
+                    type: 'success'
+                });
+                //  this.fullscreenLoading2 = false;
+             }
         }
     }
     

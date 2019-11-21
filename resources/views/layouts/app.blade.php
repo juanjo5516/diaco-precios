@@ -26,13 +26,15 @@
 </head>
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
-    {{-- @guest @yield('content') @else --}}
+    {{-- @guest @yield('content') @else --}} 
      @include('common.header')  
     <div class="app-body">
+
         <div class="sidebar">
             @include('common.sidebar')
             <button class="sidebar-minimizer brand-minimizer" type="button"></button>
         </div> 
+        
         <main  class="main">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>

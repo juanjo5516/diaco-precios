@@ -124,11 +124,14 @@ class plantillasController extends Controller
     }
    
     public function store(Request $request){
-        $TIMESTAMP = Carbon::now();
 
+        $TIMESTAMP = Carbon::now();
+        
         DB::beginTransaction();
         $valor = sizeof($request->Dproducto);
-        
+        // dd($request->Dproducto[0]['codeProducto']);
+     
+
         $validar = $this->VerificarIdTemplate($request->Nplantilla, $request->NColumna);
         if ($validar != 0) {
             try {
@@ -138,20 +141,22 @@ class plantillasController extends Controller
      
                     $Edicion->NombrePlantilla = $request->Nplantilla;
                     $Edicion->idCategoria  = $request->categoriaVaciado;
-                    $Edicion->idProducto  = $request->Dproducto[$i];
-                    $Edicion->idMedida  = $request->Dmedida[$i];
+                    $Edicion->idProducto  = $request->Dproducto[$i]['codeProducto'];
+                    $Edicion->idMedida  = $request->Dproducto[$i]['codeMedida'];
                     $Edicion->estado  = 1;
                     $Edicion->created_at = $TIMESTAMP; 
                     $Edicion->tipoVerificacion = $request->TipoVisita;
                     $Edicion->save();
     
                 }
-                
-                print 1;
+            
+                // print 200;
                 DB::commit();     
+                return response()->json('success', 200);
             } catch (\Exceptio $e) {
                 DB::rollBack();
-                print $e;
+                return $e;
+                
             }  
         }else{
             try {
@@ -161,16 +166,17 @@ class plantillasController extends Controller
      
                     $Edicion->NombrePlantilla = $request->Nplantilla;
                     $Edicion->idCategoria  = $request->categoriaVaciado;
-                    $Edicion->idProducto  = $request->Dproducto[$i];
-                    $Edicion->idMedida  = $request->Dmedida[$i];
+                    $Edicion->idProducto  = $request->Dproducto[$i]['codeProducto'];
+                    $Edicion->idMedida  = $request->Dproducto[$i]['codeMedida'];
                     $Edicion->estado  = 1;
                     $Edicion->created_at = $TIMESTAMP;
                     $Edicion->tipoVerificacion = $request->TipoVisita;
                     $Edicion->save();
     
                 }
-                print 1;
+                // print 200;
                 DB::commit();     
+                return response()->json('success', 200);
             } catch (\Exceptio $e) {
                 DB::rollBack();
                 print $e;

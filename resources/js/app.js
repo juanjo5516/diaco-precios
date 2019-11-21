@@ -51,6 +51,7 @@ Vue.component('content-market', require('./components/catalogos/market.vue').def
 Vue.component('content-local', require('./components/catalogos/local.vue').default)
 Vue.component('content-smarket', require('./components/lugares/SuperMercado.vue').default)
 Vue.component('pdf-componente', require('./components/pdf/generateData.vue').default)
+Vue.component('sidebar-componente', require('./components/sidebar/sidebar.vue').default)
 const app = new Vue({
     el: '#main'
 });
