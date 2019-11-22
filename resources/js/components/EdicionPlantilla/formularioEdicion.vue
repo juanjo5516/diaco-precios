@@ -77,7 +77,7 @@
                     <el-row :gutter="20" class="my-3">
                         <el-col :xs="25" :sm="12" :md="8" :lg="9" :xl="10">
                             <div>Producto: <strong>*</strong></div>
-                            <el-select v-model="NewProducto" placeholder="Nuevo Producto" >
+                            <el-select v-model="NewProducto" placeholder="Nuevo Producto" filterable>
                                 <el-option
                                 v-for="item in ListadoProducto"
                                 :key="item.code"
@@ -88,7 +88,7 @@
                         </el-col>
                         <el-col :xs="25" :sm="12" :md="8" :lg="9" :xl="10">
                             <div>Medida: <strong>*</strong></div>
-                            <el-select v-model="NewMeasure" placeholder="Nueva Medida">
+                            <el-select v-model="NewMeasure" placeholder="Nueva Medida" filterable>
                                 <el-option
                                 v-for="item in ListadoMedidas"
                                 :key="item.code"
