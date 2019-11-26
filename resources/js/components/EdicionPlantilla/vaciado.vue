@@ -129,7 +129,8 @@
                     </td>
                     <td >
                         
-                      <input type="text" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]">
+                      <!-- <input type="number" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]"> -->
+                      <el-input-number v-model="inputMercados['mercado' + n ]"  :min="1" :max="1000"></el-input-number>
                     </td>
                   </tr>
                 </tbody>
@@ -205,7 +206,7 @@
                   <!-- <th class="ReferencesName">Ref. 2</th> -->
                  <th v-for="n in nColumna" :key="n">{{ n }}</th>
                   
-                  <th>Obs.</th>
+                  <!-- <th>Obs.</th> -->
                   
                 </tr>
               </thead>
@@ -218,12 +219,14 @@
                   <td class="ReferencesName">{{ index.medida }}</td>
                   <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
                    <td v-for="n in nColumna" :key="n">
-                        <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
+                        <!-- <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input> -->
+                        <el-input-number  v-model="index['valor' + n ]"  :precision="2" :min="0" :max="1000"></el-input-number>
                       <!-- <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"> -->
                    </td>
-                   <td >
+                   <!-- Observaciones -->
+                   <!-- <td >
                         <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
-                   </td>
+                   </td> -->
                  </tr>
               </tbody> 
             </table> 
@@ -277,7 +280,7 @@
 }
 
 .medidaName {
-  width: 10%;
+  width: 60%;
   text-align: center !important;
 }
 

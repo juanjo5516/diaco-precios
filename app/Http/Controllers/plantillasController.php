@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
 use App\Models\Departamento;
 use App\Models\Municipio;
+use App\Models\user_cba;
 use Illuminate\Support\Str;
 
 class plantillasController extends Controller
@@ -237,25 +238,50 @@ class plantillasController extends Controller
     }
     public function storeLista(Request $request){
 
-        $Lista = new ListarAsignacion;
+
+        // dd($request);
+
+        $cantidadObjeto = sizeof($request->SSede);
+        for($i = 0; $i < $cantidadObjeto; $i++){
+
+            $UserCba = $this->getUserCba($request->SSede[$i]);
+
+            $cantidadUser = sizeof($UserCba);
+            if($cantidadUser > 0){
+                for($userCount = 0; $userCount < $cantidadUser; $userCount++ ){
+                    $Lista = new ListarAsignacion;
+                    $Lista->idPlantilla = $request->SPlantilla;
+                    $Lista->idSede  = $request->SSede[$i];
+                    $Lista->created_at  = $request->created_at_new;
+                    $Lista->estatus  = 1;
+                    $Lista->idUsuario = $UserCba[$userCount]->code_user;
+                    $Lista->save();
+                    
+                    $ListaId = $Lista->id;
+                    $Ncorrelativo = $this->createCorrelative($ListaId);
+                    ListarAsignacion::where('id_Asignacion','=',$ListaId)
+                                                ->update(['correlativo' => $Ncorrelativo]);
+                }
+            }
+        }
         
-        $Lista->idPlantilla = $request->SPlantilla;
-        $Lista->idSede  = $request->SSede;
-        $Lista->created_at  = $request->created_at_new;
-        $Lista->estatus  = 1;
-        $Lista->idUsuario = Auth()->user()->id_usuario;
-        $Lista->save();
+            // print($UserCba[0]->code_user);
+
+// $Lista->idUsuario = Auth()->user()->id_usuario;
         
-        $ListaId = $Lista->id;
-        $Ncorrelativo = $this->createCorrelative($ListaId);
-        ListarAsignacion::where('id_Asignacion','=',$ListaId)
-                                    ->update(['correlativo' => $Ncorrelativo]);
+
         // $Lista->correlativo = $Ncorrelativo;
         // $Lista->correlativo = "125";
         // $Lista->save();
         
         return 1;
 
+    }
+
+    public function getUserCba($sede){
+        $data = user_cba::select('code_user','code_sede')->where('code_sede','=',$sede)->where('status','=','A')->get();
+        // return response()->json($data, 200);
+        return $data;
     }
 
     public function showInbox(){
@@ -507,10 +533,15 @@ class plantillasController extends Controller
         
     }
     public function getDataPlantillas(Request $request){
+
+        // dd($request);
         $TIMESTAMP = Carbon::now();
         $comprobar = $this->getPlantillas($request->SPlantilla);
         $cantidadProducto = count($comprobar);
-        $validar = $this->VerificarIdTemplate($request->dataResponse);
+        $cantidadColumna = $this->getCountColumnfindId((int)$request->SPlantilla);
+        // dd($cantidadColumna);
+        $validar = $this->VerificarIdTemplate($request->dataResponse,$cantidadColumna);
+        
         if ($validar != 0) {
             try {
                 for ($i=0; $i < $cantidadProducto; $i++) { 
@@ -644,6 +675,8 @@ class plantillasController extends Controller
             return $correlativo;
             // return response()->json($correlativo, 200);
     }
+
+
 
     // public function getCorrelativo($id){
     //     $correlativo = ListarAsignaciones::select('correlativo')

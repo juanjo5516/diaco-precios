@@ -13,14 +13,20 @@
             </el-select>
         </el-form-item>
         
-        <el-form-item label="Sedes: ">
-            <el-select  name="idSede" class="vue-select" v-model="select2" placeholder="Sedes">
+        <el-form-item label="Sede: ">
+            <el-select  multiple name="idSede" class="vue-select" v-model="select2" placeholder="Sedes">
                 <el-option v-for="(item,idx) in Sedes" :key="idx" :label=" item.nombre_sede " :value=" item.id_diaco_sede "></el-option>
             </el-select>
         </el-form-item>
 
         <el-form-item>
-            <button @click="onSubmit" type="submit" class="btn btn-success" id="btnAsignar">Asignar</button>
+            <!-- <button @click="onSubmit" type="submit" class="btn btn-success" id="btnAsignar">Asignar</button> -->
+            <el-button
+              @click="onSubmit"
+              type="success"
+              size="medium"
+              :loading=load
+              >Asignar</el-button>
         </el-form-item>
     </el-form>
     <div id="snoAlertBox" class="alert alert-warning" data-alert="alert">Asignación Exitosa.</div>
@@ -106,6 +112,7 @@
         SSede:'',
         created_at_new:'',
         fullscreenLoading: false,
+        load:false,
       }
     },
      mounted() {
@@ -113,6 +120,9 @@
   },
      methods: {
       onSubmit: function(){
+        // console.log(this.select2);
+        this.load = true;
+        const h = this.$createElement;
         var url = '/aLista';
         axios.post(url, {
             SPlantilla: this.select1,
@@ -120,14 +130,31 @@
             created_at_new: new Date(),
             
         }).then(response =>{
-            // $('#table-vue-asede').DataTable().ajax.reload();
-            $("#snoAlertBox").fadeIn();
-            closeSnoAlertBox("#snoAlertBox");
-            this.getAsignaciones();
+          
+            const status = JSON.parse(response.status);
+            if (status == "200") {
+                
+                this.$notify({
+                    title: 'Exitoso',
+                    message: 'Asignacion Completa',
+                    type: 'success',
+                    duration: 2000
+                });
+                this.load = false;
+                this.select2 = "";
+                // this.NewProducto = "";
+                // this.NewMeasure = "";
+                // console.log(this.respuestaMedida);
+                this.getAsignaciones();
+                
+            }
+            
         }).catch(error => {
 				console.log(error.message)
         });
+
       },
+
       getAsignaciones: function() {
       var url = "/GetListaAsede";
       axios.get(url).then(response => {

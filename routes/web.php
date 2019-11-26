@@ -186,6 +186,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //---------------
 
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
+
+        Route::get('getUserCba/{id}','plantillasController@getUserCba');
         
     //------------------------------------------------------------------------------------------
     }); 
