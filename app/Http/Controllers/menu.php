@@ -274,6 +274,9 @@ class menu extends Controller
     public function viewProducto(){
         return view ('menu.addProducto');
     }
+    public function viewVisita(){
+        return view ('menu.addTipoVisita');
+    }
 
     public function viewMercado(){
         return view ('menu.addDetalleMercado');

@@ -73,7 +73,7 @@ class plantillasController extends Controller
   
     }
     
-    public function getTipoVisita(){
+    public function getTipoVisita(){ 
         $Tipo = TipoVisitaPlantilla::all();
         return response()->json($Tipo, 200);
     }

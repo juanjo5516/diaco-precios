@@ -2,7 +2,10 @@
   <div>
     <el-form :inline="false" :model="formInline" ref="formInline" class="form" :rules="rules">
       <el-form-item label="Nombre: " prop="name">
+        
         <el-input v-model="formInline.name"></el-input>
+
+
       </el-form-item>
       <el-form-item>
         <el-button
@@ -52,6 +55,7 @@
 export default {
   data() {
     return {
+      links: [],
       plantillasall: [],
       total: 0,
       currentPage: 1,
@@ -77,12 +81,17 @@ export default {
   },
   mounted() {
     this.getPlantillasData();
+    // this.links = this.getPlantillasData();
   },
   methods: {
+    checkItem(item){
+
+    },
     getPlantillasData: function() {
       var url = "/findAllProducto";
       axios.get(url).then(response => {
         this.plantillasall = response.data;
+        this.links = response.data;
         this.total = response.data.length;
       });
     },
@@ -97,8 +106,10 @@ export default {
               names: this.formInline.name
             })
             .then(response => {
-              const status = JSON.parse(response.status);
-              if (status == "200") {
+              const status = JSON.parse(response.data);
+
+              
+              if (status === true ) {
                 this.$message({
                   message: h("p", null, [
                     h("i", { style: "color: teal" }, "Producto Agregado!")
@@ -108,6 +119,13 @@ export default {
                 this.formInline.name = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
+              }else{
+                this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Producto Existente')
+                  ])
+                });
+                 this.fullscreenLoading = false;
               }
             })
             .catch(error => {

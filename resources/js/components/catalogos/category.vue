@@ -98,8 +98,8 @@ export default {
             })
             .then(response => {
               
-              const status = JSON.parse(response.status);
-              if (status == "200") {
+              const status = JSON.parse(response.data);
+              if (status === true) {
                 this.$message({
                   message: h("p", null, [
                     h("i", { style: "color: teal" }, "Categoria Agregada!")
@@ -109,6 +109,13 @@ export default {
                 this.formInline.name = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
+              }else{
+                this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Categoria Existente')
+                  ])
+                });
+                 this.fullscreenLoading = false;
               }
             })
             .catch(error => {
@@ -200,7 +207,7 @@ export default {
         })
         .catch(error => {
             this.$message.error({
-                message: h("p", null, [
+                message: h("p", null, [ 
                 h("i", { style: "color: red" }, 'Error, servidor no encontrado')
                 ])
             });

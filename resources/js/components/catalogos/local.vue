@@ -212,8 +212,8 @@ export default {
               status: 'A'
             })
             .then(response => {
-              const status = JSON.parse(response.status);
-              if (status == "200") {
+              const status = JSON.parse(response.data);
+              if (status === true) {
                 this.$message({
                   message: h("p", null, [
                     h("i", { style: "color: teal" }, "Establecimiento Agregado!")
@@ -226,6 +226,13 @@ export default {
                 this.departamento_value = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
+              }else{
+                this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Establecimiento Existente')
+                  ])
+                });
+                 this.fullscreenLoading = false;
               }
             })
             .catch(error => {

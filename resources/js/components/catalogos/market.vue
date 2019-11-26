@@ -211,8 +211,9 @@ export default {
               status: 'A'
             })
             .then(response => {
-              const status = JSON.parse(response.status);
-              if (status == "200") {
+              const status = JSON.parse(response.data);
+              
+              if (status === true) {
                 this.$message({
                   message: h("p", null, [
                     h("i", { style: "color: teal" }, "Lugar de Visita Agregada!")
@@ -225,9 +226,17 @@ export default {
                 this.departamento_value = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
+              }else{
+                this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Lugar Existente')
+                  ])
+                });
+                 this.fullscreenLoading = false;
               }
             })
             .catch(error => {
+              console.log(error);
                 this.$message.error({
                   message: h("p", null, [
                     h("i", { style: "color: red" }, 'Error, servidor no encontrado')
