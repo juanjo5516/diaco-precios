@@ -49,7 +49,7 @@ Auth::routes();
 // Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home', 'menu@GetSelectMedida')->name('home');
 // Route::get('/','menu@GetSelectMedida'); 
-Route::get('Productos','menu@GetTabla'); 
+Route::get('Productos','menu@GetTabla');  
 Route::get('addProducto','menu@addProductos');
 Route::get('index','menu@GetSelectMedida');
 Route::get('Producto','menu@viewProducto');
@@ -97,7 +97,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
         Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-        Route::get('getTipo','plantillasController@getTipoVisita');
+        Route::get('getTipo','plantillasController@getTipoVisita'); 
         Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
         Route::get('check','plantillasController@check');
         Route::get('GasPropano','menu@viewGasPropano');
@@ -152,6 +152,15 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::put('deleteByIdSmarket','catalogos@deleteByIdSmarket');
         Route::put('updateByIdSmarket','catalogos@updateByIdSmarket');
         // -------------
+
+        // Tipos de visita
+        Route::get('viewVisita','menu@viewVisita'); 
+        Route::get('findAllVisita','catalogos@findAllVisit');
+        Route::post('addVisita','catalogos@addSVisit');
+        Route::put('deleteByIdVisita','catalogos@deleteByIdVisit');
+        Route::put('updateByIdVisita','catalogos@updateByIdVisit');
+        // -------------
+
         // Reset Pasword User
         Route::get('changePasswordUser','PasswordResetController@reset');
         Route::post('changePassword','PasswordResetController@changePassword')->name('changePassword');
@@ -168,6 +177,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getCategoriaPdf', 'PdfController@getCategoria');
         Route::post('getProductosPdf','PdfController@getPlantillas');
         // -------------
+
+      
 
         // Count Column
         Route::post('getCountColumn','plantillasController@getCountColumn');

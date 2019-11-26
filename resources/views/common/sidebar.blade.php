@@ -27,6 +27,10 @@
                 <a class="nav-link" href="../Establecimiento">
                         <i class="nav-icon fas fa-angle-right"></i> Establecimiento</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../viewVisita">
+                        <i class="nav-icon fas fa-angle-right"></i> Tipo Visita</a>
+            </li>
             <li class="nav-title">Plantillas</li>
             <li class="nav-item">
                 <a class="nav-link" href=../Edicion>

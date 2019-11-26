@@ -18,7 +18,8 @@
       style="width: 100%"
       border
     >
-      <el-table-column prop="code" label="#" width="50"></el-table-column>
+      <!-- <el-table-column prop="code" label="#" width="50"></el-table-column> -->
+      <el-table-column  type="index" width="50"></el-table-column>
       <el-table-column prop="name" label="Nombre"></el-table-column>
       <el-table-column label="Operaciones" width="200">
         <template slot="header" slot-scope="scope">
@@ -103,8 +104,8 @@ export default {
               names: this.formInline.name
             })
             .then(response => {
-              const status = JSON.parse(response.status);
-              if (status == "200") {
+              const status = JSON.parse(response.data);
+              if (status === true) {
                 this.$message({
                   message: h("p", null, [
                     h("i", { style: "color: teal" }, "medida Agregada!")
@@ -114,6 +115,13 @@ export default {
                 this.formInline.name = "";
                 this.fullscreenLoading = false;
                 this.getPlantillasData();
+              }else{
+                this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Medida Existente')
+                  ])
+                });
+                 this.fullscreenLoading = false;
               }
             })
             .catch(error => {

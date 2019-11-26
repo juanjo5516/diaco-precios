@@ -73,7 +73,7 @@ class plantillasController extends Controller
   
     }
     
-    public function getTipoVisita(){
+    public function getTipoVisita(){ 
         $Tipo = TipoVisitaPlantilla::all();
         return response()->json($Tipo, 200);
     }
@@ -81,7 +81,7 @@ class plantillasController extends Controller
     public function index(){
         $date = Carbon::now();
         $date = $date->format('d-m-Y');
-        $categoria = DB::table("diaco_categoriacba")->select('id_Categoria as id','nombre as nombre')->where('status','=','A')->get()->toJson(JSON_PRETTY_PRINT);
+        $categoria = DB::table("diaco_categoriacba")->select('id_Categoria as id','nombre as nombre')->where('status','=','A')->orderBy('nombre','asc')->get()->toJson(JSON_PRETTY_PRINT);
         $producto = DB::table("diaco_productocba")->select('id_producto as id','nombre as Pnombre')->where('status','=','A')->get();
         $medida = DB::table('diaco_medida')->select('id_medida as id','nombre as nombre')->where('status','=','A')->get();
         //dd($categoria);
