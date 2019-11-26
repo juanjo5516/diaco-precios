@@ -97,7 +97,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
         Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-        Route::get('getTipo','plantillasController@getTipoVisita');
+        Route::get('getTipo','plantillasController@getTipoVisita'); 
         Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
         Route::get('check','plantillasController@check');
         Route::get('GasPropano','menu@viewGasPropano');

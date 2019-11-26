@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\DB;
 class catalogos extends Controller
 {
     public function dataCategory(){
-        $categoria = categoria::select('id_Categoria','nombre')->where('status','=','A')->get();
-        return $categoria;
+        $categoria = categoria::select('id_Categoria','nombre')->where('status','=','A')->orderBy('nombre','asc')->get();
+        return $categoria; 
     }
 
     public function deleteByIdCategory(Request $request){
@@ -46,7 +46,7 @@ class catalogos extends Controller
     }
 
     public function findAllProduct(){
-        $product = product::select('id_producto as code','nombre as name')->where('status','=','A')->get();
+        $product = product::select('id_producto as code','nombre as name')->where('status','=','A')->orderBy('nombre','asc')->get();
         return response()->json($product, 200);
     }
 
@@ -80,7 +80,7 @@ class catalogos extends Controller
     }
 
     public function findAllSubCategory(){
-        $product = subcategory::select('id_sCategoria as code','nombre as name')->where('status','=','A')->get();
+        $product = subcategory::select('id_sCategoria as code','nombre as name')->where('status','=','A')->orderBy('nombre','asc')->get();
         return response()->json($product, 200);
     }
 
@@ -101,7 +101,7 @@ class catalogos extends Controller
     }
 
     public function findAllmeasure(){
-        $product = measure::select('id_medida as code','nombre as name')->where('status','=','A')->get();
+        $product = measure::select('id_medida as code','nombre as name')->where('status','=','A')->orderBy('nombre','asc')->get();
         return response()->json($product, 200);
     }
 
@@ -136,7 +136,7 @@ class catalogos extends Controller
         $product = market::select('idMercado as code','nombreMercado as name','direccionMercado as address','departamento.nombre_departamento as departamento','municipio.nombre_municipio as municipio')
                                         ->join('departamento','departamento_id','=','departamento.codigo_departamento')
                                         ->join('municipio','municipio_id','=','municipio.codigo_municipio')
-                                        ->where('status','=','A')->get();
+                                        ->where('status','=','A')->orderBy('nombreMercado','asc')->get();
                                         // ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
         return response()->json($product, 200);
     }
@@ -173,7 +173,7 @@ class catalogos extends Controller
         $product = local::select('idEstablecimiento as code','nombreEstablecimiento as name','direccionEstablecimiento as address','departamento.nombre_departamento as departamento','municipio.nombre_municipio as municipio')
                                     ->join('departamento','departamento_id','=','departamento.codigo_departamento')
                                     ->join('municipio','municipio_id','=','municipio.codigo_municipio')                            
-                                    ->where('status','=','A')->get();
+                                    ->where('status','=','A')->orderBy('nombreEstablecimiento','asc')->get();
         return response()->json($product, 200);
     }
 
@@ -205,7 +205,7 @@ class catalogos extends Controller
         return response()->json($updateById, 200);
     }
     public function findAllSmarket(){
-        $product = smarket::select('code','name','address')->where('status','=','A')->get();
+        $product = smarket::select('code','name','address')->where('status','=','A')->orderBy('name','asc')->get();
         return response()->json($product, 200);
     }
 
@@ -229,7 +229,7 @@ class catalogos extends Controller
     }
 
     public function findAllVisit(){ 
-        $product = TipoVisitaPlantilla::select('id_TipoVerificacion as code','nombreVerificacion as name')->where('status','=','A')->get();
+        $product = TipoVisitaPlantilla::select('id_TipoVerificacion as code','nombreVerificacion as name')->where('status','=','A')->orderBy('nombreVerificacion','asc')->get();
         return response()->json($product, 200);
     }
 

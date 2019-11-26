@@ -32,9 +32,9 @@
                                 <el-select v-model="selectTPlantilla" placeholder="Tipo Plantilla">
                                     <el-option
                                     v-for="item in DataResult"
-                                    :key="item.id_TipoVerificacion"
-                                    :label="item.nombreVerificacion"
-                                    :value="item.id_TipoVerificacion">
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
                                     </el-option>
                                 </el-select>
                             </el-col>
@@ -154,7 +154,7 @@
 
 <script>
     export default {
-        props: ['fecha','coleccion'], 
+        props: ['fecha','coleccion'],  
         data() {
             return {
             ListadoProducto:[],
@@ -190,7 +190,7 @@
             this.getAllmeasure();
         },methods: {
             getData: function(){
-              axios.get('/getTipo')
+              axios.get('/findAllVisita')
                 .then(response => {
                   this.DataResult = response.data;
 

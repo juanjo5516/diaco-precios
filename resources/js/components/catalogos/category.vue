@@ -18,7 +18,8 @@
       style="width: 100%"
       border
     >
-      <el-table-column prop="id_Categoria" label="#" width="50"></el-table-column>
+      <!-- <el-table-column prop="id_Categoria" label="#" width="50"></el-table-column> -->
+      <el-table-column  type="index" width="50"></el-table-column>
       <el-table-column prop="nombre" label="Nombre"></el-table-column>
       <el-table-column label="Operaciones" width="200">
         <template slot="header" slot-scope="scope">
