@@ -13,7 +13,7 @@
                 <template slot-scope="scope">
                   <!-- <el-button size="mini"  @click="handleEdit(scope.row.code)">Editar</el-button> -->
                   <el-button-group>
-                    <el-button size="mini"  @click="showDialogEdit(scope.row.produto,scope.row.medida,scope.row.template)">Editar</el-button>
+                    <el-button size="mini"  @click="showDialogEdit(scope.row.produto,scope.row.medida,scope.row.idPlantilla)">Editar</el-button>
                   </el-button-group>
                 </template>
               </el-table-column>
@@ -51,7 +51,7 @@
       </span>
     </el-dialog>
 
-        <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
+        <!-- <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
           <div slot="header" class="clearfix">
             <span>{{ item.categoria }}</span>
           </div>
@@ -76,8 +76,8 @@
                  </tr>
               </tbody> 
             </table> 
-        </el-card>
-        <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button> 
+        </el-card> -->
+        <!-- <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button>  -->
     </el-form>
   </div>
 </template>
@@ -250,11 +250,11 @@ export default {
   },
   mounted() {
     this.DataProductos();
-    this.getTipo();
-    this.getPropano();
+    // this.getTipo();
+    // this.getPropano();
     // console.log(this.usuario);
-    this.getSMercado();
-    this.getColumnas();
+    // this.getSMercado();
+    // this.getColumnas();
     
     this.getAllProduct();
     this.getAllmeasure();
@@ -264,44 +264,87 @@ export default {
       this.dialogFormVisible = true;
 
       this.form.name = idplantilla;
-      this.form.producto = producto;
-      this.form.medida = medida;
+      // this.form.producto = producto;
+      // this.form.medida = medida;
     },
     handleEdit(row){
-        
-        const config = { headers: {'Content-Type': 'application/json'} };
-        const h = this.$createElement;
-        var url = "/updatePlantillaById"; 
-        axios
-        .put(url, {
-            id: this.form.name,
-            producto: this.form.producto,
-            medida: this.form.medida,
-        },config
-        )
-        .then(response => {            
-            const status = JSON.parse(response.status);
-            console.log(response);
-            if (status == "200") {
-            this.$message({
-                message: h("p", null, [
-                h("i", { style: "color: teal" }, "Datos Actualizados!")
-                ]),
-                type: 'success'
+        if(this.form.producto === "" ){
+            this.form.producto = 0;
+            
+            const config = { headers: {'Content-Type': 'application/json'} };
+            const h = this.$createElement;
+            var url = "/updatePlantillaById"; 
+            axios
+            .put(url, {
+                id: this.form.name,
+                producto: this.form.producto,
+                medida: this.form.medida,
+            },config
+            )
+            .then(response => {   
+              
+                const status = JSON.parse(response.status);
+                if (status == "200") {    
+                this.$message({
+                    message: h("p", null, [
+                    h("i", { style: "color: teal" }, "Datos Actualizados!")
+                    ]),
+                    type: 'success'
+                });
+                this.DataProductos();
+                this.dialogFormVisible = false;
+                this.form.name= "";
+                // this.form.address ="";
+                this.form.producto = "";
+                this.form.medida = "";
+                }
+            })
+            .catch(error => {
+                this.$message.error({
+                    message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Error, servidor no encontrado')
+                    ])
+                });
+            });  
+        }else if(this.form.medida === ""){
+            this.form.medida = 0;
+            
+            const config = { headers: {'Content-Type': 'application/json'} };
+            const h = this.$createElement;
+            var url = "/updatePlantillaById"; 
+            axios
+            .put(url, {
+                id: this.form.name,
+                producto: this.form.producto,
+                medida: this.form.medida,
+            },config
+            )
+            .then(response => {   
+              
+                const status = JSON.parse(response.status);
+                if (status == "200") {    
+                this.$message({
+                    message: h("p", null, [
+                    h("i", { style: "color: teal" }, "Datos Actualizados!")
+                    ]),
+                    type: 'success'
+                });
+                this.DataProductos();
+                this.dialogFormVisible = false;
+                this.form.name= "";
+                // this.form.address ="";
+                this.form.producto = "";
+                this.form.medida = "";
+                }
+            })
+            .catch(error => {
+                this.$message.error({
+                    message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Error, servidor no encontrado')
+                    ])
+                });
             });
-            this.getPlantillasData();
-            this.dialogFormVisible = false;
-            this.form.name= "";
-            this.form.address ="";
-            }
-        })
-        .catch(error => {
-            this.$message.error({
-                message: h("p", null, [
-                h("i", { style: "color: red" }, 'Error, servidor no encontrado')
-                ])
-            });
-        });  
+        }
     },
      getAllProduct: function() {
                 axios.get("/findAllProducto")
@@ -322,26 +365,14 @@ export default {
                 })
             },
     DataProductos: function(){
-          for (let i = 0; i <= this.coleccion.length-1; i++) {
-            this.Productos.push({
-              // NombrePlantilla: this.coleccion[i].NombrePlantilla,
-              categoria: this.coleccion[i].categoria,
-              created_at: this.coleccion[i].created_at,
-              medida: this.coleccion[i].medida,
-              producto: this.coleccion[i].producto,
-              produto: this.coleccion[i].produto,
-              precio1: this.coleccion[i].Anterior1,
-              precio2: this.coleccion[i].Anterior1,
-              medidaId: this.coleccion[i].idmedida,
-              template: this.coleccion[i].idPlantilla,
-              valor1:'',
-              valor2:'',
-              valor3:'',
-              valor4:'',
-              valor5:''
-            })
-            // console.log(this.Productos);
-        }
+          // this.Productos = [];
+
+          var url = "/getProductoEdicionPlantilla";
+          axios.post(url,{
+            id: this.id
+          }).then(response => {
+            this.Productos = response.data;
+          })
     },
       
       getTipo: function(){
