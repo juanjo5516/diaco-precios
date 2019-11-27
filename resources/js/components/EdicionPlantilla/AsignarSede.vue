@@ -51,14 +51,24 @@
         </template>
         <template slot-scope="scope">
           <!-- <el-button size="mini"  @click="handleEdit(scope.row.code)">Editar</el-button> -->
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row.id_Asignacion)"
-          >Inactivar</el-button>
+          <el-button-group>
+            <el-button
+             size="small"
+              type="danger"
+              @click="handleDelete(scope.row.id_Asignacion)"
+            >Inactivar</el-button>
+            <el-link :underline=false v-bind:href="'/editPlantilla/'+scope.row.idPlantilla+'/'+scope.row.correlativo" :id=scope.row.id_Asignacion>
+              <el-button
+              size="small"
+              icon="el-icon-edit" 
+              type="primary"
+              >Editar</el-button>
+            </el-link>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
+
 
       <!-- <table class="table table-responsive" id="table-vue-asede">
         <thead>
@@ -163,22 +173,6 @@
         this.total = response.data.length;
       });
     },
-      // resetDateFilter() {
-      //   this.$refs.filterTable.clearFilter('date');
-      // },
-      // clearFilter() {
-      //   this.$refs.filterTable.clearFilter();
-      // },
-      //  formatter(row, column) {
-      //   return row.address;
-      // },
-      // filterTag(value, row) {
-      //   return row.tag === value;
-      // },
-      // filterHandler(value, row, column) {
-      //   const property = column['property'];
-      //   return row[property] === value;
-      // },
       handleEdit(row){
         this.$prompt('Nombre Producto', 'Edición de Productos', {
           confirmButtonText: 'Actualizar',

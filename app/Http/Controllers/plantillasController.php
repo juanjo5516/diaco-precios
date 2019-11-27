@@ -190,7 +190,7 @@ class plantillasController extends Controller
                         ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
                         ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
                         // ->select('diaco_name_template_cba.NombreTemplate','diaco_sede.nombre_sede','diaco_asignarsedecba.estatus','diaco_asignarsedecba.created_at')
-                        ->selectraw("diaco_asignarsedecba.id_Asignacion,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,diaco_asignarsedecba.created_at")
+                        ->selectraw("diaco_asignarsedecba.id_Asignacion,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,diaco_asignarsedecba.created_at,diaco_asignarsedecba.correlativo,diaco_asignarsedecba.idPlantilla")
                         ->where('diaco_asignarsedecba.estatus','>',0)
                         ->get();
         return $Listar;
@@ -289,8 +289,6 @@ class plantillasController extends Controller
     }
 
     public function showprinter($id,$correlativo){ 
-
-        
        // DB::beginTransaction();
         try {
 
@@ -347,18 +345,79 @@ class plantillasController extends Controller
             ]);
             return $pdf->download('Ediciones.pdf');
             // return $pdf->stream();
-
-
-            
            // DB::commit(); 
         } catch (\Exceptio $e) {
             //DB::rollBack();
-            print $e; 
-            
-        }
-
-        
+            print $e;     
+        } 
     }
+
+    public function showEdit($id,$correlativo){ 
+         
+        try {
+            $fecha = $this->getFecha();
+            $usuario = $this->UserLogin();
+            // $columna = $this->getCountColumnfindId($id);
+            
+            // dd($columna);
+           
+            
+            $query = DB::table('diaco_plantillascba')
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla') 
+                            ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+                            ->join('diaco_productocba','id_producto','=','idProducto')
+                            ->join('diaco_medida','id_medida','=','idMedida')
+                            ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                            ->where('diaco_name_template_cba.id',$id)
+                            ->get();
+                          
+            $categorias = DB::select('
+                                SELECT distinct cl.nombre as categoria FROM diaco_plantillascba pl
+                                    INNER JOIN diaco_categoriacba cl
+                                        ON cl.id_Categoria = pl.idCategoria
+                                    INNER JOIN diaco_productocba prl
+                                        ON prl.id_producto = pl.idProducto
+                                    INNER JOIN diaco_medida md
+                                        ON md.id_medida = pl.idMedida
+                                    INNER JOIN diaco_name_template_cba npl
+                                        ON npl.NombreTemplate = pl.NombrePlantilla
+                                    WHERE npl.id = :id',[
+                                        'id' => $id]);
+            // return view('Ediciones.printer_data',[
+            //     'id' => $id,
+            //     'fecha' => $fecha,
+            //     'usuario' => $usuario,
+            //     'coleccion' => $query,
+            //     'categoria' => $categorias
+            // ]);
+
+               
+            // return view('Ediciones.pdfdata');
+
+            return view('Ediciones.editPlantilla',[
+                'id' => $id,
+                'fecha' => $fecha,
+                'usuario' => $usuario,
+                'coleccion' => $query,
+                'categoria' => $categorias,
+                'correlativo' => $correlativo
+            ]);
+
+            // $pdf = \PDF::loadView('Ediciones.editPlantilla',[
+            //     'id' => $id,
+            //     'fecha' => $fecha,
+            //     'usuario' => $usuario,
+            //     'coleccion' => $query,
+            //     'categoria' => $categorias,
+            //     'Ncolumna' => $columna,
+            //     'correlativo' => $correlativo
+            // ]);
+            // return $pdf->download('Ediciones.pdf');
+        } catch (\Exceptio $e) {
+            print $e;     
+        } 
+    }
+
     public function getPlantillas($id){
         // $query = DB::table('diaco_plantillascba')
         //                 // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
