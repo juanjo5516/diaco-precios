@@ -53,6 +53,7 @@ Vue.component('content-smarket', require('./components/lugares/SuperMercado.vue'
 Vue.component('pdf-componente', require('./components/pdf/generateData.vue').default)
 Vue.component('sidebar-componente', require('./components/sidebar/sidebar.vue').default)
 Vue.component('visitas-componente', require('./components/catalogos/typeVisit.vue').default)
+Vue.component('editarplantilla-componente', require('./components/EdicionPlantilla/editarPlantilla.vue').default)
 const app = new Vue({
     el: '#main'
 });

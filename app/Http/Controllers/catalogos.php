@@ -12,6 +12,7 @@ use App\Models\local;
 use App\Models\smarket;
 use App\responseData;
 use App\TipoVisitaPlantilla;
+use App\EdicionPlantilla;
 use Illuminate\Support\Facades\DB;
 
 class catalogos extends Controller
@@ -317,6 +318,11 @@ class catalogos extends Controller
                 return 1;
             }
         }
+    }
+
+    public function updateByIdPlantilla(Request $request){
+        $updateById = EdicionPlantilla::where('idPlantilla', $request->id)->update(['idProducto' => $request->producto, 'idMedida' => $request->medida]);
+        return response()->json($updateById, 200);
     }
     
 }

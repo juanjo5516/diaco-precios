@@ -185,6 +185,13 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getCorrelativo','plantillasController@createCorrelative');
         //---------------
 
+        // Editar Plantillas
+        // Route::post('getCountColumn','plantillasController@getCountColumn');
+        // Route::get('getCorrelativo','plantillasController@createCorrelative');
+        Route::put('updatePlantillaById','catalogos@updateByIdPlantilla');
+        Route::get('editPlantilla/{id}/{correlativo}','plantillasController@showEdit');
+        //---------------
+
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
 
         Route::get('getUserCba/{id}','plantillasController@getUserCba');
