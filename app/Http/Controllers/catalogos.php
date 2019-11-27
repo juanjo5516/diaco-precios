@@ -321,8 +321,18 @@ class catalogos extends Controller
     }
 
     public function updateByIdPlantilla(Request $request){
-        $updateById = EdicionPlantilla::where('idPlantilla', $request->id)->update(['idProducto' => $request->producto, 'idMedida' => $request->medida]);
-        return response()->json($updateById, 200);
+        if($request->producto === 0){
+            $updateById = EdicionPlantilla::where('idPlantilla', $request->id)->update(['idMedida' => $request->medida]);
+            return response()->json($updateById, 200);
+        }elseif($request->medida === 0){
+            $updateById = EdicionPlantilla::where('idPlantilla', $request->id)->update(['idProducto' => $request->producto]);
+            return response()->json($updateById, 200);
+        }
+        else{
+            $updateById = EdicionPlantilla::where('idPlantilla', $request->id)->update(['idProducto' => $request->producto, 'idMedida' => $request->medida]);
+            return response()->json($updateById, 200);
+        }
+
     }
     
 }

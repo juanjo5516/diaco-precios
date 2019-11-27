@@ -352,6 +352,20 @@ class plantillasController extends Controller
         } 
     }
 
+    public function getProductoEdicionPlantilla(Request $request){
+        $query = DB::table('diaco_plantillascba')
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla') 
+                            ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+                            ->join('diaco_productocba','id_producto','=','idProducto')
+                            ->join('diaco_medida','id_medida','=','idMedida')
+                            ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                            ->where('diaco_name_template_cba.id',$request->id)
+                            ->get();
+                        
+
+        return response()->json($query, 200);
+    }
+
     public function showEdit($id,$correlativo){ 
          
         try {
