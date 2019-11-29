@@ -718,8 +718,8 @@ class plantillasController extends Controller
     public function getCountColumn(Request $request){
         $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$request->id)->get();
 
-        return (int)$cantidad[0]->Columna;
-        // return response()->json($cantidad, 200);
+        // return (int)$cantidad[0]->Columna;
+        return response()->json($cantidad, 200);
     }
     public function getCountColumnfindId($id){
         $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$id)->get();

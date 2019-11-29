@@ -18,7 +18,6 @@ window.Vue = require('vue');
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/es';
-import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 
 
@@ -39,7 +38,6 @@ Vue.component('asignacion-component',require('./components/EdicionPlantilla/Asig
 Vue.component('inbox-component',require('./components/EdicionPlantilla/inbox.vue').default)
 Vue.component('printer-component',require('./components/EdicionPlantilla/printer.vue').default)
 Vue.component('vaciado-component',require('./components/EdicionPlantilla/vaciado.vue').default)
-Vue.component('v-select', vSelect)
 Vue.component('clon-component',require('./components/EdicionPlantilla/clonar.vue').default)
 Vue.component('propano-component',require('./components/Propano/addPropano.vue').default)
 Vue.component('historico-component',require('./components/EdicionPlantilla/historico.vue').default)

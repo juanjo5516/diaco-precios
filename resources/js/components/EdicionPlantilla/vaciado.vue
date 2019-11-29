@@ -1,243 +1,259 @@
 <template>
   <div>
-    
     <el-form :inline="false" v-model="formInline" class="form" ref="formInline"  id="vue-Asignacion">
       <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>Vaciado de Información</span>
-          <span class="d"></span>
-        </div>
-        <div slot="header" class="date">
-          Fecha:
-          <span>{{ fecha }}</span>
-          
-          <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
-          
-          
-        </div>
-        <div>
-
-      
-
-          <table class="table">
-            <tbody v-for="(index , ex1) in usuario" :key="ex1">
-              <tr >
-                  <td  class="titulo">Sede:</td>
-                  <td  colspan="8">{{ index.sede }}</td>
-
-                   
-              <span  v-for="(tipos, tp) of IdTipo" :key="tp" >
-                  <span v-if="tipos.tipoVerificacion === '1'">
-                    <td  class="titulo">Mercado:</td> 
-                    <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
-                            <el-option
-                              v-for="(sede,index) in mercados"
-                              v-bind:key=" index "
-                              :label=" sede.nombre  " 
-                              :value=" sede.idMercado "
-                            ></el-option>
-                        </el-select>
-                    </td>
-                  </span>
-                  <span v-if="tipos.tipoVerificacion === '2'">
-                    <td  class="titulo">Super Mercado:</td> 
-                    <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                            <el-option
-                              v-for="(sede,index) in mercados"
-                              v-bind:key=" index "
-                              :label=" sede.nombre  " 
-                              :value=" sede.idMercado "
-                            ></el-option>
-                        </el-select>
-                    </td>
-                  </span>
-                  <span v-if="tipos.tipoVerificacion === '3'">
-                    <td  class="titulo">Tienda de Barrio:</td> 
-                    <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                            <el-option
-                              v-for="(sede,index) in mercados"
-                              v-bind:key=" index "
-                              :label=" sede.nombre  " 
-                              :value=" sede.idMercado "
-                            ></el-option>
-                        </el-select>
-                    </td>
-                  </span>
-                  <span v-if="tipos.tipoVerificacion === '4'">
-                    <td  class="titulo">Canasta Básica Alimentaria:</td> 
-                    <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
-                        <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                            <el-option
-                              v-for="(sede,index) in mercados"
-                              v-bind:key=" index "
-                              :label=" sede.nombre  " 
-                              :value=" sede.idMercado "
-                            ></el-option>
-                        </el-select>
-                    </td>
-                  </span>
-                  <span v-if="tipos.tipoVerificacion === '5'">
-                    <td class="titulo">Gas Propano:</td> 
-                    <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
-                      <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                          <el-option
-                            v-for="(sede,index) in mercados"
-                            v-bind:key=" index "
-                            :label=" sede.nombre  " 
-                            :value=" sede.idMercado "
-                          ></el-option>
-                      </el-select>
-                    </td>
-                  </span>
-              </span>    
-              </tr>
-              <tr>
-                <td class="titulo">Verificador:</td>
-                <td colspan="11">{{ index.nombre }}</td>
-                <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
-              </tr>
-            </tbody>
-          </table>
-          <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Lugares de visitas</span>
+                  <span>Vaciado de Información</span>
+                  <span class="d"></span>
             </div>
-            <div >
-              <table class="table table-bordered head">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th class="establecimiento">Establecimiento</th>
-                    <th>No. Local</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="n in nColumna" :key="n">
-                    <td>{{ n }}</td>
-                    <td >
-                      <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]" filterable>
-                          <el-option
-                            v-for="(sede,index) in establecimientos"
-                            v-bind:key=" index "
-                            :label=" sede.nombre  " 
-                            :value=" sede.idEstablecimiento "
-                          ></el-option>
-                      </el-select>
-                    </td>
-                    <td >
-                        
-                      <!-- <input type="number" class="form-control" :name="'inputMercado['  + n  + ']'" v-model="inputMercados['mercado' + n ]"> -->
-                      <el-input-number v-model="inputMercados['mercado' + n ]"  :min="1" :max="1000"></el-input-number>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div slot="header" class="date">
+                  Fecha:
+                  <span>{{ fecha }}</span>
+                  <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
             </div>
-          </el-card>
-        </div>
-        
+            <div>
+                  <table class="table">
+                        <tbody v-for="(index , ex1) in usuario" :key="ex1">
+                              <tr >
+                                    <td  class="titulo">Sede:</td>
+                                    <td  colspan="8">{{ index.sede }}</td>
+                              <span  v-for="(tipos, tp) of IdTipo" :key="tp" >
+                                    <span v-if="tipos.tipoVerificacion === '1'">
+                                    <td  class="titulo">Mercado:</td> 
+                                    <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
+                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
+                                          <el-option
+                                                v-for="(sede,index) in mercados"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idMercado "
+                                          ></el-option>
+                                          </el-select>
+                                    </td>
+                                    </span>
+                                    <span v-if="tipos.tipoVerificacion === '2'">
+                                    <td  class="titulo">Super Mercado:</td> 
+                                    <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
+                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
+                                          <el-option
+                                                v-for="(sede,index) in mercados"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idMercado "
+                                          ></el-option>
+                                          </el-select>
+                                    </td>
+                                    </span>
+                                    <span v-if="tipos.tipoVerificacion === '3'">
+                                    <td  class="titulo">Tienda de Barrio:</td> 
+                                    <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
+                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
+                                          <el-option
+                                                v-for="(sede,index) in mercados"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idMercado "
+                                          ></el-option>
+                                          </el-select>
+                                    </td>
+                                    </span>
+                                    <span v-if="tipos.tipoVerificacion === '4'">
+                                    <td  class="titulo">Canasta Básica Alimentaria:</td> 
+                                    <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
+                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
+                                          <el-option
+                                                v-for="(sede,index) in mercados"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idMercado "
+                                          ></el-option>
+                                          </el-select>
+                                    </td>
+                                    </span>
+                                    <span v-if="tipos.tipoVerificacion === '5'">
+                                    <td class="titulo">Gas Propano:</td> 
+                                    <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
+                                    <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
+                                          <el-option
+                                          v-for="(sede,index) in mercados"
+                                          v-bind:key=" index "
+                                          :label=" sede.nombre  " 
+                                          :value=" sede.idMercado "
+                                          ></el-option>
+                                    </el-select>
+                                    </td>
+                                    </span>
+                              </span>    
+                              </tr>
+                              <tr>
+                                    <td class="titulo">Verificador:</td>
+                                    <td colspan="11">{{ index.nombre }}</td>
+                                    <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
+                              </tr>
+                        </tbody>
+                  </table>
+            </div>
       </el-card>
     
-<!-- <el-form :inline="false" :model="formInline" class="form" id="vue-Asignacion"> -->
-      <!-- Vaciado -->
-    <!-- <el-container  > -->
-      <el-card class="box-card">
-        <el-card clas="box-card categoria" v-for="(item, it) in categoria" :key="it">
-          <div slot="header" class="clearfix">
-            <span>{{ item.categoria }}</span>
-          </div>
-          <!-- <el-main> -->
+      <el-card class="box-card" >
+            <div slot="header" class="clearfix">
+                  <span>Categorías </span>
+            </div>
+            <div>
+                  <el-table :data="categoria" style="width: 100%" border>
+                        <el-table-column label="Id" type="index"></el-table-column>
+                        <el-table-column label="Categoría" prop="categoria"></el-table-column>
+                        <el-table-column label="Operaciones" width="200">
+                              <template slot-scope="scope">
+                                    <el-button-group>
+                                    <el-button size="mini"  @click="showDialogEdit(scope.row.categoria)">Llenar</el-button>
+                                    </el-button-group>
+                              </template>
+                        </el-table-column>
+                  </el-table>
+            </div>
+             <el-dialog title="Vaciado de Información" :visible.sync="dialogFormVisible" width="60%" top="1vh">
+                  <el-form :model="form">
+                        
+                        <el-table :data="nColumna" style="width: 100%" border size="small">
+                              <el-table-column  label="No." type="index"></el-table-column>
+                              <el-table-column  label="Establecimiento"  >
+                                    <template slot-scope="scope">      
+                                          <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
+                                                <el-option
+                                                v-for="(sede,index) in establecimientos"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idEstablecimiento "
+                                                ></el-option>
+                                          </el-select>
+                                    </template>
+                              </el-table-column>
+                              <el-table-column  label="No. Local"  width="200">
+                                    <template slot-scope="scope">    
+                                          <el-input-number size="small" v-model="inputMercados['mercado' + scope.row.index ]"  :min="0" :max="1000"></el-input-number>
+                                    </template>
+                              </el-table-column>
+                        </el-table>
+                        <el-table :data="Productos">
+                              <el-table-column label="Producto" prop="produto" ></el-table-column>
+                              <el-table-column label="Medida" prop="medida"></el-table-column>
+                              <el-table-column label="Información de Vaciado">
+                                    <el-table-column v-for="(index,x) in nColumna" v-bind:key="x"  >
+                                          <el-input-number  v-model="index['valor' + n ]"  :precision="2" :min="0" :max="1000" size="small"></el-input-number>
+                                    </el-table-column>
+                              </el-table-column>
+                        </el-table>
 
-            <!-- Table ElementUI -->
 
-            <!-- <el-table :data="Productos" style="width: 100%;">
-              <el-table-column prop="produto" label="Producto" width="180">
-              </el-table-column>
-              <el-table-column prop="medida" label="Medida" width="180">
-              </el-table-column>
-              <el-table-column v-for="n in 5" :key="n" :label="''  + n  + ''">
-              <template slot-scope="scope">
-                       <el-input type="text" size="small"  :name="'inputs['  + n  + ']'"  :v-model="scope['valor' + n ]"></el-input> 
-                        <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="scope['valor' + n ]">
-              </template>
 
-              </el-table-column>
-            </el-table> -->
 
-            <!-- <table class="table table-bordered head" id="vue">
-              <thead>
-                <tr>
-                  <th class="productoName">Producto</th>
-                  <th class="medidaName">Medida</th>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th></th>
-                  
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(index, ix) of Productos "
-                  :key="ix"
-                  v-if="index.categoria == item.categoria">
-                  <td>{{ index.produto }}</td>
-                  <td class="ReferencesName">{{ index.medida }}</td>
-                    <td v-for="n in 5" :key="n">
-                      <el-input size="small"  :name="'inputs['  + n  + ']'" ></el-input>
-                    </td>
-                </tr>
-              </tbody>
-             </table>  -->
-
-            <!-- Tabla normal -->
-            
-            <table class="table table-bordered head" id="vue">
-              <thead>
-                <tr>
-                  <th class="productoName">Producto</th>
-                  <th class="medidaName">Medida</th>
-                  <!-- <th class="ReferencesName" >Ref. 1</th> -->
-                  <!-- <th class="ReferencesName">Ref. 2</th> -->
-                 <th v-for="n in nColumna" :key="n">{{ n }}</th>
-                  
-                  <!-- <th>Obs.</th> -->
-                  
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(index, ix) of Productos "
-                  :key="ix"
-                  v-if="index.categoria == item.categoria">
-                  <td>{{ index.produto }}</td>
-                  <td class="ReferencesName">{{ index.medida }}</td>
-                  <!-- <td class="ReferencesName">{{ index.precio2 }}</td> -->
-                   <td v-for="n in nColumna" :key="n">
-                        <!-- <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input> -->
-                        <el-input-number  v-model="index['valor' + n ]"  :precision="2" :min="0" :max="1000"></el-input-number>
-                      <!-- <input type="text" class="form-control" :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"> -->
-                   </td>
-                   <!-- Observaciones -->
-                   <!-- <td >
-                        <el-input type="text" size="small"  :name="'inputs['  + n  + ']'" v-model="index['valor' + n ]"></el-input>
-                   </td> -->
-                 </tr>
-              </tbody> 
-            </table> 
-          <!-- </el-main> -->
-        </el-card>
-        <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button> 
-        <!-- <button  type="submit" class="btn btn-outline-success">Almacenar</button> -->
-        
+                        <!-- <el-form-item label="ID" :label-width="formLabelWidth">
+                        <el-input v-model="form.name" autocomplete="off" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Producto" :label-width="formLabelWidth">
+                              <el-select v-model="form.producto" placeholder="Producto" filterable >
+                                    <el-option
+                                    v-for="(item,index) in ListadoProducto"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.code">
+                                    </el-option>
+                              </el-select>
+                        </el-form-item>
+                        <el-form-item label="Medida" :label-width="formLabelWidth">
+                              <el-select v-model="form.medida" placeholder="Municipio" filterable >
+                                    <el-option
+                                    v-for="(item,index) in ListadoMedidas"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.code">
+                                    </el-option>
+                              </el-select>
+                        </el-form-item> -->
+                  </el-form>
+                  <span slot="footer" class="dialog-footer">
+                  <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+                  <el-button type="primary" @click="handleEdit()">Guardar</el-button>
+                  </span>
+            </el-dialog>
       </el-card>
-    <!-- </el-container> -->
+            <el-progress :text-inside="true" :stroke-width="24" :percentage="50" status="success"></el-progress>
+      <!-- <el-card class="box-card"  v-for="(item, it) in categoria" :key="it">
+            <div slot="header" class="clearfix">
+                  <span>{{ item.categoria }}</span>
+            </div>
+            <div >
+                  <el-table :data="nColumna" style="width: 100%" border>
+                        <el-table-column type="index" width="50"></el-table-column>
+                        <el-table-column label="Establecimiento">
+                                          <el-select  v-model="sedes['select']" filterable>
+                                                <el-option
+                                                v-for="(sede,index) in establecimientos"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idEstablecimiento "
+                                                ></el-option>
+                                          </el-select>
+                        </el-table-column>
+                        <el-table-column lable="No. Local"></el-table-column>
+                  </el-table> 
+                  <table class="table table-bordered head">
+                        <thead>
+                              <tr>
+                                    <th>No.</th>
+                                    <th class="establecimiento">Establecimiento</th>
+                                    <th>No. Local</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr 
+                                    v-for="(index,x) in nColumna" 
+                                    :key="x">
+                                    <td>{{ index }}</td>
+                                    <td v-for="(index2,x) in nColumna" :key="x">
+                                          <el-select :name="'visita['  + n  + ']'" v-model="sedes['select' + n ]" filterable>
+                                          <el-select  v-model="index['select' + index2 ]" filterable>
+                                                <el-option
+                                                v-for="(sede,index) in establecimientos"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idEstablecimiento "
+                                                ></el-option>
+                                          </el-select>
+                                    </td>
+                                    <td >
+                                          <el-input-number v-model="inputMercados['mercado' + n ]"  :min="1" :max="1000"></el-input-number>
+                                    </td>
+                              </tr>
+                        </tbody>
+                  </table> 
+                  <table class="table table-bordered head" id="vue">
+                        <thead>
+                              <tr>
+                                    <th class="productoName">Producto</th>
+                                    <th class="medidaName">Medida</th>
+                                    <th v-for="n in nColumna" :key="n">{{ n }}</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              <tr
+                                    v-for="(index, ix) of Productos "
+                                    :key="ix"
+                                    v-if="index.categoria == item.categoria">
+                                    <td>{{ index.produto }}</td>
+                                    <td class="ReferencesName">{{ index.medida }}</td>
+                                    <td v-for="n in nColumna" :key="n">
+                                          <el-input-number  v-model="index['valor' + n ]"  :precision="2" :min="0" :max="1000"></el-input-number>
+                                    </td>
+                              </tr>
+                        </tbody> 
+                 
+            </div>
+      </el-card> -->
+        <!-- <el-button @click="onSubmit" type="success" icon="el-icon-folder-add" v-loading.fullscreen.lock="fullscreenLoading" plain>Almacenar</el-button>   -->
     </el-form>
+    
   </div>
 </template>
 
@@ -342,6 +358,7 @@ export default {
         select5: "Seleccione una Opción",
         mLugar: "Seleccione una Opción",
       },
+      // sedes:[],
       input1: "",
       input2: "",
       input3: "",
@@ -389,41 +406,139 @@ export default {
       idTt:'',
       SMercado: [],
       fullscreenLoading: false,
-      nColumna:0,
+      // nColumna:0,
+      nColumna:[],
       // usuario:{
       //   sede:'',
       //   nombre:'',
       //   id_usuario:''
       // }
+
+      dialogFormVisible: false,
+      form: {
+          name: '',
+          producto:"",
+          medida:"",
+          seleccionMercado:[]
+        },
+      formLabelWidth: '120px',
+      ListadoProducto:[],
+      ListadoMedidas:[],
+      filas:0,
+      categoriaFiltro:"",
     };
   },
   mounted() {
-    this.DataProductos();
+    
     this.getTipo();
     this.getPropano();
     // console.log(this.usuario);
     this.getSMercado();
     this.getColumnas();
+    console.log(this.Productos);
   },
   methods: {
+      showDialogEdit(producto){
+            this.dialogFormVisible = true;
+            this.categoriaFiltro = producto;
+            console.log(this.categoriaFiltro);
+            this.DataProductos();
+            // this.form.producto = producto;
+            // this.form.medida = medida;
+    },
+    handleEdit(){
+      //     console.log(this.inputMercados);
+      //   if(this.form.producto === "" ){
+      //       this.form.producto = 0;
+            
+      //       const config = { headers: {'Content-Type': 'application/json'} };
+      //       const h = this.$createElement;
+      //       var url = "/updatePlantillaById"; 
+      //       axios
+      //       .put(url, {
+      //           id: this.form.name,
+      //           producto: this.form.producto,
+      //           medida: this.form.medida,
+      //       },config
+      //       )
+      //       .then(response => {   
+              
+      //           const status = JSON.parse(response.status);
+      //           if (status == "200") {    
+      //           this.$message({
+      //               message: h("p", null, [
+      //               h("i", { style: "color: teal" }, "Datos Actualizados!")
+      //               ]),
+      //               type: 'success'
+      //           });
+      //           this.DataProductos();
+      //           this.dialogFormVisible = false;
+      //           this.form.name= "";
+      //           // this.form.address ="";
+      //           this.form.producto = "";
+      //           this.form.medida = "";
+      //           }
+      //       })
+      //       .catch(error => {
+      //           this.$message.error({
+      //               message: h("p", null, [
+      //               h("i", { style: "color: red" }, 'Error, servidor no encontrado')
+      //               ])
+      //           });
+      //       });  
+      //   }else if(this.form.medida === ""){
+      //       this.form.medida = 0;
+            
+      //       const config = { headers: {'Content-Type': 'application/json'} };
+      //       const h = this.$createElement;
+      //       var url = "/updatePlantillaById"; 
+      //       axios
+      //       .put(url, {
+      //           id: this.form.name,
+      //           producto: this.form.producto,
+      //           medida: this.form.medida,
+      //       },config
+      //       )
+      //       .then(response => {   
+              
+      //           const status = JSON.parse(response.status);
+      //           if (status == "200") {    
+      //           this.$message({
+      //               message: h("p", null, [
+      //               h("i", { style: "color: teal" }, "Datos Actualizados!")
+      //               ]),
+      //               type: 'success'
+      //           });
+      //           this.DataProductos();
+      //           this.dialogFormVisible = false;
+      //           this.form.name= "";
+      //           // this.form.address ="";
+      //           this.form.producto = "";
+      //           this.form.medida = "";
+      //           }
+      //       })
+      //       .catch(error => {
+      //           this.$message.error({
+      //               message: h("p", null, [
+      //               h("i", { style: "color: red" }, 'Error, servidor no encontrado')
+      //               ])
+      //           });
+      //       });
+      //   }
+    },
     DataProductos: function(){
+          this.Productos = [];
           for (let i = 0; i <= this.coleccion.length-1; i++) {
-            this.Productos.push({
-              // NombrePlantilla: this.coleccion[i].NombrePlantilla,
-              categoria: this.coleccion[i].categoria,
-              created_at: this.coleccion[i].created_at,
-              medida: this.coleccion[i].medida,
-              producto: this.coleccion[i].producto,
-              produto: this.coleccion[i].produto,
-              precio1: this.coleccion[i].Anterior1,
-              precio2: this.coleccion[i].Anterior1,
-              medidaId: this.coleccion[i].idmedida,
-              valor1:'',
-              valor2:'',
-              valor3:'',
-              valor4:'',
-              valor5:''
-            })
+                if(this.categoriaFiltro === this.coleccion[i].categoria){
+                      this.Productos.push({
+                        categoria: this.coleccion[i].categoria,
+                        created_at: this.coleccion[i].created_at,
+                        medida: this.coleccion[i].medida,
+                        producto: this.coleccion[i].producto,
+                        produto: this.coleccion[i].produto,
+                        medidaId: this.coleccion[i].idmedida,
+                      })
+                }
             // console.log(this.Productos);
         }
     },
@@ -459,7 +574,13 @@ export default {
       getColumnas: function(){
           axios.post('/getCountColumn',{id: this.idplantilla})
             .then(response => {
-              this.nColumna = response.data;
+                  for(let i=1; i <= response.data[0].Columna; i++){
+                        this.nColumna.push({
+                              index: i
+                        })
+                  };
+            //   this.nColumna = response.data[0].Columna;
+            //   console.log(this.nColumna);
               // console.log(this.nColumna);
               // console.log(response.data);
             })
