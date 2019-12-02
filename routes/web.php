@@ -91,7 +91,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getinbox','plantillasController@getInbox');
         Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter');
         // Route::post('Printer','plantillasController@showprinter');
-        Route::get('vaciado/{id}','plantillasController@showVaciado'); 
+        Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado'); 
         Route::post('mercadoCBA','plantillasController@vaciado');
         Route::get('clonar','plantillasController@clon');
         Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
@@ -183,6 +183,11 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // Count Column
         Route::post('getCountColumn','plantillasController@getCountColumn');
         Route::get('getCorrelativo','plantillasController@createCorrelative');
+        //---------------
+
+        // Update Vaciado status
+        Route::post('updateStatusVaciado','plantillasController@updateStatusVaciado');
+        // Route::get('getCorrelativo','plantillasController@createCorrelative');
         //---------------
 
         // Editar Plantillas

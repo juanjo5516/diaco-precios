@@ -8,6 +8,7 @@
                 :establecimientos="{{ json_encode($establecimiento) }}"
                 :idplantilla="{{ $idPlantilla }}"
                 :mercados="{{ $mercado }}"
+                :correlativo ="{{ json_encode($correlativo) }}"
                 
                 >
             </vaciado-component>

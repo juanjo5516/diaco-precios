@@ -32,7 +32,7 @@
         width="220"
         label="Operaciones">
         <template slot-scope="scope">
-          <el-link :underline=false v-bind:href="'/vaciado/'+scope.row.id" :id=scope.row.id_Asignacion>  
+          <el-link :underline=false v-bind:href="'/vaciado/'+scope.row.id+'/'+scope.row.correlativo" :id=scope.row.id_Asignacion>  
             <el-button
               size="small"
               type="success"
@@ -129,7 +129,7 @@ import { createPdfFromHtml } from "../logic.js";
                 .then(response => {
                   // handle success
                   this.DataResult = response.data;
-                  //console.log(this.DataResult);
+                  // console.log(this.DataResult);
                 })
                 .catch(function (error) {
                   // handle error
