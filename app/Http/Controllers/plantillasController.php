@@ -516,7 +516,7 @@ class plantillasController extends Controller
         return response()->json($tipo, 200);
     } 
 
-    public function showVaciado($id){
+    public function showVaciado($id,$correlativo){
          $fecha = $this->getFecha();
          $usuario = $this->UserLogin();
          $plantilla = $this->getPlantillas($id); 
@@ -528,7 +528,7 @@ class plantillasController extends Controller
         //return response()->json($mercado);
         
 
-        return view('Ediciones.vaciado',
+        return view('Ediciones.vaciado', 
             [
                 'fecha' => $fecha,
                 'user' => $usuario,
@@ -536,7 +536,8 @@ class plantillasController extends Controller
                 'categoria' => $categoria,
                 'establecimiento' => $data,
                 'idPlantilla' => $id,
-                'mercado' => $lugarMercado
+                'mercado' => $lugarMercado,
+                'correlativo' => $correlativo
 
             ]
         );
@@ -547,14 +548,16 @@ class plantillasController extends Controller
         
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
-
+        // dd($cantidadProducto);
         // dd($request->get('idTipo')[0]['tipoVerificacion']);
+        $columnas = (int)$request->columnas;
+
 
 
         try {
-            for ($ii=0; $ii <= 4 ; $ii++) { 
+            for ($ii=0; $ii < $columnas ; $ii++) { 
                     $fila = $ii + 1;
-                    for ($i=0; $i  <= $cantidadProducto-1 ; $i++) { 
+                    for ($i=0; $i  < $cantidadProducto ; $i++) { 
                         $modelo = new vaciadocba;
                         $modelo->numeroLocal = $request->get('Mercados')['mercado'.$fila];
                         // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
@@ -577,7 +580,7 @@ class plantillasController extends Controller
                     }
             }
             $respuesta = 'ingresado';
-            DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
+            // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);
             
         }
@@ -586,6 +589,14 @@ class plantillasController extends Controller
             DB::rollBack();
                 print "ERROR";
         }
+    }
+    public function updateStatusVaciado(Request $request){
+        
+        $updateById = ListarAsignacion::where('idPlantilla', $request->idP)
+                                                         ->where('idSede',$request->idSede)
+                                                         ->where('idUsuario',$request->Usuarios)
+                                                         ->where('correlativo',$request->correlativo)->update(['estatus'  => 0]);
+        return response()->json($updateById, 200);
     }
 
     public function clon(){ 
@@ -718,8 +729,8 @@ class plantillasController extends Controller
     public function getCountColumn(Request $request){
         $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$request->id)->get();
 
-        return (int)$cantidad[0]->Columna;
-        // return response()->json($cantidad, 200);
+        // return (int)$cantidad[0]->Columna;
+        return response()->json($cantidad, 200);
     }
     public function getCountColumnfindId($id){
         $cantidad = NameTemplate::select('cantidadColmna as Columna')->where('id','=',$id)->get();
