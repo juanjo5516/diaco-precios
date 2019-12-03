@@ -11,10 +11,10 @@
                 <a class="nav-link" href="/Categoria">
                         <i class="nav-icon fas fa-angle-right"></i> Categoría</a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="/SubCategorias">
                         <i class="nav-icon fas fa-angle-right"></i> Sub-Categoría</a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link" href="/Medida">
                         <i class="nav-icon fas fa-angle-right"></i> Medida</a>
@@ -30,6 +30,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="/viewVisita">
                         <i class="nav-icon fas fa-angle-right"></i> Tipo Visita</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/viewUsuariosSistema">
+                        <i class="nav-icon fas fa-angle-right"></i> Usuarios Sistema</a>
             </li>
             <li class="nav-title">Plantillas</li>
             <li class="nav-item">

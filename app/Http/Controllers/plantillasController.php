@@ -582,7 +582,7 @@ class plantillasController extends Controller
             $respuesta = 'ingresado';
             // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);
-            
+             
         }
         
         catch (\Exceptio $e) {

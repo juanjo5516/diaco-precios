@@ -154,7 +154,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // -------------
 
         // Tipos de visita
-        Route::get('viewVisita','menu@viewVisita'); 
+        Route::get('viewVisita','menu@viewVisita');  
         Route::get('findAllVisita','catalogos@findAllVisit');
         Route::post('addVisita','catalogos@addSVisit');
         Route::put('deleteByIdVisita','catalogos@deleteByIdVisit');
@@ -197,6 +197,14 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getProductoEdicionPlantilla','plantillasController@getProductoEdicionPlantilla');
         Route::get('editPlantilla/{id}/{correlativo}','plantillasController@showEdit');
         //---------------
+
+        // Usuarios Sistema
+        Route::get('viewUsuariosSistema','menu@viewUsuariosSistema');  
+        Route::get('findAllUserSystem','catalogos@findAllUserSystem');
+        Route::post('addUserSystem','catalogos@addUserSystem');
+        Route::put('deleteByIdUserSystem','catalogos@deleteByIdUserSystem');
+        Route::put('updateByIdUserSystem','catalogos@updateByIdUserSystem');
+        // *******************
 
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
 

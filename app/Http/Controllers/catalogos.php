@@ -9,6 +9,7 @@ use App\Models\subcategory;
 use App\Models\measure;
 use App\Models\market;
 use App\Models\local;
+use App\Models\UsuarioSistema;
 use App\Models\smarket;
 use App\responseData;
 use App\TipoVisitaPlantilla;
@@ -334,5 +335,32 @@ class catalogos extends Controller
         }
 
     }
+
+    public function findAllUserSystem(){
+        $product = UsuarioSistema::join('diaco_usuario','diaco_usuario.id_usuario','code_user')
+                                                    ->join('diaco_sede','diaco_sede.id_diaco_sede','code_sede')
+                                                    ->select('diaco_usuarios_cba.code as code','diaco_usuario.nombre as user','diaco_sede.nombre_sede as sede','diaco_usuarios_cba.status as status')
+                                                    ->where('status','=','A')->orderBy('diaco_usuario.nombre','asc')->get();
+        return response()->json($product, 200);
+    }
+
+    public function addUserSystem(Request $request){
+        $data = new UsuarioSistema; 
+        $data->code_user = $request->usuario;
+        $data->code_sede = $request->sede;
+        $data->status = 'A';
+        if($data->save()){
+            return response()->json($data, 200);
+        };
+    }
+    public function deleteByIdUserSystem(Request $request){
+        $deleteById = UsuarioSistema::where('code', $request->id)->update(['status' => 'I']); 
+        return response()->json($deleteById, 200);
+    }
+
+    // public function updateByIdUserSystem(Request $request){
+    //     $updateById = UsuarioSistema::where('code', $request->id)->update(['name' => $request->name, 'address' => $request->address]);
+    //     return response()->json($updateById, 200);
+    // }
     
 }
