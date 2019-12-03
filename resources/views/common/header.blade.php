@@ -3,7 +3,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="#">
-        <img class="navbar-brand-full" src=" {{ asset('images/diaco/logo.webp') }}"  alt="Diaco">
+        <img class="navbar-brand-full" src=" {{ asset('images/diaco/logo.webp') }}"  width="119" height="45" alt="Diaco">
         <img class="navbar-brand-minimized" src=" {{ asset('images/diaco/logo.webp') }} " width="30" height="30" alt="Diaco">
     </a>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
