@@ -277,6 +277,16 @@ class menu extends Controller
     public function viewVisita(){
         return view ('menu.addTipoVisita');
     }
+    public function viewUsuariosSistema(){
+        $Usuarios = DB::table('diaco_usuario')->select('id_usuario as code','nombre as name')->get();
+        $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
+        
+        return view('menu.addUsuarioSistema',
+        [
+            'Plantillas' => $Usuarios,
+            'Sedes' =>$sede
+        ]);
+    }
 
     public function viewMercado(){
         return view ('menu.addDetalleMercado');

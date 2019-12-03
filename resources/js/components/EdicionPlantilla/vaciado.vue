@@ -19,7 +19,7 @@
                                     <td  colspan="8">{{ index.sede }}</td>
                               <span  v-for="(tipos, tp) of IdTipo" :key="tp" >
                                     <span v-if="tipos.tipoVerificacion === '1'">
-                                    <td  class="titulo">Mercado:</td> 
+                                    <td  class="titulo">Mercado: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
                                           <el-option
@@ -32,7 +32,7 @@
                                     </td>
                                     </span>
                                     <span v-if="tipos.tipoVerificacion === '2'">
-                                    <td  class="titulo">Super Mercado:</td> 
+                                    <td  class="titulo">Super Mercado: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                                           <el-option
@@ -45,7 +45,7 @@
                                     </td>
                                     </span>
                                     <span v-if="tipos.tipoVerificacion === '3'">
-                                    <td  class="titulo">Tienda de Barrio:</td> 
+                                    <td  class="titulo">Tienda de Barrio: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                                           <el-option
@@ -58,7 +58,7 @@
                                     </td>
                                     </span>
                                     <span v-if="tipos.tipoVerificacion === '4'">
-                                    <td  class="titulo">Canasta Básica Alimentaria:</td> 
+                                    <td  class="titulo">Canasta Básica Alimentaria: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                                           <el-option
@@ -71,7 +71,7 @@
                                     </td>
                                     </span>
                                     <span v-if="tipos.tipoVerificacion === '5'">
-                                    <td class="titulo">Gas Propano:</td> 
+                                    <td class="titulo">Gas Propano: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
                                     <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
                                           <el-option
@@ -118,8 +118,10 @@
                         
                         <el-table :data="nColumna" style="width: 100%" border size="small">
                               <el-table-column  label="No." type="index"></el-table-column>
-                              <el-table-column  label="Establecimiento"  >
+                              <el-table-column  label="Establecimiento (campo obligatorio)"  >
+                                    
                                     <template slot-scope="scope">      
+                                          
                                           <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
                                                 <el-option
                                                 v-for="(sede,index) in establecimientos"
@@ -163,6 +165,7 @@
       </el-card>
             <el-progress :text-inside="true" :stroke-width="24" :percentage="porcentaje" status="success"></el-progress>
             <el-button  class="my-5 oculto" type="success" id="enviar" round @click="terminar" v-loading.fullscreen.lock="fullscreenTerminar">Guardar</el-button>
+            
            
     </el-form>
     
@@ -174,6 +177,9 @@
             display: none;
       }
 
+      strong{
+        color:red;
+    }
 
       .titulo {
       width: 300px;
@@ -347,7 +353,9 @@ export default {
       porcentaje:0,
       cantitdadPorcentaje:0,
       precios:[],
-      button :""
+      button :"",
+      type_error:"",
+      result_error:"",
     };
   },
   mounted() {
@@ -439,46 +447,54 @@ export default {
                 
       },    
     onSubmit() {
+          const h = this.$createElement;
+      if(this.checkValidation(this.sedes) == true){
+            this.fullscreenLoading = true;
+            this.dataProductos = [];
+            for(let a = 0; a <= this.coleccion.length-1; a++){
+                  if(this.categoriaFiltro === this.coleccion[a].categoria){
+                        this.dataProductos.push({
+                              idDataProducto: this.coleccion[a].producto,
+                              idDataMedida: this.coleccion[a].idmedida
+                          })
+                    }
+              }
+              var url = '/mercadoCBA';
+              const bandeja = '/Bandeja';
+  
+              axios.post(url, {
+                    idP: this.idplantilla,
+                    Mercados: this.inputMercados,
+                    Sedes:this.sedes,
+                    Usuarios: this.usuario[0].id_usuario, 
+                    Data: this.Productos,
+                    idSede:this.usuario[0].id,
+                    idTipo: this.IdTipo,
+                    columnas: this.nColumna[0].index
+              }).then(response =>{
+                    const status = JSON.parse(response.status);
+                    if (status == '200') {
+                          // window.location = bandeja;
+                          this.dialogFormVisible = false;
+                          document.getElementById(this.button).disabled = true;
+                          this.porcentaje = this.porcentaje + this.cantitdadPorcentaje;
+                          this.fullscreenLoading = false;
+                          this.checkPorcentaje(this.porcentaje,this.button); 
+                    }
+              }).catch(error => { 
+                    this.fullscreenLoading = false;
+                    console.log(error.message)
+              });
+      }else{
+            this.result_error = this.checkValidation(this.sedes);
+            this.$message.error({
+                  message: h("p", null, [
+                    h("i", { style: "color: red" }, this.result_error)
+                  ])
+                });
+      }
 
           
-          this.fullscreenLoading = true;
-          this.dataProductos = [];
-          for(let a = 0; a <= this.coleccion.length-1; a++){
-                if(this.categoriaFiltro === this.coleccion[a].categoria){
-                      this.dataProductos.push({
-                            idDataProducto: this.coleccion[a].producto,
-                            idDataMedida: this.coleccion[a].idmedida
-                        })
-                  }
-            }
-
-            // console.log(this.precios);
-            var url = '/mercadoCBA';
-            const bandeja = '/Bandeja';
-
-            axios.post(url, {
-                  idP: this.idplantilla,
-                  Mercados: this.inputMercados,
-                  Sedes:this.sedes,
-                  Usuarios: this.usuario[0].id_usuario,
-                  Data: this.Productos,
-                  idSede:this.usuario[0].id,
-                  idTipo: this.IdTipo,
-                  columnas: this.nColumna[0].index
-            }).then(response =>{
-                  const status = JSON.parse(response.status);
-                  if (status == '200') {
-                        // window.location = bandeja;
-                        this.dialogFormVisible = false;
-                        document.getElementById(this.button).disabled = true;
-                        this.porcentaje = this.porcentaje + this.cantitdadPorcentaje;
-                        this.fullscreenLoading = false;
-                        this.checkPorcentaje(this.porcentaje,this.button);
-                  }
-            }).catch(error => { 
-                  this.fullscreenLoading = false;
-                  console.log(error.message)
-            });
       },
       checkPorcentaje(porcentaje,idBotton) {
             document.getElementById(idBotton).style.display= 'none';
@@ -512,9 +528,32 @@ export default {
             ).catch(error => {
                 
             })
+      },
+      checkValidation(selecciones){
+            if(selecciones.mLugar === "Seleccione una Opción"){
+                  this.type_error = "El lugar de visita no puede ir vacio";
+                  return this.type_error;
+            }else if(selecciones.select1 === "Seleccione una Opción"){
+                  this.type_error = "Por favor selecione un establecimiento";
+                  return this.type_error;
+            }else if(selecciones.select2 === "Seleccione una Opción"){
+                  this.type_error = "Por favor selecione un establecimiento";
+                  return this.type_error;
+            }else if(selecciones.select3 === "Seleccione una Opción"){
+                  this.type_error = "Por favor selecione un establecimiento";
+                  return this.type_error;
+            }else if(selecciones.select4 === "Seleccione una Opción"){
+                  this.type_error = "Por favor selecione un establecimiento";
+                  return this.type_error;
+            }else if(selecciones.select5 === "Seleccione una Opción"){
+                  this.type_error = "Por favor selecione un establecimiento";
+                  return this.type_error;
+            }else{
+                  return true;
+            }
       }
   }
 };
 </script>
 
-// prueba
+

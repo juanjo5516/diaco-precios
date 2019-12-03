@@ -156,12 +156,30 @@
                                     @endforeach
             </table>               
             @foreach ($categoria as $dataCategoria)
+            <table class="table my-3 mx-3  table-bordered descripcion">
+                <thead>
+                    <tr >
+                        <th >No.</th>
+                        <th >Establecimiento</th>
+                        <th >No. Local</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @for ($i = 1; $i <= $Ncolumna; $i++)
+                                <tr > 
+                                    <td ></td>
+                                    <td ></td>
+                                    <td ></td>
+                                </tr>
+                        @endfor
+                </tbody>
+            </table>
             <div class="card">
                 <div class="card-body">
                     <table class="table">
                         <tr>
                                 <td>
-                                    {{ $dataCategoria->categoria }}
+                                    {{ $dataCategoria->categoria }} 
                                 </td>
                             </tr>
                         </table>

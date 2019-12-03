@@ -217,6 +217,17 @@
     padding: 25mm;
 }
 
+.navbar-brand-full {
+    width: 119px !important;
+    height: 45px !important;
+}
+
+@media (max-width: 767px) {
+
+    .navbar-brand-full {
+        display: none;
+    }
+}
 /** For screen preview **/
 @media screen {
     /* body {
@@ -263,4 +274,6 @@
     #print.legal.landscape {
         width: 357mm;
     }
+
+    
 }
