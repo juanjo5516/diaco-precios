@@ -347,7 +347,7 @@ export default {
         }else{
           const config = { headers: {'Content-Type': 'application/json'} };
             const h = this.$createElement;
-            var url = "/updatePlantillaById"; 
+            var url = "/updatePlantillaById";  
             axios
             .put(url, {
                 id: this.form.name,
