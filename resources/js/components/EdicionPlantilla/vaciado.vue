@@ -144,7 +144,7 @@
                                           <el-input-number size="small" v-model="inputMercados['mercado' + scope.row.index ]"  :min="0" :max="1000"></el-input-number>
                                     </template>
                               </el-table-column>
-                              <el-table-column  label="Establecimiento (campo obligatorio)">
+                              <el-table-column  label="Establecimiento (campo obligatorio)"> 
                                     <template slot-scope="scope">      
                                           <!-- <el-input v-model="sedes['select' + scope.row.index ]" placeholder="Ingrese Establecimiento"></el-input> -->
                                           <el-select   v-model="sedes['select' + scope.row.index ]" filterable >

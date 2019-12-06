@@ -68,7 +68,14 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <div style="text-align: left;margin-top: 30px;">
+      <el-pagination
+        background
+        layout="total,prev, pager, next"
+        :total="total"
+        @current-change="current_change">
+        </el-pagination>
+    </div>
 
       <!-- <table class="table table-responsive" id="table-vue-asede">
         <thead>
@@ -123,6 +130,7 @@
         created_at_new:'',
         fullscreenLoading: false,
         load:false,
+        total: 0,
       }
     },
      mounted() {
@@ -164,7 +172,9 @@
         });
 
       },
-
+  current_change: function(currentPage) {
+        this.currentPage = currentPage;
+      },
       getAsignaciones: function() {
       var url = "/GetListaAsede";
       axios.get(url).then(response => {
