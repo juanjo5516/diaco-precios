@@ -12,15 +12,36 @@
                   <input type="hidden" :value="formInline.idplantilla" name="idPlantilla">
             </div>
             <div>
-                  <table class="table">
+                  <el-row :gutter="20" v-for="(item, x) in usuario" v-bind:key="x">
+                        <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
+                              <div> <b>Sede:</b> </div>
+                              {{ item.sede}}
+                        </el-col>
+                        <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
+                              <div> <b> Verificador: </b> </div> 
+                              {{ item.nombre }}
+                        </el-col>
+                        <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
+                              <div> <b> Lugar Visita: </b> </div> 
+                              <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  > 
+                                          <el-option
+                                                v-for="(sede,index) in mercados"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  " 
+                                                :value=" sede.idMercado "
+                                          ></el-option>
+                              </el-select>
+                        </el-col>
+                  </el-row>
+                  <!-- <table class="table">
                         <tbody v-for="(index , ex1) in usuario" :key="ex1">
                               <tr >
                                     <td  class="titulo">Sede:</td>
-                                    <td  colspan="8">{{ index.sede }}</td>
-                              <span  v-for="(tipos, tp) of IdTipo" :key="tp" >
-                                    <span v-if="tipos.tipoVerificacion === '1'">
-                                    <td  class="titulo">Mercado: <strong>*</strong></td> 
-                                    <td v-if="tipos.tipoVerificacion === '1'" class="selectMercado">
+                                    <td  colspan="8">{{ index.sede }}</td> -->
+                              <!-- <span  v-for="(tipos, tp) of IdTipo" :key="tp" > -->
+                                    <!-- <span v-if="tipos.tipoVerificacion === '1'"> -->
+                                    <!-- <td  class="titulo">Visista: <strong>*</strong></td> 
+                                    <td  class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
                                           <el-option
                                                 v-for="(sede,index) in mercados"
@@ -29,9 +50,9 @@
                                                 :value=" sede.idMercado "
                                           ></el-option>
                                           </el-select>
-                                    </td>
-                                    </span>
-                                    <span v-if="tipos.tipoVerificacion === '2'">
+                                    </td> -->
+                                    <!-- </span> -->
+                                    <!-- <span v-if="tipos.tipoVerificacion === '2'">
                                     <td  class="titulo">Super Mercado: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
@@ -43,8 +64,8 @@
                                           ></el-option>
                                           </el-select>
                                     </td>
-                                    </span>
-                                    <span v-if="tipos.tipoVerificacion === '3'">
+                                    </span> -->
+                                    <!-- <span v-if="tipos.tipoVerificacion === '3'">
                                     <td  class="titulo">Tienda de Barrio: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
@@ -56,8 +77,8 @@
                                           ></el-option>
                                           </el-select>
                                     </td>
-                                    </span>
-                                    <span v-if="tipos.tipoVerificacion === '4'">
+                                    </span> -->
+                                    <!-- <span v-if="tipos.tipoVerificacion === '4'">
                                     <td  class="titulo">Canasta Básica Alimentaria: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
                                           <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
@@ -69,8 +90,8 @@
                                           ></el-option>
                                           </el-select>
                                     </td>
-                                    </span>
-                                    <span v-if="tipos.tipoVerificacion === '5'">
+                                    </span> -->
+                                    <!-- <span v-if="tipos.tipoVerificacion === '5'">
                                     <td class="titulo">Gas Propano: <strong>*</strong></td> 
                                     <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
                                     <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
@@ -82,16 +103,16 @@
                                           ></el-option>
                                     </el-select>
                                     </td>
-                                    </span>
-                              </span>    
-                              </tr>
+                                    </span> -->
+                              <!-- </span>     -->
+                              <!-- </tr>
                               <tr>
                                     <td class="titulo">Verificador:</td>
                                     <td colspan="11">{{ index.nombre }}</td>
                                     <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
                               </tr>
                         </tbody>
-                  </table>
+                  </table> -->
             </div>
       </el-card>
     
@@ -118,10 +139,14 @@
                         
                         <el-table :data="nColumna" style="width: 100%" border size="small">
                               <el-table-column  label="No." type="index"></el-table-column>
-                              <el-table-column  label="Establecimiento (campo obligatorio)"  >
-                                    
+                              <el-table-column  label="No. Local"  width="170">
+                                    <template slot-scope="scope">    
+                                          <el-input-number size="small" v-model="inputMercados['mercado' + scope.row.index ]"  :min="0" :max="1000"></el-input-number>
+                                    </template>
+                              </el-table-column>
+                              <el-table-column  label="Establecimiento (campo obligatorio)">
                                     <template slot-scope="scope">      
-                                          
+                                          <!-- <el-input v-model="sedes['select' + scope.row.index ]" placeholder="Ingrese Establecimiento"></el-input> -->
                                           <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
                                                 <el-option
                                                 v-for="(sede,index) in establecimientos"
@@ -130,11 +155,6 @@
                                                 :value=" sede.idEstablecimiento "
                                                 ></el-option>
                                           </el-select>
-                                    </template>
-                              </el-table-column>
-                              <el-table-column  label="No. Local"  width="200">
-                                    <template slot-scope="scope">    
-                                          <el-input-number size="small" v-model="inputMercados['mercado' + scope.row.index ]"  :min="0" :max="1000"></el-input-number>
                                     </template>
                               </el-table-column>
                         </el-table>
@@ -274,12 +294,12 @@ export default {
     return {
       Fecha: "fecha",
       sedes:{
-        select1: "Seleccione una Opción",
-        select2: "Seleccione una Opción",
-        select3: "Seleccione una Opción",
-        select4: "Seleccione una Opción",
-        select5: "Seleccione una Opción",
-        mLugar: "Seleccione una Opción",
+        select1: "",
+        select2: "",
+        select3: "",
+        select4: "",
+        select5: "",
+        mLugar: "",
       },
       // sedes:[],
       input1: "",
@@ -337,7 +357,7 @@ export default {
       //   nombre:'',
       //   id_usuario:''
       // }
-
+      plantillasall:[],
       dialogFormVisible: false,
       form: {
           name: '',
@@ -370,6 +390,13 @@ export default {
 //     console.log(this.cantitdadPorcentaje);
   },
   methods: {
+      getVisitas: function() {
+      var url = "/findAllVisita";
+      axios.get(url).then(response => {
+        this.plantillasall = response.data;
+      //   this.total = response.data.length;
+      });
+    },
       showDialogEdit(producto,button){
             this.dialogFormVisible = true;
             this.categoriaFiltro = producto;
@@ -383,7 +410,7 @@ export default {
     DataProductos: function(){
           this.Productos = [];
           for (let i = 0; i <= this.coleccion.length-1; i++) {
-                if(this.categoriaFiltro === this.coleccion[i].categoria){
+                if(this.categoriaFiltro === this.coleccion[i].categoria){ 
                       this.Productos.push({
                             categoria: this.coleccion[i].categoria,
                             created_at: this.coleccion[i].created_at,
