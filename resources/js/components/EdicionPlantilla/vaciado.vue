@@ -146,15 +146,15 @@
                               </el-table-column>
                               <el-table-column  label="Establecimiento (campo obligatorio)"> 
                                     <template slot-scope="scope">      
-                                          <!-- <el-input v-model="sedes['select' + scope.row.index ]" placeholder="Ingrese Establecimiento"></el-input> -->
-                                          <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
+                                          <el-input v-model="sedes['select' + scope.row.index ]" placeholder="Ingrese Establecimiento"></el-input>
+                                          <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
                                                 <el-option
                                                 v-for="(sede,index) in establecimientos"
                                                 v-bind:key=" index "
                                                 :label=" sede.nombre  " 
                                                 :value=" sede.idEstablecimiento "
                                                 ></el-option>
-                                          </el-select>
+                                          </el-select> -->
                                     </template>
                               </el-table-column>
                         </el-table>
@@ -376,6 +376,7 @@ export default {
       button :"",
       type_error:"",
       result_error:"",
+      cantidadColumna: 0,
     };
   },
   mounted() {
@@ -455,6 +456,7 @@ export default {
                               index: i
                         })
                   };
+                  this.cantidadColumna =response.data[0].Columna;
             })
             .catch(function (error) {
               console.log(error);
@@ -489,6 +491,7 @@ export default {
               var url = '/mercadoCBA';
               const bandeja = '/Bandeja';
   
+            
               axios.post(url, {
                     idP: this.idplantilla,
                     Mercados: this.inputMercados,
@@ -497,7 +500,7 @@ export default {
                     Data: this.Productos,
                     idSede:this.usuario[0].id,
                     idTipo: this.IdTipo,
-                    columnas: this.nColumna[0].index
+                    columnas: this.cantidadColumna
               }).then(response =>{
                     const status = JSON.parse(response.status);
                     if (status == '200') {

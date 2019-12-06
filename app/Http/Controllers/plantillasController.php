@@ -9,6 +9,7 @@ use App\EdicionPlantilla;
 use App\NameTemplate;
 use App\ListarAsignacion;
 use App\vaciadocba;
+use App\Models\local;
 use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
 use App\Models\Departamento;
@@ -550,38 +551,48 @@ class plantillasController extends Controller
         $cantidadProducto = count($request->Data);
         // dd($cantidadProducto);
         // dd($request->get('idTipo')[0]['tipoVerificacion']);
-        $columnas = (int)$request->columnas;
+        $columnas = (int)$request->columnas; 
+        // dd($request->get('Sedes')); 
+    
 
 
 
         try {
-            for ($ii=0; $ii < $columnas ; $ii++) { 
-                    $fila = $ii + 1;
+            for ($ii=1; $ii <= $columnas ; $ii++) { 
+                // $fila = $ii + 1;
+                    // $modelo = local::create(['nombreEstablecimiento' => $request->get('Sedes')['select'.$fila]]);
                     for ($i=0; $i  < $cantidadProducto ; $i++) { 
+                        $local = $this->createLocal($request->get('Sedes')['select'.$ii]);
                         $modelo = new vaciadocba;
-                        $modelo->numeroLocal = $request->get('Mercados')['mercado'.$fila];
+                        $modelo->numeroLocal = $request->get('Mercados')['mercado'.$ii];
                         // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
                         $modelo->idLugarVisita = $request->get('Sedes')['mLugar']; 
                         $modelo->created_at = $TIMESTAMP;
                         $modelo->idPlantilla = $request->idP;
                         $modelo->idVerificador = $request->Usuarios;
                         $modelo->tipoVerificacion = $request->get('idTipo')[0]['tipoVerificacion'] ;
-                        if($request->get('Sedes')['select'.$fila] == 'Seleccione una Opción'){
+                        if($request->get('Sedes')['select'.$ii] == 'Seleccione una Opción'){
                            $modelo->idEstablecimientoVisita = 0;
                         }else{
-                            $modelo->idEstablecimientoVisita = $request->get('Sedes')['select'.$fila];
+                            // $modelo->idEstablecimientoVisita = $request->get('Sedes')['select'.$fila];
+                            $modelo->idEstablecimientoVisita = $local;
                         }
 
                         $modelo->idProducto = $request->get('Data')[$i]['producto'];
                         $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
-                        $modelo->precioProducto = $request->get('Data')[$i]['valor'.$fila];
+                        $modelo->precioProducto = $request->get('Data')[$i]['valor'.$ii];
                         $modelo->estado = 'A';
-                        $modelo->save();     
+                        $modelo->save();
+                        // if($modelo->save()){
+                        //     $respuesta = 'ingresado';
+                        //     return response()->json($respuesta, 200);
+                        // }    
                     }
             }
             $respuesta = 'ingresado';
             // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);
+            // return response()->json(true, 200);
              
         }
         
@@ -749,7 +760,7 @@ class plantillasController extends Controller
                                                     ->where('diaco_asignarsedecba.id_Asignacion','=',$id)
                                                     ->get();
             
-            $Nsede = Str::substr($sede[0]->sede,0,2);
+            $Nsede = Str::substr($sede[0]->sede,0,2); 
             $Ntipo = Str::substr($sede[0]->tipo,0,2);
             $date = Carbon::now('America/Guatemala');
             $date->toDateTimeString();
@@ -760,6 +771,36 @@ class plantillasController extends Controller
             // return response()->json($correlativo, 200);
     }
 
+    public function createLocal($nombre){
+        
+        $id="";
+        $validar = $this->VerificarItem($nombre,'local','nombreEstablecimiento');
+        if($validar === 0){
+            // return response()->json(false, 200);
+            $id = local::select('idEstablecimiento as code')->where('nombreEstablecimiento','=',$nombre)->get();
+            // print $id[0]['code'];
+            return $id[0]['code'];
+            
+        }else{
+            $data = new local;
+            $data->nombreEstablecimiento = $nombre;
+            $data->status = 'A';
+            $data->save();
+            $id = $data->id; 
+            return $id;
+            
+        }
+    }
+
+    public function VerificarItem($nombre, $tabla,$campo){
+        if ($tabla === 'local') {
+            if (local::where($campo, '=', $nombre)->where('status','=','A')->exists()){
+                return 0; 
+            }else{
+                return 1;
+            }
+        }
+    }
 
 
     // public function getCorrelativo($id){
