@@ -344,6 +344,42 @@ export default {
                     ])
                 });
             });
+        }else{
+          const config = { headers: {'Content-Type': 'application/json'} };
+            const h = this.$createElement;
+            var url = "/updatePlantillaById"; 
+            axios
+            .put(url, {
+                id: this.form.name,
+                producto: this.form.producto,
+                medida: this.form.medida,
+            },config
+            )
+            .then(response => {   
+              
+                const status = JSON.parse(response.status);
+                if (status == "200") {    
+                this.$message({
+                    message: h("p", null, [
+                    h("i", { style: "color: teal" }, "Datos Actualizados!")
+                    ]),
+                    type: 'success'
+                });
+                this.DataProductos();
+                this.dialogFormVisible = false;
+                this.form.name= "";
+                // this.form.address ="";
+                this.form.producto = "";
+                this.form.medida = "";
+                }
+            })
+            .catch(error => {
+                this.$message.error({
+                    message: h("p", null, [
+                    h("i", { style: "color: red" }, 'Error, servidor no encontrado')
+                    ])
+                });
+            });
         }
     },
      getAllProduct: function() {
