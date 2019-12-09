@@ -188,7 +188,7 @@
             
            
     </el-form>
-    
+     <!-- <el-button  class="my-5 " type="success" id="enviar" round @click="terminar" v-loading.fullscreen.lock="fullscreenTerminar">Guardar</el-button> -->
   </div>
 </template>
 
@@ -381,13 +381,17 @@ export default {
   },
   mounted() {
     
-    this.getTipo();
+    this.getTipo(); 
     this.getPropano();
     // console.log(this.usuario);
     this.getSMercado();
     this.getColumnas();
 //     console.log(this.categoria.length);
-    this.cantitdadPorcentaje = (100 /this.categoria.length);
+    this.cantitdadPorcentaje =  parseInt((100 /this.categoria.length),10);
+    if(this.categoria.length > 10 ){
+          this.cantitdadPorcentaje +=1;
+    }
+//     this.cantitdadPorcentaje =  (100 /this.categoria.length);
 //     console.log(this.cantitdadPorcentaje);
   },
   methods: {
