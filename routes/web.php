@@ -34,20 +34,27 @@
 /----------------------------------------------------------------------------
 /
 */
-Route::get('/', function () {
-    if (Auth::check()) {
-        // The user is logged in...
-        return redirect()->intended('/home');
+
+
+// Route::middleware('auth:api')->get('/', function () {
+//     if (Auth::check()) {
+//         return redirect()->intended('/home');
+//     }
+// });
+
+// Route::get('/', function () {
+//     if (Auth::check()) {
+//         return redirect()->intended('/home');
         
-    }else{
-        return view('auth.login'); 
-    }
-});
+//     }else{
+//         return view('auth.login'); 
+//     }
+// });
 
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/home', 'menu@GetSelectMedida')->name('home');
+Route::get('/', 'menu@GetSelectMedida');
+Route::get('/home', 'menu@GetSelectMedida')->name('home'); 
 // Route::get('/','menu@GetSelectMedida'); 
 Route::get('Productos','menu@GetTabla');  
 Route::get('addProducto','menu@addProductos');
