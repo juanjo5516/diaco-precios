@@ -41,7 +41,7 @@
               Vaciar
             </el-button>
           </el-link>
-          <el-link :underline=false v-bind:href="'/Printer/'+scope.row.id+'/'+scope.row.correlativo" :id=scope.row.id_Asignacion>
+          <el-link :underline=false target="_blank" v-bind:href="'/Printer/'+scope.row.id+'/'+scope.row.correlativo" :id=scope.row.id_Asignacion>
           <!-- <el-link :underline=false @click="PrinterData(scope.row.id,scope.row.correlativo)" :id=scope.row.id_Asignacion> -->
             <el-button
               size="small"

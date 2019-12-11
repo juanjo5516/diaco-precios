@@ -7,7 +7,7 @@
     <title>pdf</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
-        @page { margin: 50px 6px 50px 5px; }
+        /* @page { margin: 50px 6px 200px 5px; } */
         
         /* html{
            font-family: verdana !important;
@@ -35,7 +35,8 @@
             width: 100%;
             border-spacing: 0;
             border-collapse: collapse;
-            border: 1px solid #ccc;
+            border: none;
+            border-top: none !important;
             margin-bottom: none !important;
         }
          .card {
@@ -60,6 +61,9 @@
             -ms-flex: 1 1 auto;
             flex: 1 1 auto;
             padding: 1.25rem;
+            }
+            .border  tr, .border th, .border td{
+                border: 1px solid #000 !important;
             }
         
         /*    .card-header {
@@ -95,8 +99,8 @@
                 
             }
             .tableData td p{
-                width: 250;
-                font-size: 12px;
+                width: 200;
+                font-size: 14px;
                 text-align: center;
             }
         /* .border th {
@@ -111,8 +115,8 @@
     </style>
 </head>
 <body>
-    <div class="A4">
-    <table class="table tableData" witdh="90%">
+    <div >
+    <table class=" tableData">
         <tr>
             <td><img src="img/Ndiaco.jpg" alt="diaco"  ></td>
             {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco"  ></td> --}}
@@ -126,7 +130,7 @@
             {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco" ></td> --}}
         </tr>
     </table>
-                <table class="table" >
+                <table class="table border" >
                     <tr >
                     <td colspan="7">
                         Fecha: <span>{{ $fecha }}</span>
@@ -156,7 +160,7 @@
                                     @endforeach
             </table>               
             @foreach ($categoria as $dataCategoria)
-            <table class="table my-3 mx-3  table-bordered descripcion">
+            <table class="table my-3  table-bordered descripcion border" >
                 <thead>
                     <tr >
                         <th >No.</th>
@@ -176,52 +180,50 @@
             </table>
             <div class="card">
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table border table-sm">
                         <tr>
                                 <td>
                                     {{ $dataCategoria->categoria }} 
                                 </td>
                             </tr>
                         </table>
-                        <table class="table table-bordered descripcion" >
+                        <table class="table table-bordered descripcion border table-sm" >
                             <thead>
                                 <tr>
                                     <th>
-                                                    Producto
-                                                </th>
-                                                <th>
-                                                    Medida
-                                                </th>
-                                            @for ($i = 1; $i <= $Ncolumna; $i++)
-                                                    <th > Visita {{ $i }} </th>
-                                            @endfor
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($coleccion as $item)
-                                            @if ($item->categoria == $dataCategoria->categoria)
-                                            <tr >
+                                         Producto
+                                    </th>
+                                    <th>
+                                        Medida
+                                    </th>
+                                        @for ($i = 1; $i <= $Ncolumna; $i++)
+                                                <th > Visita {{ $i }} </th>
+                                        @endfor
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($coleccion as $item)
+                                    @if ($item->categoria == $dataCategoria->categoria)
+                                            <tr class="my-1">
                                                 <td >
                                                     {{ $item->produto }}
                                                 </td>
                                                 <td >
                                                     {{ $item->medida }}
-                                                    </td>
-                                                @for ($i = 1; $i <= $Ncolumna; $i++)
-                                                    
+                                                </td>
+                                                @for ($i = 1; $i <= $Ncolumna; $i++)    
                                                     <td >
                                                         &nbsp;
                                                     </td>
                                                 @endfor
                                             </tr> 
-                                            @endif
-                                            @endforeach
-                                            
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            @endforeach
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
         </div>
         </body>
         </html>

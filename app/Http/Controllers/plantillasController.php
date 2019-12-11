@@ -335,7 +335,7 @@ class plantillasController extends Controller
             //     'coleccion' => $query,
             //      'categoria' => $categorias 
             // ]);
-            $pdf = \PDF::loadView('Ediciones.printer_data',[
+            $pdf = \PDF::loadView('Ediciones.printer_data',[ 
                 'id' => $id,
                 'fecha' => $fecha,
                 'usuario' => $usuario,
@@ -344,7 +344,9 @@ class plantillasController extends Controller
                 'Ncolumna' => $columna,
                 'correlativo' => $correlativo
             ]);
-            return $pdf->download('Ediciones.pdf');
+            // $pdf->setPaper('Legal', 'portrait');
+            return $pdf->stream('Ediciones.pdf');
+            // return $pdf->save('Ediciones.pdf');
             // return $pdf->stream();
            // DB::commit(); 
         } catch (\Exceptio $e) {
