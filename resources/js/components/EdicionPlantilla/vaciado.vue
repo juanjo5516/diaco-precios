@@ -18,104 +18,24 @@
                               {{ item.sede}}
                         </el-col>
                         <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
-                              <div> <b> Verificador: </b> </div> 
+                              <div> <b> Verificador: </b> </div>
                               {{ item.nombre }}
                         </el-col>
                         <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
-                              <div> <b> Lugar Visita: </b> </div> 
-                              <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  > 
+                              <div> <b> Lugar Visita: </b> </div>
+                              <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
                                           <el-option
                                                 v-for="(sede,index) in mercados"
                                                 v-bind:key=" index "
-                                                :label=" sede.nombre  " 
+                                                :label=" sede.nombre  "
                                                 :value=" sede.idMercado "
                                           ></el-option>
                               </el-select>
                         </el-col>
                   </el-row>
-                  <!-- <table class="table">
-                        <tbody v-for="(index , ex1) in usuario" :key="ex1">
-                              <tr >
-                                    <td  class="titulo">Sede:</td>
-                                    <td  colspan="8">{{ index.sede }}</td> -->
-                              <!-- <span  v-for="(tipos, tp) of IdTipo" :key="tp" > -->
-                                    <!-- <span v-if="tipos.tipoVerificacion === '1'"> -->
-                                    <!-- <td  class="titulo">Visista: <strong>*</strong></td> 
-                                    <td  class="selectMercado">
-                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']"  filterable  >
-                                          <el-option
-                                                v-for="(sede,index) in mercados"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  " 
-                                                :value=" sede.idMercado "
-                                          ></el-option>
-                                          </el-select>
-                                    </td> -->
-                                    <!-- </span> -->
-                                    <!-- <span v-if="tipos.tipoVerificacion === '2'">
-                                    <td  class="titulo">Super Mercado: <strong>*</strong></td> 
-                                    <td v-if="tipos.tipoVerificacion === '2'" class="selectMercado">
-                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                                          <el-option
-                                                v-for="(sede,index) in mercados"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  " 
-                                                :value=" sede.idMercado "
-                                          ></el-option>
-                                          </el-select>
-                                    </td>
-                                    </span> -->
-                                    <!-- <span v-if="tipos.tipoVerificacion === '3'">
-                                    <td  class="titulo">Tienda de Barrio: <strong>*</strong></td> 
-                                    <td v-if="tipos.tipoVerificacion === '3'" class="selectMercado">
-                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                                          <el-option
-                                                v-for="(sede,index) in mercados"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  " 
-                                                :value=" sede.idMercado "
-                                          ></el-option>
-                                          </el-select>
-                                    </td>
-                                    </span> -->
-                                    <!-- <span v-if="tipos.tipoVerificacion === '4'">
-                                    <td  class="titulo">Canasta Básica Alimentaria: <strong>*</strong></td> 
-                                    <td v-if="tipos.tipoVerificacion === '4'" class="selectMercado">
-                                          <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                                          <el-option
-                                                v-for="(sede,index) in mercados"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  " 
-                                                :value=" sede.idMercado "
-                                          ></el-option>
-                                          </el-select>
-                                    </td>
-                                    </span> -->
-                                    <!-- <span v-if="tipos.tipoVerificacion === '5'">
-                                    <td class="titulo">Gas Propano: <strong>*</strong></td> 
-                                    <td v-if="tipos.tipoVerificacion === '5'" class="selectMercado">
-                                    <el-select :name="'LugarMercado'" v-model="sedes['mLugar']" filterable>
-                                          <el-option
-                                          v-for="(sede,index) in mercados"
-                                          v-bind:key=" index "
-                                          :label=" sede.nombre  " 
-                                          :value=" sede.idMercado "
-                                          ></el-option>
-                                    </el-select>
-                                    </td>
-                                    </span> -->
-                              <!-- </span>     -->
-                              <!-- </tr>
-                              <tr>
-                                    <td class="titulo">Verificador:</td>
-                                    <td colspan="11">{{ index.nombre }}</td>
-                                    <input type="hidden"  :value="index.id_usuario"  id="idVerificador" name="idVerificador" >
-                              </tr>
-                        </tbody>
-                  </table> -->
             </div>
       </el-card>
-    
+
       <el-card class="box-card" >
             <div slot="header" class="clearfix">
                   <span>Categorías </span>
@@ -136,22 +56,22 @@
             </div>
              <el-dialog title="Vaciado de Información" :visible.sync="dialogFormVisible" width="60%" top="1vh">
                   <el-form :model="form">
-                        
+
                         <el-table :data="nColumna" style="width: 100%" border size="small">
                               <el-table-column  label="No." type="index"></el-table-column>
                               <el-table-column  label="No. Local"  width="170">
-                                    <template slot-scope="scope">    
+                                    <template slot-scope="scope">
                                           <el-input-number size="small" v-model="inputMercados['mercado' + scope.row.index ]"  :min="0" :max="1000"></el-input-number>
                                     </template>
                               </el-table-column>
-                              <el-table-column  label="Establecimiento (campo obligatorio)"> 
-                                    <template slot-scope="scope">      
+                              <el-table-column  label="Establecimiento (campo obligatorio)">
+                                    <template slot-scope="scope">
                                           <el-input v-model="sedes['select' + scope.row.index ]" placeholder="Ingrese Establecimiento"></el-input>
                                           <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
                                                 <el-option
                                                 v-for="(sede,index) in establecimientos"
                                                 v-bind:key=" index "
-                                                :label=" sede.nombre  " 
+                                                :label=" sede.nombre  "
                                                 :value=" sede.idEstablecimiento "
                                                 ></el-option>
                                           </el-select> -->
@@ -174,8 +94,8 @@
                                                 <el-input-number  v-model="index['valor' + n.index ]"  size="mini" :precision="2" :min="0" :max="1000"></el-input-number>
                                           </td>
                                     </tr>
-                              </tbody> 
-                        </table> 
+                              </tbody>
+                        </table>
                   </el-form>
                   <span slot="footer" class="dialog-footer">
                   <el-button @click="dialogFormVisible = false">Cancelar</el-button>
@@ -185,10 +105,9 @@
       </el-card>
             <el-progress :text-inside="true" :stroke-width="24" :percentage="porcentaje" status="success"></el-progress>
             <el-button  class="my-5 oculto" type="success" id="enviar" round @click="terminar" v-loading.fullscreen.lock="fullscreenTerminar">Guardar</el-button>
-            
-           
+
+
     </el-form>
-     <!-- <el-button  class="my-5 " type="success" id="enviar" round @click="terminar" v-loading.fullscreen.lock="fullscreenTerminar">Guardar</el-button> -->
   </div>
 </template>
 
@@ -289,7 +208,7 @@
 export default {
   name: "vaciado",
   props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos", "idplantilla", "mercados" , "correlativo"],
-  
+
   data() {
     return {
       Fecha: "fecha",
@@ -311,7 +230,7 @@ export default {
       n:"",
       tipo:'',
       IdTipo:{},
-     
+
 
       formInline: {
         idplantilla:'',
@@ -320,11 +239,11 @@ export default {
         sede2:'',
         sede3:'',
         categoria:{},
-        
+
         Productos:{},
         coleccion:{}
-        
-        
+
+
       },
       Productos:[],
       dataProductos:[],
@@ -350,13 +269,7 @@ export default {
       SMercado: [],
       fullscreenLoading: false,
       fullscreenTerminar: false,
-      // nColumna:0,
       nColumna:[],
-      // usuario:{
-      //   sede:'',
-      //   nombre:'',
-      //   id_usuario:''
-      // }
       plantillasall:[],
       dialogFormVisible: false,
       form: {
@@ -380,19 +293,14 @@ export default {
     };
   },
   mounted() {
-    
-    this.getTipo(); 
+    this.getTipo();
     this.getPropano();
-    // console.log(this.usuario);
     this.getSMercado();
     this.getColumnas();
-//     console.log(this.categoria.length);
     this.cantitdadPorcentaje =  parseInt((100 /this.categoria.length),10);
     if(this.categoria.length > 10 ){
           this.cantitdadPorcentaje +=1;
     }
-//     this.cantitdadPorcentaje =  (100 /this.categoria.length);
-//     console.log(this.cantitdadPorcentaje);
   },
   methods: {
       getVisitas: function() {
@@ -405,7 +313,6 @@ export default {
       showDialogEdit(producto,button){
             this.dialogFormVisible = true;
             this.categoriaFiltro = producto;
-            // console.log(this.categoriaFiltro);
             this.DataProductos();
             this.button = button;
             // this.form.producto = producto;
@@ -415,7 +322,7 @@ export default {
     DataProductos: function(){
           this.Productos = [];
           for (let i = 0; i <= this.coleccion.length-1; i++) {
-                if(this.categoriaFiltro === this.coleccion[i].categoria){ 
+                if(this.categoriaFiltro === this.coleccion[i].categoria){
                       this.Productos.push({
                             categoria: this.coleccion[i].categoria,
                             created_at: this.coleccion[i].created_at,
@@ -424,11 +331,11 @@ export default {
                             produto: this.coleccion[i].produto,
                             medidaId: this.coleccion[i].idmedida,
                       })
-                     
+
                   }
             }
-            
-    },  
+
+    },
       getTipo: function(){
         const tipos = this.idplantilla;
           axios.get('/visitas/'+tipos)
@@ -472,13 +379,13 @@ export default {
               axios.get('/getPropano')
                 .then(response => {
                   this.Propano = response.data;
-                 
+
                 })
                 .catch(function (error) {
                   console.log(error);
                 });
-                
-      },    
+
+      },
     onSubmit() {
           const h = this.$createElement;
       if(this.checkValidation(this.sedes) == true){
@@ -492,19 +399,20 @@ export default {
                           })
                     }
               }
-              var url = '/mercadoCBA';
+              var url = '/mercadoCBA'; 
               const bandeja = '/Bandeja';
-  
-            
+
+
               axios.post(url, {
                     idP: this.idplantilla,
                     Mercados: this.inputMercados,
                     Sedes:this.sedes,
-                    Usuarios: this.usuario[0].id_usuario, 
+                    Usuarios: this.usuario[0].id_usuario,
                     Data: this.Productos,
                     idSede:this.usuario[0].id,
                     idTipo: this.IdTipo,
-                    columnas: this.cantidadColumna
+                    columnas: this.cantidadColumna,
+                    Ncorrelativo: this.correlativo
               }).then(response =>{
                     const status = JSON.parse(response.status);
                     if (status == '200') {
@@ -513,9 +421,9 @@ export default {
                           document.getElementById(this.button).disabled = true;
                           this.porcentaje = this.porcentaje + this.cantitdadPorcentaje;
                           this.fullscreenLoading = false;
-                          this.checkPorcentaje(this.porcentaje,this.button); 
+                          this.checkPorcentaje(this.porcentaje,this.button);
                     }
-              }).catch(error => { 
+              }).catch(error => {
                     this.fullscreenLoading = false;
                     console.log(error.message)
               });
@@ -528,7 +436,7 @@ export default {
                 });
       }
 
-          
+
       },
       checkPorcentaje(porcentaje,idBotton) {
             document.getElementById(idBotton).style.display= 'none';
@@ -539,7 +447,7 @@ export default {
             if(porcentaje === 100){
                   env.classList.remove('oculto');
             }
-           
+
       },
       terminar() {
             console.log(this.nColumna);
@@ -560,7 +468,7 @@ export default {
                         }
                   }
             ).catch(error => {
-                
+
             })
       },
       checkValidation(selecciones){

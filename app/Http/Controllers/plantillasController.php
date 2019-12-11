@@ -582,6 +582,7 @@ class plantillasController extends Controller
                         $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
                         $modelo->precioProducto = $request->get('Data')[$i]['valor'.$ii];
                         $modelo->estado = 'A';
+                        $modelo->Ncorrelativo = $request->get('Ncorrelativo');
                         $modelo->save();
                         // if($modelo->save()){
                         //     $respuesta = 'ingresado';
