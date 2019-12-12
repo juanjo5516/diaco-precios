@@ -46,7 +46,7 @@
             <el-button
               size="small"
               type="warning"
-              icon="el-icon-printer"
+              icon="el-icon-printer" 
               plain
               >Imprimir 
             </el-button>

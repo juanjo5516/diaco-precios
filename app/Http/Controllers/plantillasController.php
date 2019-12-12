@@ -40,6 +40,7 @@ class plantillasController extends Controller
         return $user;
     }
 
+   
     public function Asede(){
         
         $Plantillas = DB::table('diaco_name_template_cba')->select('id','NombreTemplate')->get();
@@ -545,6 +546,20 @@ class plantillasController extends Controller
             ]
         );
     }
+ 
+    public function exportExcelView($id,$correlativo,$user){
+            $categoria = $this->getCategoria($id);
+            $plantilla = $this->getPlantillas($id); 
+            return view('exportacion.datos',[
+                  'categorias' => $categoria,
+                  'producto' => $plantilla,
+                  'correlativo' => $correlativo,
+                  'id' => $id,
+                  'user' => $user
+            ]);
+    }
+
+
 
     public function vaciado(Request $request){
         
@@ -695,27 +710,56 @@ class plantillasController extends Controller
             ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
             ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
             ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
-            ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
+            ->join('diaco_usuario as usuarioss','diaco_asignarsedecba.idUsuario','=','diaco_usuario.id_usuario')
+            ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
+            ->selectraw("
+                                distinct 
+                                diaco_name_template_cba.id,
+                                diaco_name_template_cba.NombreTemplate,
+                                diaco_sede.nombre_sede,
+                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                                diaco_usuario.nombre,
+                                diaco_asignarsedecba.correlativo"
+                            )
+            ->where('diaco_asignarsedecba.estatus','=','0')
+            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
+            ->get();
+                            // ->selectraw("
+                            //                     distinct diaco_name_template_cba.id,
+                            //                     diaco_name_template_cba.NombreTemplate,
+                            //                     diaco_sede.nombre_sede,
+                            //                     (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                            //                     diaco_plantillascba.tipoVerificacion as Tipo,
+                            //                     diaco_vaciadocba.created_at,
+                            //                     diaco_usuario.nombre"
+                            //                 )
+            // ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
             // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-            ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
-            ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
             // ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
             // ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
-            ->where('diaco_asignarsedecba.estatus','=','0')
-            ->get();
         }else{
 
             $buson = DB::table('diaco_asignarsedecba')
             ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
             ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
             ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+            ->join('diaco_usuario as usuarioss','diaco_asignarsedecba.idUsuario','=','diaco_usuario.id_usuario')
             ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
             // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-            ->join('diaco_vaciadocba','diaco_vaciadocba.idPlantilla','=','diaco_asignarsedecba.idPlantilla')
-            ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
+            ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
+            ->selectraw("
+                                distinct 
+                                diaco_name_template_cba.id,
+                                diaco_name_template_cba.NombreTemplate,
+                                diaco_sede.nombre_sede,
+                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                                diaco_usuario.nombre,
+                                diaco_asignarsedecba.correlativo"
+                            )
+            // ->selectraw("distinct diaco_name_template_cba.id,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,diaco_vaciadocba.created_at")
             ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
             ->where('diaco_usuario.id_usuario','=',$usuario[0]->id_usuario)
-            ->where('diaco_asignarsedecba.estatus','=','0')
+            // ->where('diaco_asignarsedecba.estatus','=','0')
             ->get();
         }
 

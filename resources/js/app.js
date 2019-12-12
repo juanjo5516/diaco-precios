@@ -53,6 +53,7 @@ Vue.component('sidebar-componente', require('./components/sidebar/sidebar.vue').
 Vue.component('visitas-componente', require('./components/catalogos/typeVisit.vue').default)
 Vue.component('editarplantilla-componente', require('./components/EdicionPlantilla/editarPlantilla.vue').default)
 Vue.component('usuario-component', require('./components/EdicionPlantilla/UsuarioSistema.vue').default);
+Vue.component('export-component', require('./components/exportacion/export.vue').default);
 const app = new Vue({
     el: '#main'
 });

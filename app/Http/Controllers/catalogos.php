@@ -12,6 +12,7 @@ use App\Models\local;
 use App\Models\UsuarioSistema;
 use App\Models\smarket;
 use App\responseData;
+use App\vaciadocba;
 use App\TipoVisitaPlantilla;
 use App\EdicionPlantilla;
 use Illuminate\Support\Facades\DB;
@@ -362,5 +363,42 @@ class catalogos extends Controller
     //     $updateById = UsuarioSistema::where('code', $request->id)->update(['name' => $request->name, 'address' => $request->address]);
     //     return response()->json($updateById, 200);
     // }
-    
+    public function getExportData($id,$user,$correlativo){
+        // dd($id);
+            $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                              ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                              ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
+                              ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida')
+                              ->where('diaco_vaciadocba.idPlantilla','=',$id)
+                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                              ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
+                              ->get();
+            return response()->json($data, 200);
+    }
+
+    public function getCategoriaExport($id,$user,$correlativo){
+            $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                              ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                              ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
+                              ->selectraw('distinct diaco_tipoverificacioncba.nombreVerificacion as categoria')
+                              ->where('diaco_vaciadocba.idPlantilla','=',$id)
+                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                              ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
+                              ->get();
+            return response()->json($data, 200);
+    }
+
+    public function getExportDataPrice($id,$user,$correlativo){
+        // dd($id);
+            $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                              ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                              ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
+                              ->selectraw('diaco_productocba.nombre as producto,diaco_medida.nombre as medida, diaco_vaciadocba.precioProducto as price')
+                              ->where('diaco_vaciadocba.idPlantilla','=',$id)
+                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                              ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
+                              ->get();
+            return response()->json($data, 200);
+    }
+
 }

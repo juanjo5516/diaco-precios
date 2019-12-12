@@ -47,7 +47,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getinbox','plantillasController@getInbox');
         Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter');
         // Route::post('Printer','plantillasController@showprinter');
-        Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado'); 
+        Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');  
         Route::post('mercadoCBA','plantillasController@vaciado');
         Route::get('clonar','plantillasController@clon');
         Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
@@ -161,6 +161,15 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::put('deleteByIdUserSystem','catalogos@deleteByIdUserSystem');
         Route::put('updateByIdUserSystem','catalogos@updateByIdUserSystem');
         // *******************
+
+        // Export Excel
+        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');
+        Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
+        Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
+        Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
+        // Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');  
+        // Route::post('export/{id}/{user}/{correlativo}','plantillasController@exportExcel');  
+        //***************
 
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
 
