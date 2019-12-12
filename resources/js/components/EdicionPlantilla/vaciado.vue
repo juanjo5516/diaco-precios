@@ -74,7 +74,7 @@
                                                 :label=" sede.nombre  "
                                                 :value=" sede.idEstablecimiento "
                                                 ></el-option>
-                                          </el-select> -->
+                                          </el-select> --> 
                                     </template>
                               </el-table-column>
                         </el-table>
@@ -206,7 +206,7 @@
 
 <script>
 export default {
-  name: "vaciado",
+  name: "vaciado", 
   props: ["fecha", "usuario", "coleccion", "categoria", "establecimientos", "idplantilla", "mercados" , "correlativo"],
 
   data() {
