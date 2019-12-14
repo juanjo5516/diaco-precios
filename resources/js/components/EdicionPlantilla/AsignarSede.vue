@@ -117,7 +117,7 @@
 
         plantillasall: [],
         select1: 'Seleccione una Opción',
-        select2: 'Seleccione una Opción',
+        select2: 'Seleccione una Opción', 
         pagesize: 10,
         total: 0,
         currentPage: 1,
@@ -140,7 +140,7 @@
       onSubmit: function(){
         // console.log(this.select2);
         this.load = true;
-        const h = this.$createElement;
+        const h = this.$createElement; 
         var url = '/aLista';
         axios.post(url, {
             SPlantilla: this.select1,

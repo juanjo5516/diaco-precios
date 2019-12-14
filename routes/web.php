@@ -30,7 +30,7 @@ Route::get('GetTablaEstablecimiento','menu@GetTablaEstablecimiento');
 Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 /*Graficos */
-Route::get('bar-chart', 'ChartController@ChartProductos'); 
+Route::get('bar-chart', 'ChartController@ChartProductos');  
 
 /* Rutas de Editor de Plantillas */
 
@@ -162,14 +162,23 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::put('updateByIdUserSystem','catalogos@updateByIdUserSystem');
         // *******************
 
-        // Export Excel
+        // Export Excel 
         Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');
         Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
-        // Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');  
-        // Route::post('export/{id}/{user}/{correlativo}','plantillasController@exportExcel');  
         //***************
+
+        // Asignacion Sede Usuario
+        Route::get('asignacionUsuario','menu@viewUsuariosSistemaById'); 
+        Route::post('AUsuario', 'plantillasController@storeListaUsuario');
+        //******************************
+
+        // Preview
+        Route::get('preview/{id}/{user}/{correlativo}','plantillasController@preview');
+        //**********************
+
+
 
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
 

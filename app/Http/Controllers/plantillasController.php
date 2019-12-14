@@ -214,7 +214,7 @@ class plantillasController extends Controller
                                 ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                                 ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,diaco_asignarsedecba.filtro")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
@@ -226,7 +226,7 @@ class plantillasController extends Controller
                                 ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                                 ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo")
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo ,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,diaco_asignarsedecba.filtro")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
@@ -239,15 +239,9 @@ class plantillasController extends Controller
         return response()->json($buson);
     }
     public function storeLista(Request $request){
-
-
-        // dd($request);
-
         $cantidadObjeto = sizeof($request->SSede);
         for($i = 0; $i < $cantidadObjeto; $i++){
-
-            $UserCba = $this->getUserCba($request->SSede[$i]);
-
+            $UserCba = $this->getUserCba($request->SSede[$i]); 
             $cantidadUser = sizeof($UserCba);
             if($cantidadUser > 0){
                 for($userCount = 0; $userCount < $cantidadUser; $userCount++ ){
@@ -256,6 +250,7 @@ class plantillasController extends Controller
                     $Lista->idSede  = $request->SSede[$i];
                     $Lista->created_at  = $request->created_at_new;
                     $Lista->estatus  = 1;
+                    $Lista->filtro = 1;
                     $Lista->idUsuario = $UserCba[$userCount]->code_user;
                     $Lista->save();
                     
@@ -266,18 +261,23 @@ class plantillasController extends Controller
                 }
             }
         }
-        
-            // print($UserCba[0]->code_user);
-
-// $Lista->idUsuario = Auth()->user()->id_usuario;
-        
-
-        // $Lista->correlativo = $Ncorrelativo;
-        // $Lista->correlativo = "125";
-        // $Lista->save();
-        
         return 1;
-
+    }
+    public function storeListaUsuario(Request $request){
+        $Lista = new ListarAsignacion;
+        $Lista->idPlantilla = $request->SPlantilla;
+        $Lista->idSede  = $request->SSede;
+        $Lista->created_at  = $request->created_at_new;
+        $Lista->estatus  = 1;
+        $Lista->filtro = 1;
+        $Lista->idUsuario = $request->Usuario;
+        $Lista->save();
+        
+        $ListaId = $Lista->id;
+        $Ncorrelativo = $this->createCorrelative($ListaId);
+        ListarAsignacion::where('id_Asignacion','=',$ListaId)
+                                    ->update(['correlativo' => $Ncorrelativo]);
+        return 1;
     }
 
     public function getUserCba($sede){
@@ -550,7 +550,7 @@ class plantillasController extends Controller
     public function exportExcelView($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
             $plantilla = $this->getPlantillas($id); 
-            return view('exportacion.datos',[
+            return view('exportacion.datos',[ 
                   'categorias' => $categoria,
                   'producto' => $plantilla,
                   'correlativo' => $correlativo,
@@ -558,8 +558,17 @@ class plantillasController extends Controller
                   'user' => $user
             ]);
     }
-
-
+    public function preview($id,$correlativo,$user){
+            $categoria = $this->getCategoria($id);
+            $plantilla = $this->getPlantillas($id); 
+            return view('exportacion.datospreview',[
+                  'categorias' => $categoria,
+                  'producto' => $plantilla,
+                  'correlativo' => $correlativo,
+                  'id' => $id,
+                  'user' => $user
+            ]);
+    }
 
     public function vaciado(Request $request){
         
@@ -598,7 +607,7 @@ class plantillasController extends Controller
                         $modelo->idProducto = $request->get('Data')[$i]['producto'];
                         $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
                         $modelo->precioProducto = $request->get('Data')[$i]['valor'.$ii];
-                        $modelo->estado = 'A';
+                        $modelo->estado = 'I';
                         $modelo->Ncorrelativo = $request->get('Ncorrelativo');
                         $modelo->save();
                         // if($modelo->save()){
@@ -624,7 +633,8 @@ class plantillasController extends Controller
         $updateById = ListarAsignacion::where('idPlantilla', $request->idP)
                                                          ->where('idSede',$request->idSede)
                                                          ->where('idUsuario',$request->Usuarios)
-                                                         ->where('correlativo',$request->correlativo)->update(['estatus'  => 0]);
+                                                         ->where('correlativo',$request->correlativo)->update(['filtro'  => 2]);
+                                                        //  ->where('correlativo',$request->correlativo)->update(['estatus'  => 0]);
         return response()->json($updateById, 200);
     }
 

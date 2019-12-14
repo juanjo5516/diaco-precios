@@ -98,6 +98,10 @@
   margin: 7% auto;
 }
 
+.navbar {
+    position: absolute !important;
+}
+
 @media (max-width: 576px) {
     .login-box,
     .register-box {

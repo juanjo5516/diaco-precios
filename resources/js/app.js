@@ -52,8 +52,11 @@ Vue.component('pdf-componente', require('./components/pdf/generateData.vue').def
 Vue.component('sidebar-componente', require('./components/sidebar/sidebar.vue').default)
 Vue.component('visitas-componente', require('./components/catalogos/typeVisit.vue').default)
 Vue.component('editarplantilla-componente', require('./components/EdicionPlantilla/editarPlantilla.vue').default)
+
 Vue.component('usuario-component', require('./components/EdicionPlantilla/UsuarioSistema.vue').default);
 Vue.component('export-component', require('./components/exportacion/export.vue').default);
+Vue.component('preview-component', require('./components/exportacion/preview.vue').default);
+Vue.component('ausuario-component', require('./components/EdicionPlantilla/ausuario.vue').default);
 const app = new Vue({
     el: '#main'
 });
