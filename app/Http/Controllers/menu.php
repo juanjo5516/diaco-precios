@@ -204,7 +204,7 @@ class menu extends Controller
         
     }
 
-    public function addDetalleMercados(Request $request){
+    public function addDetalleMercados(Request $request){ 
         DB::beginTransaction();
 
         if($request->nombreM != ""){
@@ -285,6 +285,20 @@ class menu extends Controller
         [
             'Plantillas' => $Usuarios,
             'Sedes' =>$sede
+        ]);
+    }
+    
+    public function viewUsuariosSistemaById(){
+        $user = Auth::user()->id_usuario;
+        $Usuarios = DB::table('diaco_usuario')->select('id_usuario as code','nombre as name','id_sede_diaco as sede')->where('id_usuario','=',$user)->get();
+        $Plantillas = DB::table('diaco_name_template_cba')->select('id as code','NombreTemplate as name')->get();
+
+        $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
+        
+        return view('menu.addUsuarioAsignacion',
+        [
+            'usuarios' => $Usuarios,
+            'plantillas' =>$Plantillas 
         ]);
     }
 
