@@ -178,6 +178,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('preview/{id}/{user}/{correlativo}','plantillasController@preview');
         Route::post('updatePrice','catalogos@updatePrice');
         Route::post('changeStatusPlantilla','catalogos@changeStatusPlantilla');
+        Route::get('revisarEnvio','plantillasController@previewSubmit');
+        Route::get('viewSubmit/{id}/{user}/{correlativo}','plantillasController@submitView');
         //**********************
 
 

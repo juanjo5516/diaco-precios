@@ -54,6 +54,10 @@
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#">Reporte</a>
                 <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href=/revisarEnvio>
+                            <i class="nav-icon fas fa-angle-right"></i> Revisar</a>
+                    </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" href=/Edicion>
                             <i class="nav-icon fas fa-angle-right"></i> Editor
@@ -83,6 +87,7 @@
                         <a class="nav-link" href=/asignacionUsuario>
                             <i class="nav-icon fas fa-angle-right"></i> Asignar</a>
                     </li>
+                    
                 </ul>
             </li>
     </ul>
