@@ -25,9 +25,9 @@
                 <div class="dropdown-header text-center">
                     <strong>Herramientas</strong>
                 </div>
-                <a class="dropdown-item" href="../logout">
+                <a class="dropdown-item" href="/logout">
                     <i class="fa fa-lock"></i> Cerrar Sesión</a>
-                <a class="dropdown-item" href="../changePasswordUser">
+                <a class="dropdown-item" href="/changePasswordUser">
                     <i class="fa fa-lock"></i> Cambiar Clave</a>
             </div>
         </li>
