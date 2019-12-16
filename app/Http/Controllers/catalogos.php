@@ -371,7 +371,7 @@ class catalogos extends Controller
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
                               ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida,diaco_productocba.id_producto as code')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
-                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                            //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
                               ->get();
             return response()->json($data, 200);
@@ -383,7 +383,7 @@ class catalogos extends Controller
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
                               ->selectraw('distinct diaco_tipoverificacioncba.nombreVerificacion as categoria')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
-                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                            //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
                               ->get();
             return response()->json($data, 200);
@@ -396,7 +396,7 @@ class catalogos extends Controller
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
                               ->selectraw('diaco_productocba.nombre as producto,diaco_medida.nombre as medida, CONVERT(decimal(18,2),diaco_vaciadocba.precioProducto) as price,diaco_vaciadocba.correlativo as codigo')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
-                              ->where('diaco_vaciadocba.idVerificador','=',$user)
+                            //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
                               ->get();
             return response()->json($data, 200);

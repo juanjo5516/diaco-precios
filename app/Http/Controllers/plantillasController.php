@@ -218,6 +218,7 @@ class plantillasController extends Controller
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
+                                ->where('diaco_asignarsedecba.filtro','<','3')
                                 ->get();
         }else{
              $buson = DB::table('diaco_asignarsedecba')
@@ -230,6 +231,7 @@ class plantillasController extends Controller
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
+                                ->where('diaco_asignarsedecba.filtro','<','3')
                                 ->get();
         }
         // dd($usuario);
@@ -732,6 +734,7 @@ class plantillasController extends Controller
                                 diaco_asignarsedecba.correlativo"
                             )
             ->where('diaco_asignarsedecba.estatus','=','0')
+            ->orWhere('diaco_asignarsedecba.filtro','=','3')
             ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
             ->get();
                             // ->selectraw("
