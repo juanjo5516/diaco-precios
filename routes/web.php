@@ -176,6 +176,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
         // Preview
         Route::get('preview/{id}/{user}/{correlativo}','plantillasController@preview');
+        Route::post('updatePrice','catalogos@updatePrice');
+        Route::post('changeStatusPlantilla','catalogos@changeStatusPlantilla');
         //**********************
 
 

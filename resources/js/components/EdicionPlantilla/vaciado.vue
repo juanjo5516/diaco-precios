@@ -521,7 +521,7 @@ export default {
                         Ncorrelativo: this.correlativo
                     })
                     .then(response => {
-                        const status = JSON.parse(response.status);
+                        const status = JSON.parse(response.status); 
                         if (status == "200") {
                             // window.location = bandeja;
                             this.dialogFormVisible = false;

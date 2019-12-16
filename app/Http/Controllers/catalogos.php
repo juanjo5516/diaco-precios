@@ -14,6 +14,7 @@ use App\Models\smarket;
 use App\responseData;
 use App\vaciadocba;
 use App\TipoVisitaPlantilla;
+use App\ListarAsignacion;
 use App\EdicionPlantilla;
 use Illuminate\Support\Facades\DB;
 
@@ -388,7 +389,7 @@ class catalogos extends Controller
             return response()->json($data, 200);
     }
 
-    public function getExportDataPrice($id,$user,$correlativo){
+    public function getExportDataPrice($id,$user,$correlativo){ 
         // dd($id);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -399,6 +400,25 @@ class catalogos extends Controller
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
                               ->get();
             return response()->json($data, 200);
+    }
+
+    public function updatePrice(Request $request){
+        $cantidadProducto = count($request->get('data'));
+        try {
+            for ($i=0; $i  < $cantidadProducto ; $i++) { 
+                $data = vaciadocba::where('correlativo', $request->get('data')[$i]['code'])->update(['precioProducto' => $request->get('data')[$i]['current']]);   
+            }
+            return response()->json($data, 200);    
+        }
+        catch (\Exceptio $e) {
+            DB::rollBack();
+                print "ERROR";
+        }
+    }
+
+    public function changeStatusPlantilla(Request $request){
+        $data = ListarAsignacion::where('correlativo',$request->correlativo)->update(['filtro' => 3]);
+        return response()->json($data, 200);
     }
 
 }

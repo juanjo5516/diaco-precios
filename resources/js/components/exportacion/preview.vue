@@ -67,7 +67,7 @@
                                                       <th>Medida</th>
                                                       <th
                                                             v-for="(correlativo, c) in getColumnaCount"
-                                                            v-bind:key="c">
+                                                            v-bind:key="c" style="width:16%">
                                                             
                                                             Precio
                                                       </th>
@@ -75,29 +75,20 @@
                                           </thead>
                                           <tbody>
                                                 <tr
-                                                v-for="(item, i) in Getdata"
-                                                v-bind:key="i"
-                                                v-if="(item.code == itemData)"
+                                                v-for="(item, i) in Getdata" v-bind:key="i" v-if="(item.code == itemData)"
                                                 >
-                                                <td>{{ item.producto }}</td>
-                                                <td>{{ item.medida }}</td>
-                                                <td
-                                                      v-for="(prices, p) in getPriceData"
-                                                      v-bind:key="p"
-                                                      v-if="
-                                                            item.medida == prices.medida &&
-                                                            item.producto == prices.producto
-                                                      "
-                                                      :id="prices.codigo"
-                                                >
-                                                      
-                                                            <el-input size="medium" placeholder="precio"  v-model="form.precios['precio' + prices.codigo]" :id="1"></el-input>
+                                                      <td>{{ item.producto }}</td>
+                                                      <td>{{ item.medida }}</td>
+                                                      <td v-for="(prices, p) in getPriceData" v-bind:key="p"  v-if="item.medida == prices.medida && item.producto == prices.producto">
                                                             
-                                                     
-                                                      {{ prices.price }}
-                                                </td>
-                                                
+                                                            <el-input v-for="(id,ix) in form.precios" v-bind:key="ix"  v-if="(id.id == x)" size="medium"   v-model="form.preciosP['valor_' + id.id]" :id="'inputs['  + id.id  + ']'"></el-input>
+                                                            <span v-show="false">{{ x++}}</span>
+                                                            <!-- {{ prices.price }} -->
+                                                  
+                                                      </td>
                                                 </tr>
+                                                
+                                                
                                           </tbody>
                                     </table>
 
@@ -151,7 +142,7 @@
                 </el-dialog>
             </div>
         </div>
-        <el-button class="my-5" type="success" @click="exportExcel"
+        <el-button class="my-5" type="success" @click="envio" v-loading.fullscreen.lock="fullscreenTerminar"
             >Enviar</el-button
         >
     </div>
@@ -175,25 +166,66 @@ export default {
                 producto: "",
                 medida: "",
                 seleccionMercado: [],
-                precios:[]
+                precios:[],
+                preciosP:[]
             },
             itemData:0,
             input:"",
-            inicio:0
+            inicio:0,
+            x:1,
+            pricesUpdate:[],
+            fullscreenTerminar: false,
             
         };
     },
     
     mounted() {
         this.getPreciosVaciado();
-        // console.log(this.categorias);
         this.getExportCategoria();
         this.getPrice();
         this.getColumn();
+
     },
     methods: {
         onSubmit () {
-              console.log(this.form.precios)
+            const h = this.$createElement;
+            this.pricesUpdate= [];
+            for (let index = 0; index < this.form.precios.length; index++) {
+                  this.pricesUpdate.push({
+                        code: this.form.precios[index].codePrice,
+                        current: this.form.preciosP['valor_' + index],
+                        previous:this.form.precios[index].priceValue
+                  })
+            }
+            var url = '/updatePrice';
+            // const bandeja = "/Bandeja";
+
+            axios.post(url,{
+                  data:this.pricesUpdate
+            }).then(response => {
+                  console.log(response.data)
+                  const status = JSON.parse(response.status);
+                  if(status == '200'){
+                        this.dialogFormVisible = false;
+                        this.$message({
+                              message: h("p", null, [
+                              h("i", { style: "color: teal" }, "Cambio Exitoso!")
+                              ]),
+                              type: 'success'
+                        });
+                        this.getPreciosVaciado();
+                        this.getExportCategoria();
+                        this.getPrice();
+                        this.getColumn();
+                  }
+
+            })
+
+            for (let cambio = 0; cambio < this.form.precios.length; cambio++) {
+                        this.form.preciosP['valor_' + cambio] = "";
+            }
+           
+            
         },
         getPreciosVaciado() {
             var url =
@@ -216,25 +248,29 @@ export default {
             // console.log(this.dataIndexPrice);
         },
         showDialogEdit(data) {
+              this.inicio = 0;
+              this.form.precios = [];
               this.dialogFormVisible = true;
               this.itemData = data;
-            // var customerId;
-            // var i = 0;
-            // $("#out-table " + "#id_" + data).each(function() {
-            //     $(this)
-            //         .find("td")
-            //         .each(function() {
-            //             alert(i++);
-            //             alert(
-            //                 $(this)
-            //                     .eq()
-            //                     .attr("id")
-            //             );
-            //         });
-            // });
-            // f;
-
-            // console.log(customerId);
+            //   console.log(this.getPriceData)
+            for (let index = 0; index < this.Getdata.length; index++) {
+                  if (this.Getdata[index].code == this.itemData) {
+                        for (let Fproducto = 0; Fproducto < this.getPriceData.length; Fproducto++) {
+                             if ((this.getPriceData[Fproducto].medida == this.Getdata[index].medida) && (this.getPriceData[Fproducto].producto == this.Getdata[index].producto) ) {
+                              //      console.log(this.getPriceData[Fproducto])
+                                   this.form.precios.push({
+                                         id: this.inicio,
+                                         codePrice: this.getPriceData[Fproducto].codigo,
+                                         priceValue: this.getPriceData[Fproducto].price,
+                                         nameProduct: this.Getdata[index].producto,
+                                          nameMedida: this.Getdata[index].medida,
+                                         updateP:0
+                                   })
+                                    this.inicio ++;
+                             }
+                        }
+                  }
+            }
         },
         getExportCategoria() {
             var url =
@@ -258,10 +294,11 @@ export default {
                 this.correlativo;
             axios.get(url).then(response => {
                 this.getPriceData = response.data;
-                    console.log(this.getPriceData);
+                  //   console.log(this.getPriceData);
             });
         },
         getColumn() {
+            this.getColumnaCount = []
             var url = "/getCountColumn";
             axios
                 .post(url, {
@@ -282,6 +319,24 @@ export default {
                         cantidad++;
                     }
                 });
+        },
+        envio() {
+    
+            this.fullscreenTerminar = true;
+            var url = "/changeStatusPlantilla";
+            const bandeja = "/Bandeja";
+            axios
+                .post(url, {
+                    correlativo: this.correlativo
+                })
+                .then(response => {
+                    const status = JSON.parse(response.status);
+                    if (status == "200") {
+                        this.fullscreenTerminar = false;
+                        window.location = bandeja;
+                    }
+                })
+                .catch(error => {});
         },
         exportExcel() {
             var table = "out-table";
