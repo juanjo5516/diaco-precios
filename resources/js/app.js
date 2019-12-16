@@ -57,6 +57,8 @@ Vue.component('usuario-component', require('./components/EdicionPlantilla/Usuari
 Vue.component('export-component', require('./components/exportacion/export.vue').default);
 Vue.component('preview-component', require('./components/exportacion/preview.vue').default);
 Vue.component('ausuario-component', require('./components/EdicionPlantilla/ausuario.vue').default);
+Vue.component('submit-component', require('./components/EdicionPlantilla/submitPreview.vue').default)
+Vue.component('authorize-component', require('./components/exportacion/authorize.vue').default);
 const app = new Vue({
     el: '#main'
 });

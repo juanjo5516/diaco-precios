@@ -560,6 +560,18 @@ class plantillasController extends Controller
                   'user' => $user
             ]);
     }
+    public function submitView($id,$correlativo,$user){
+            $categoria = $this->getCategoria($id);
+            $plantilla = $this->getPlantillas($id); 
+            return view('exportacion.submitPreview',[ 
+                  'categorias' => $categoria,
+                  'producto' => $plantilla,
+                  'correlativo' => $correlativo,
+                  'id' => $id,
+                  'user' => $user
+            ]);
+    }
+
     public function preview($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
             $plantilla = $this->getPlantillas($id); 
@@ -784,6 +796,10 @@ class plantillasController extends Controller
     public function showEnviados(){
 
         return view('Ediciones.Enviados');
+    }
+    
+    public function previewSubmit(){
+        return view('Ediciones.previewSubmit');
     }
 
 
