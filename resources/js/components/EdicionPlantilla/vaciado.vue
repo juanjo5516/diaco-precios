@@ -98,8 +98,9 @@
                 <el-dialog
                     title="Vaciado de Información"
                     :visible.sync="dialogFormVisible"
-                    width="60%"
-                    top="1vh"
+                    width="40%"
+                    top="2vh"
+                    destroy-on-close
                 >
                     <el-form :model="form">
                         <el-table
@@ -150,9 +151,9 @@
                         <table class="table table-bordered head" width="100%">
                             <thead>
                                 <tr>
-                                    <th style="width:200px">Producto</th>
-                                    <th style="width:200px">Medida</th>
-                                    <th
+                                    <th style="width:40%">Producto</th>
+                                    <th style="width:40%">Medida</th>
+                                    <th style="width:20%"
                                         v-for="(index, x) in nColumna"
                                         v-bind:key="x"
                                     >
@@ -178,7 +179,7 @@
                                             size="mini"
                                             :precision="2"
                                             :min="0"
-                                            :max="1000"
+                                            :max="1000000000"
                                         ></el-input-number>
                                     </td>
                                 </tr>

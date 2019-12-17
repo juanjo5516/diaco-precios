@@ -160,6 +160,7 @@ class ServiciosRest extends Controller
                         ->selectraw('diaco_productocba.id_producto as code,DATEADD(hour,-3,getdate()) as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price')
                         ->where('diaco_vaciadocba.created_at','<=', $date_previous)
                         ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                        ->where('diaco_vaciadocba.precioProducto','>',0)
                         ->where('diaco_sede.id_diaco_sede','=',$id)
                         ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto')
                         ->orderByRaw('diaco_productocba.id_producto')
@@ -450,7 +451,7 @@ class ServiciosRest extends Controller
         
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
-                $dataSede = $convert->where('code_depa',$departamento->code_muni);
+                $dataSede = $convert->where('code_depa',$departamento->code_muni); 
                 array_push($array_sede_categoria,[
                     'sede' => $dataSede,
                     // 'categoria' => $sedes_data
