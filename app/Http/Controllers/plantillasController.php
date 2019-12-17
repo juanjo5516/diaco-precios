@@ -586,7 +586,7 @@ class plantillasController extends Controller
 
     public function vaciado(Request $request){
         
-        dd($request);
+        
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
         // dd($cantidadProducto);
