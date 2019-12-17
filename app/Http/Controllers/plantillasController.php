@@ -589,13 +589,7 @@ class plantillasController extends Controller
         
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
-        // dd($cantidadProducto);
-        // dd($request->get('idTipo')[0]['tipoVerificacion']);
         $columnas = (int)$request->columnas; 
-        // dd($request->get('Sedes')); 
-    
-
-
 
         try {
             for ($ii=1; $ii <= $columnas ; $ii++) { 
