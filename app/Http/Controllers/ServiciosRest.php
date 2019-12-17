@@ -114,6 +114,7 @@ class ServiciosRest extends Controller
                             ->selectraw('diaco_medida.id_medida as idMedida, diaco_productocba.id_producto as code,diaco_productocba.nombre as articulo,diaco_medida.nombre as medida,getdate() as fecha_Actual,avg(diaco_vaciadocba.precioProducto) as price2')
                             ->where('diaco_vaciadocba.created_at','<=', $date_previous)
                             ->where('diaco_categoriacba.id_Categoria','=',$idCatetoria)
+                            ->where('diaco_vaciadocba.precioProducto','>',0)
                             ->where('diaco_sede.id_diaco_sede','=',$id)
                             // ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto')
                             ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_medida.id_medida')
@@ -211,6 +212,7 @@ class ServiciosRest extends Controller
                             WHERE convert(date,vaciado.created_at) <= '".$date_last ."'
                                 AND sede.id_diaco_sede = ".$id."
                                 and categorias.id_Categoria = ".$idCatetoria."
+                                and vaciado.precioProducto > 0
                             GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida)  t1
                     full outer JOIN 
                             (SELECT 
@@ -236,6 +238,7 @@ class ServiciosRest extends Controller
                             WHERE convert(date,vaciado.created_at) <= '".$date_previous."'
                                 AND sede.id_diaco_sede = ".$id."
                                 and categorias.id_Categoria = ".$idCatetoria."
+                                and vaciado.precioProducto > 0
                             GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida) t2
                     ON t1.code = t2.code
                     where t1.idMedida = t2.idMedida
