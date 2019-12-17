@@ -745,7 +745,7 @@ class plantillasController extends Controller
                                 diaco_usuario.nombre,
                                 diaco_asignarsedecba.correlativo"
                             )
-            ->where('diaco_asignarsedecba.estatus','=','0')
+            ->where('diaco_asignarsedecba.estatus','=','1')
             ->orWhere('diaco_asignarsedecba.filtro','=','3')
             ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
             ->get();
