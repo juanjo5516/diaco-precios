@@ -88,6 +88,8 @@ export default {
                               })
                               cantidad ++;
                          };
+
+                         console.log(this.getColumnaCount);
                   })
             },
             exportExcel () {
