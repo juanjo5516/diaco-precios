@@ -571,6 +571,17 @@ class plantillasController extends Controller
                   'user' => $user
             ]);
     }
+    public function submitViewEditPrices($id,$correlativo,$user){
+            $categoria = $this->getCategoria($id);
+            $plantilla = $this->getPlantillas($id); 
+            return view('exportacion.submitEditPrices',[ 
+                  'categorias' => $categoria,
+                  'producto' => $plantilla,
+                  'correlativo' => $correlativo,
+                  'id' => $id,
+                  'user' => $user
+            ]);
+    }
 
     public function preview($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);

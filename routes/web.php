@@ -167,6 +167,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
+        
         //***************
 
         // Asignacion Sede Usuario
@@ -180,6 +181,10 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('changeStatusPlantilla','catalogos@changeStatusPlantilla');
         Route::get('revisarEnvio','plantillasController@previewSubmit');
         Route::get('viewSubmit/{id}/{user}/{correlativo}','plantillasController@submitView');
+        Route::get('viewSubmitPricesEdit/{id}/{user}/{correlativo}','plantillasController@submitViewEditPrices');
+        Route::put('deletePricesSubmit','catalogos@deletePricesSubmit');
+        // Route::get('getExportDataPriceRepeat/{id}/{user}/{correlativo}/{producto}/{medida}','catalogos@getExportDataPriceRepeat');
+        Route::post('getExportDataPriceRepeat','catalogos@getExportDataPriceRepeat');
         //**********************
 
 

@@ -18,25 +18,45 @@
             </el-table-column> -->
             <el-table-column width="220" label="Operaciones"> 
                 <template slot-scope="scope">
-                    <el-link
-                        :underline="false"
-                        v-bind:href="
-                            '/viewSubmit/' +
-                                scope.row.id +
-                                '/' +
-                                scope.row.correlativo +
-                                '/' +
-                                idUser
-                        "
-                    >
-                        <el-button
-                            size="small"
-                            type="success"
-                            icon="el-icon-data-analysis"
+                    <el-button-group>
+                        <el-link
+                            :underline="false"
+                            v-bind:href="
+                                '/viewSubmit/' +
+                                    scope.row.id +
+                                    '/' +
+                                    scope.row.correlativo +
+                                    '/' +
+                                    idUser
+                            "
                         >
-                            Ver Datos
-                        </el-button>
-                    </el-link>
+                            <el-button
+                                size="small"
+                                type="success"
+                                icon="el-icon-data-analysis"
+                            >
+                                Ver Datos
+                            </el-button>
+                        </el-link>
+                        <el-link
+                            :underline="false"
+                            v-bind:href="
+                                '/viewSubmitPricesEdit/' +
+                                    scope.row.id +
+                                    '/' +
+                                    scope.row.correlativo +
+                                    '/' +
+                                    idUser
+                            "
+                        >
+                            <el-button
+                                size="small"
+                                type="primary"
+                            >
+                                Editar
+                            </el-button>
+                        </el-link>
+                    </el-button-group>
                 </template>
             </el-table-column>
         </el-table>

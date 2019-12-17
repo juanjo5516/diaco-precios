@@ -59,6 +59,7 @@ Vue.component('preview-component', require('./components/exportacion/preview.vue
 Vue.component('ausuario-component', require('./components/EdicionPlantilla/ausuario.vue').default);
 Vue.component('submit-component', require('./components/EdicionPlantilla/submitPreview.vue').default)
 Vue.component('authorize-component', require('./components/exportacion/authorize.vue').default);
+Vue.component('updateprices-component', require('./components/exportacion/updateprices.vue').default);
 const app = new Vue({
     el: '#main'
 });
