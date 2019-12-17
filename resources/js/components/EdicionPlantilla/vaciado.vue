@@ -202,7 +202,7 @@
                 status="success"
             ></el-progress>
             <el-button
-                class="my-5 oculto"
+                class="my-5"
                 type="success"
                 id="enviar"
                 round
@@ -497,14 +497,14 @@ export default {
             if (this.checkValidation(this.sedes) == true) {
                 this.fullscreenLoading = true;
                 this.dataProductos = [];
-                for (let a = 0; a <= this.coleccion.length - 1; a++) {
-                    if (this.categoriaFiltro === this.coleccion[a].categoria) {
-                        this.dataProductos.push({
-                            idDataProducto: this.coleccion[a].producto,
-                            idDataMedida: this.coleccion[a].idmedida
-                        });
-                    }
-                }
+                // for (let a = 0; a <= this.coleccion.length - 1; a++) {
+                //     if (this.categoriaFiltro === this.coleccion[a].categoria) {
+                //         this.dataProductos.push({
+                //             idDataProducto: this.coleccion[a].producto,
+                //             idDataMedida: this.coleccion[a].idmedida
+                //         });
+                //     }
+                // }
                 var url = "/mercadoCBA";
                 const bandeja = "/Bandeja";
 

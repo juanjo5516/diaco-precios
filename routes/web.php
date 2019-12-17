@@ -45,7 +45,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('GetListaAsede','plantillasController@getAsedeJson');
         Route::get('Bandeja','plantillasController@showInbox');
         Route::get('getinbox','plantillasController@getInbox');
-        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter');
+        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter'); 
         // Route::post('Printer','plantillasController@showprinter');
         Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');  
         Route::post('mercadoCBA','plantillasController@vaciado');
