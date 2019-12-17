@@ -369,7 +369,7 @@ class catalogos extends Controller
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
-                              ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida,diaco_productocba.id_producto as code')
+                              ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida,diaco_productocba.id_producto as code, diaco_vaciadocba.precioProducto as prices')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
                             //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
@@ -401,6 +401,22 @@ class catalogos extends Controller
                               ->get();
             return response()->json($data, 200);
     }
+    public function getExportDataPriceRepeat(Request $request){ 
+        // dd($id);
+            $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                              ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                              ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
+                              ->selectraw('diaco_productocba.nombre as producto ,diaco_medida.nombre as medida, count(diaco_productocba.nombre) as repetidos')
+                              ->where('diaco_vaciadocba.idPlantilla','=',$request->id)
+                            //   ->where('diaco_vaciadocba.idVerificador','=',$user)
+                              ->where('diaco_vaciadocba.Ncorrelativo','=',$request->correlativo)
+                            //   ->where('diaco_productocba.nombre','=',$request->producto)
+                            //   ->where('diaco_medida.nombre','=',$request->medida)
+                              ->groupBy('diaco_productocba.nombre')
+                              ->groupBy('diaco_medida.nombre')
+                              ->get();
+            return response()->json($data, 200);
+    }
 
     public function updatePrice(Request $request){
         $cantidadProducto = count($request->get('data'));
@@ -416,9 +432,15 @@ class catalogos extends Controller
         }
     }
 
+    
     public function changeStatusPlantilla(Request $request){
         $data = ListarAsignacion::where('correlativo',$request->correlativo)->update(['filtro' => 3]);
         return response()->json($data, 200);
+    }
+    public function deletePricesSubmit(Request $request){
+        
+        $update = vaciadocba::where('correlativo',$request->code)->delete();
+        return response()->json($update, 200);
     }
 
 }

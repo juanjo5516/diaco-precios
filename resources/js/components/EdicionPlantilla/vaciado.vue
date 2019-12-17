@@ -98,7 +98,7 @@
                 <el-dialog
                     title="Vaciado de Información"
                     :visible.sync="dialogFormVisible"
-                    width="40%"
+                    width="52%"
                     top="2vh"
                     destroy-on-close
                 >
@@ -153,7 +153,7 @@
                                 <tr>
                                     <th style="width:40%">Producto</th>
                                     <th style="width:40%">Medida</th>
-                                    <th style="width:20%"
+                                    <th style="width:10%"
                                         v-for="(index, x) in nColumna"
                                         v-bind:key="x"
                                     >
