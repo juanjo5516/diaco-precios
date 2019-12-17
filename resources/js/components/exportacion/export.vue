@@ -22,6 +22,7 @@
                                           <td v-for="(prices, p) in getPriceData" v-bind:key="p" v-if="(item.medida == prices.medida && item.producto == prices.producto)">
                                                 {{ prices.price }}
                                           </td>
+                                          
                                     </tr>
                               </tbody>
                         </table>
@@ -72,6 +73,7 @@ export default {
                   axios.get(url)
                   .then(response => {
                         this.getPriceData = response.data;
+                        console.log(this.getPriceData)
                   })
             },
             getColumn () {
