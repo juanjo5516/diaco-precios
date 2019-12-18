@@ -1,63 +1,55 @@
 <template>
-      <div>
-            <div class="card bg-light mb-3" v-for="(index, x) in getCategoria" v-bind:key="x">
+      <div >
+            <!-- <div class="card bg-light" v-for="(index, x) in getCategoria" v-bind:key="x">
                   <div class="card-header">
                   </div> 
-                  <div class="card-body">
-                        <el-table :data="getPriceData" border >
-                              <el-table-column label="#" type="index"></el-table-column>
-                              <el-table-column label="Codigo" prop="codigo"></el-table-column>
-                              <el-table-column label="Producto" prop="producto"></el-table-column>
-                              <el-table-column label="Medida" prop="medida"></el-table-column>
-                              <el-table-column label="Precio" prop="price"></el-table-column>
-                              <el-table-column label="Repetido" >
-                                    <template  slot-scope="scope">
-                                          <div v-for="(precio, n) in getPriceDataCount" v-bind:key="n" v-if="(scope.row.producto == precio.producto && scope.row.medida == precio.medida)">
-                                                {{ precio.repetidos }}
-                                          </div>
-                                    </template>
-                              </el-table-column>
-                              <el-table-column label="Operación" >
-                                    <template slot-scope="scope">
-                                          <el-button
-                                                size="mini"
-                                                type="danger"
-                                                @click="handleDelete(scope.row.codigo)"
-                                          >Eliminar</el-button>
-                                    </template>
-                              </el-table-column>
-                        </el-table>
-                        <!-- <el-table :data="getPriceDataCount">
-                              <el-table-column label="repetidos" prop="repetidos"></el-table-column>
-
-                        </el-table> -->
-                        <!-- <table class="table" id="out-table">
-                              <thead>
-                                    <tr>
-                                          <th>Producto</th>
-                                          <th>Medida</th>
-                                          <th>Precio</th>
-                                          <th>Operación</th>
-                                    </tr>
-                              </thead>
-                              <tbody>
-                                    <tr v-for="(item, i) in getPriceData" v-bind:key="i" >
-                                          <td>{{ item.producto}}</td>
-                                          <td>{{ item.medida}}</td>
-                                          <td>{{ item.price }}</td>
-  
-
-                                    </tr>
-                              </tbody>
-                        </table> -->
-                  </div>
-            </div>
+                  <div class="card-body"> -->
+                  <el-container>
+                        <el-main>
+                              <el-row  >
+                                    <!-- <el-col :xs="25" :sm="52" :md="20" :lg="15" :xl="20"> -->
+                                    <el-col :span="24" >
+                                          <el-table :data="getPriceData" border max-height="650" style="width: 100%" stripe>
+                                                <el-table-column label="#" type="index"></el-table-column>
+                                                <el-table-column label="Codigo" prop="codigo" width="80%"></el-table-column>
+                                                <el-table-column label="Producto" prop="producto" ></el-table-column>
+                                                <el-table-column label="Medida" prop="medida" width="100%"></el-table-column>
+                                                <el-table-column label="Precio" prop="price" width="100%"></el-table-column>
+                                                <el-table-column label="Repetido" width="100%">
+                                                      <template  slot-scope="scope" >
+                                                            <div v-for="(precio, n) in getPriceDataCount" v-bind:key="n" >
+                                                                  <span v-if="(scope.row.producto == precio.producto && scope.row.medida == precio.medida)">{{ precio.repetidos }} </span>
+                                                            </div>
+                                                      </template>
+                                                </el-table-column>
+                                                <el-table-column label="Operación" width="120">
+                                                      <template slot-scope="scope">
+                                                            <el-button
+                                                                  size="mini"
+                                                                  type="danger"
+                                                                  @click="handleDelete(scope.row.codigo)"
+                                                            >Eliminar</el-button>
+                                                      </template>
+                                                </el-table-column>
+                                          </el-table>
+                                    </el-col>
+                              </el-row> 
+                        </el-main>
+                  </el-container>
+                  <!-- </div>
+            </div> -->
             <el-button  class="my-5" type="primary"  @click="exportExcel" >Autorizar</el-button>
             <el-button  class="my-5" type="danger"  @click="exportExcel" >Rechazar</el-button>
             <el-button  class="my-5" type="success"  @click="exportExcel" >Exportar</el-button>
       </div>
 </template>
 <style>
+
+      .el-table th{
+            background-color: #b1b4b0;
+            color:#fff;
+            text-align: center
+      }
   .el-table .warning-row {
     background: oldlace;
   }
@@ -65,6 +57,12 @@
   .el-table .success-row {
     background: #f0f9eb;
   }
+
+      .table-sm th,
+      .table-sm td {
+            padding: 0.3rem;
+      }
+     
 </style>
 <script>
       import FileSaver from 'file-saver'
@@ -103,22 +101,12 @@ export default {
                         // console.log(this.Getdata);
                   })
             },
-            
-            changeRowTable(){
-                  
-                  
-                  // for (let index = 0; index <= this.getPriceData.length; index++) {
-
-                  //       for (let fila = 0; fila < this.getPriceDataCount.length; fila++) {
-                  //             if(this.getPriceData[index].producto != this.getPriceDataCount[fila].producto){
-                  //                   this.RowData.push({
-                  //                         codigo: this.getPriceData[index].codigo
-                  //                   })
-                  //             }
-                  //       }
-                  // }
-                  // console.log(this.RowData);
+            tableRowClassName({row, rowIndex}) {
+                  return 'borde';
             },
+            formatter(row, column) {
+                  console.log( row.medida);
+                  },
             getExportCategoria () {
                   var url = '/getExportDataCategory/'+this.id+'/'+this.user+'/'+this.correlativo;
                   axios.get(url)
