@@ -173,7 +173,7 @@ class ServiciosRest extends Controller
     }
 
     public function getPriceLastPrevious($id,$idCatetoria){
-
+       
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
 
@@ -236,8 +236,8 @@ class ServiciosRest extends Controller
                                 ON plantilla.idProducto = vaciado.idProducto
                             INNER JOIN diaco_categoriacba categorias
                                 ON categorias.id_Categoria = plantilla.idCategoria
-                            WHERE convert(date,vaciado.created_at) <= '".$date_previous."'
-                                AND sede.id_diaco_sede = ".$id."
+                            WHERE  convert(date,vaciado.created_at) <= '".$date_previous."'
+                                    AND sede.id_diaco_sede = ".$id."
                                 and categorias.id_Categoria = ".$idCatetoria."
                                 and vaciado.precioProducto > 0
                             GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida) t2
@@ -255,8 +255,9 @@ class ServiciosRest extends Controller
         $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
         $n2 = $this->getPriceLast($id,$idCategoria);
-
+        
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
+       
 
         $convert = collect($getDataPrices);
         $array_price = array();
@@ -389,16 +390,7 @@ class ServiciosRest extends Controller
                                         ON muni.codigo_municipio = sede.codigo_municipio
                                     INNER JOIN departamento depa
                                         ON depa.codigo_departamento = muni.codigo_departamento
-<<<<<<< Updated upstream
-                                        INNER JOIN diaco_asignarsedecba da on vaciado.Ncorrelativo = da.correlativo
-=======
-<<<<<<< HEAD
-                                    INNER JOIN diaco_asignarsedecba da on vaciado.Ncorrelativo = da.correlativo
-=======
-                                        INNER JOIN diaco_asignarsedecba da on vaciado.Ncorrelativo = da.correlativo
->>>>>>> 126b37944070549b783e4f24460b8c68b0623f50
->>>>>>> Stashed changes
-                                    WHERE da.filtro = 4
+
                                     ");
         return $departamento;
     }
@@ -510,6 +502,7 @@ class ServiciosRest extends Controller
             }
         }
 
+        
         $array_sede = $this->array_unique2($array_sede_categoria);
         // $dconvert = collect($array_sede);
         foreach($categoria as $sedes_data){
