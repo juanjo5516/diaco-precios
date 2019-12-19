@@ -390,6 +390,8 @@ class ServiciosRest extends Controller
                                         ON muni.codigo_municipio = sede.codigo_municipio
                                     INNER JOIN departamento depa
                                         ON depa.codigo_departamento = muni.codigo_departamento
+                                        INNER JOIN diaco_asignarsedecba da on vaciado.Ncorrelativo = da.correlativo
+                                    WHERE da.filtro = 4
                                     ");
         return $departamento;
     }
