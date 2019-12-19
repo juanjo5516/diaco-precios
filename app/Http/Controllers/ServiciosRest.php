@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Client\Response;
 use Illuminate\Http\Request;
 use App\Models\Departamento;
 use App\Models\Municipio;
@@ -31,9 +32,9 @@ class ServiciosRest extends Controller
                     ]
                 ]);
         }
-        return response()->json($array_departamentos, 200);      
+        return response()->json($array_departamentos, 200);
     }
-    
+
     public function getSede()
     {
         $departamentos = Departamento::with('sede')
@@ -57,9 +58,9 @@ class ServiciosRest extends Controller
                         "category" => $cate
                     ]
                 ]);
-         
+
         }
-        return response()->json($array_departamentos, 200); 
+        return response()->json($array_departamentos, 200);
     }
 
 
@@ -91,7 +92,7 @@ class ServiciosRest extends Controller
                         ->groupBy('diaco_productocba.nombre','diaco_productocba.id_producto')
                         ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
-    
+
         // return response()->json($last_price, 200);
         return $last_price;
     }
@@ -102,7 +103,7 @@ class ServiciosRest extends Controller
 
 
         $date_previous = $date->subHours(3);
-                        
+
         $previous_price = DB::table('diaco_vaciadocba')
                             ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                             ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -140,8 +141,8 @@ class ServiciosRest extends Controller
                         ->get();
 
 
-    
-                                        
+
+
         // return response()->json($last_price, 200);
         return $last_price;
     }
@@ -149,8 +150,8 @@ class ServiciosRest extends Controller
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
         $date_previous = $date->subHours(3);
-        
-        
+
+
         $previous_price = DB::table('diaco_vaciadocba')
                         ->join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                         ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -166,7 +167,7 @@ class ServiciosRest extends Controller
                         ->groupBy('diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto')
                         ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
-    
+
         // return response()->json($previous_price, 200);
         return $previous_price;
     }
@@ -176,11 +177,10 @@ class ServiciosRest extends Controller
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
 
-        
+
         $date_previous = $date->subDay(1)->format('Y-m-d');
         $date_last = $date->addDay(1)->format('Y-m-d');
-        
-     
+
         $price = DB::select("SELECT  
                                     t1.code as code,
                                     t1.idMedida,
@@ -247,7 +247,7 @@ class ServiciosRest extends Controller
         ");
 
     return $price;
-    
+
     }
 
     public function apiPrice($id,$idCategoria){
@@ -263,14 +263,14 @@ class ServiciosRest extends Controller
         $array_price = array();
         $array_n2 = array();
         foreach ($last as $nivel1) {
-            foreach($getDataPrices as $nivel2){                    
+            foreach($getDataPrices as $nivel2){
                     if($nivel1->code  == $nivel2->code){
                         $data = $convert->where('code',$nivel1->code);
-                        
+
                                 array_push($array_n2,[
                                     'code' =>$nivel1->code,
                                     'name' => $nivel1->articulo,
-                                    'uom' => $data  
+                                    'uom' => $data
                                 ]);
 
                     }
@@ -284,7 +284,7 @@ class ServiciosRest extends Controller
         ->includeCharacters()
         ->toArray();
 
-            
+
         // return response()->json($fractal, 200);
 
     }
@@ -325,14 +325,14 @@ class ServiciosRest extends Controller
                                     (SELECT distinct NombreTemplate FROM diaco_name_template_cba template
                                     INNER JOIN diaco_vaciadocba vaciado
                                         ON template.id = vaciado.idPlantilla) ");
-                                                
+
         $dep = $this->getIdDepartamento();
 
         $array_departamentos = [];
         $array_sede= [];
 
         // dd($cate);
-        
+
         foreach ($departamentos as $departamento) {
             $sedes = $departamento->sede;
             array_push($array_departamentos,[
@@ -343,7 +343,7 @@ class ServiciosRest extends Controller
             //     foreach($sedes as $idSede){
             //         if($departamento->codigo_departamento == $key->codigo_departamento)  {
             //             if($idSede->code == $key->id_diaco_sede){
-                            
+
             //                 array_push($array_departamentos,
             //                 [
             //                     [
@@ -356,27 +356,27 @@ class ServiciosRest extends Controller
             //                         ]
             //                 ]);
             //             }
-            //         }  
-            //     }  
+            //         }
+            //     }
             // }
 
         }
 
 
         return response()->json($array_departamentos, 200);
-        // return response()->json($array_departamentos, 200); 
+        // return response()->json($array_departamentos, 200);
     }
     // *********************************************
 
-    function array_unique2($a) 
-    { 
-        $n = array(); 
-        foreach ($a as $k=>$v) if (!in_array($v,$n))$n[$k]=$v; 
-        return $n; 
+    function array_unique2($a)
+    {
+        $n = array();
+        foreach ($a as $k=>$v) if (!in_array($v,$n))$n[$k]=$v;
+        return $n;
     }
 
     public function collectionDepartamento(){
-       
+
        $departamento = DB::select("SELECT distinct 
                                     depa.codigo_departamento as code,
                                     depa.nombre_departamento as name,
@@ -390,12 +390,11 @@ class ServiciosRest extends Controller
                                         ON muni.codigo_municipio = sede.codigo_municipio
                                     INNER JOIN departamento depa
                                         ON depa.codigo_departamento = muni.codigo_departamento
-                                        INNER JOIN diaco_asignarsedecba da on vaciado.Ncorrelativo = da.correlativo
-                                    WHERE da.filtro = 4
+
                                     ");
         return $departamento;
     }
-    
+
     public function collectionSede(){
 
         $sede = DB::select("SELECT distinct 
@@ -439,8 +438,47 @@ class ServiciosRest extends Controller
                                         ON sede.id_diaco_sede = usuario.id_sede_diaco");
         return $categoria;
 
-    } 
+    }
 
+    public function VerifyActiveDepartments(){
+        $departments = DB::SELECT('exec VerifyActiveDepartments');
+
+        foreach ($departments as $branche)
+        {
+            $codeDepart = $branche->code;
+            $sedes = DB::SELECT('exec getOfficesByDepartment :department',['department' => $codeDepart]);
+            $convert = collect($sedes);
+            foreach ($convert as $convertt)
+            {
+                $data = DB::SELECT('exec getCategoriesForDepartament :sede',['sede' => $convertt->code]);
+                $responseSede[] = [
+                    'code' => $convertt->code,
+                    'name' => $convertt->name,
+                    'latitude' => $convertt->latitut,
+                    'longitude' => $convertt->longitud,
+                    'departamento' => $convertt->codigo_departamento,
+                    'categories' =>$data
+                ];
+            }
+
+
+        }
+        $brancheData = collect($responseSede);
+        foreach ($departments as $department){
+            $branches = $department->code;
+            $sedes = DB::SELECT('exec getOfficesByDepartment :department',['department' => $branches]);
+            $data = $brancheData->where('departamento',$department->code);
+            //codigo_departamento
+
+            $response[] = [
+                'code' => $department->code,
+                'name' => $department->name,
+                'branches' => $data
+            ];
+
+        }
+        return response()->json($response, 200);
+    }
 
     public function collectionDataApi(){
         $depa = $this->collectionDepartamento();
@@ -452,11 +490,11 @@ class ServiciosRest extends Controller
         $array_data = [];
         $array_sede_categoria = [];
         $array_categorias = [];
-        
-        
+
+
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
-                $dataSede = $convert->where('code_depa',$departamento->code_muni); 
+                $dataSede = $convert->where('code_depa',$departamento->code_muni);
                 array_push($array_sede_categoria,[
                     'sede' => $dataSede,
                     // 'categoria' => $sedes_data
@@ -478,10 +516,10 @@ class ServiciosRest extends Controller
         }
 
         $infoSede = $this->array_unique2($array_categorias);
-        
+
 
         $array_sede = collect($array_sede);
-        
+
 
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
@@ -492,13 +530,13 @@ class ServiciosRest extends Controller
                                 'code'  => $departamento->code,
                                 'name'  => $departamento->name,
                                 'sedes' => $infoSede,
-                                            // 'categorias' =>$sedes_data  
-                                                
+                                            // 'categorias' =>$sedes_data
+
                     ]);
                 }
             }
         }
-        //     
+        //
         $codigo = $this->array_unique2($array_data);
 
         return fractal()
