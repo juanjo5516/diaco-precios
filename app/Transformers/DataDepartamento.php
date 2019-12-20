@@ -14,19 +14,19 @@ class DataDepartamento extends TransformerAbstract
      */
     public function transform($data)
     {
-        // dd($data['sedes']);
+        //dd($data['sedes']);
         return [
             'code'          =>  $data['code'],
             'name'          =>  $data['name'],
             // 'branches'      =>  fractal($data['sedes'], new dataSede()),
             'branches'      =>  [
-                
+
                                     fractal()->collection($data['sedes'])
                                     ->transformWith(new dataSede())
                                     ->includeCharacters()
-                                    ->toArray(), 
+                                    ->toArray(),
                             ]
-            
+
         ];
     }
 }

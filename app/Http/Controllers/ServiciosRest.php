@@ -173,7 +173,7 @@ class ServiciosRest extends Controller
     }
 
     public function getPriceLastPrevious($id,$idCatetoria){
-       
+
         $date = Carbon::now('America/Guatemala');
         $date->toDateTimeString();
 
@@ -255,9 +255,9 @@ class ServiciosRest extends Controller
         $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
         $n2 = $this->getPriceLast($id,$idCategoria);
-        
+
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
-       
+
 
         $convert = collect($getDataPrices);
         $array_price = array();
@@ -473,11 +473,17 @@ class ServiciosRest extends Controller
             $response[] = [
                 'code' => $department->code,
                 'name' => $department->name,
-                'branches' => $data
+                'sedes' => $data
             ];
 
         }
-        return response()->json($response, 200);
+        return fractal()
+            ->collection($response)
+            ->transformWith(new DataDepartamento())
+            ->includeCharacters()
+            ->toArray();
+
+        //return response()->json($response, 200);
     }
 
     public function collectionDataApi(){
@@ -490,28 +496,26 @@ class ServiciosRest extends Controller
         $array_data = [];
         $array_sede_categoria = [];
         $array_categorias = [];
-
-
         foreach ($depa as $departamento) {
             foreach ($sede as $sedes) {
                 $dataSede = $convert->where('code_depa',$departamento->code_muni);
-                array_push($array_sede_categoria,[
+                $array_sede_categoria[] = [
                     'sede' => $dataSede,
                     // 'categoria' => $sedes_data
-                ]);
+                ];
             }
         }
+        dd($array_sede_categoria);
 
-        
         $array_sede = $this->array_unique2($array_sede_categoria);
         // $dconvert = collect($array_sede);
         foreach($categoria as $sedes_data){
             foreach ($sede as $data_sede) {
                 $d = $ccategoria->where('sede_id',$data_sede->code);
-                array_push($array_categorias,[
-                    'dataS'     =>  $data_sede,
-                    'cateS'     =>  $d
-                ]);
+                $array_categorias[] = [
+                    'dataS' => $data_sede,
+                    'cateS' => $d
+                ];
             }
         }
 

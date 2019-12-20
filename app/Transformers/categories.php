@@ -13,10 +13,10 @@ class categories extends TransformerAbstract
      */
     public function transform($data)
     {
-        
+
         return [
-            'code'      =>  $data->idCategoria,
-            'name'      =>  $data->nombre
+            'code'      =>  $data->code,
+            'name'      =>  $data->name
         ];
     }
 }
