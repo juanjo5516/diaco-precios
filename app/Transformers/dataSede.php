@@ -12,7 +12,7 @@ class dataSede extends TransformerAbstract
     //     $this->categorias = $categorias;
     // }
 
-    
+
     /**
      * A Fractal transformer.
      *
@@ -23,13 +23,18 @@ class dataSede extends TransformerAbstract
 
         return [
             'data'  => [
-                'code'              =>  $data['dataS']->code,
-                'name'              =>  $data['dataS']->name,
-                'latitude'          =>  $data['dataS']->latitut,
-                'longitude'         =>  $data['dataS']->longitud,
-                'categories'        =>  fractal($data['cateS'], new categories())
+                //'code'              =>  $data['dataS']->code,
+                //'name'              =>  $data['dataS']->name,
+                //'latitude'          =>  $data['dataS']->latitut,
+                //'longitude'         =>  $data['dataS']->longitud,
+
+                'code'              =>  $data['code'],
+                'name'              =>  $data['name'],
+                'latitude'          =>  $data['latitude'],
+                'longitude'         =>  $data['longitude'],
+                'categories'        =>  fractal($data['categories'], new categories())
             ],
-                          
+
         ];
     }
 }

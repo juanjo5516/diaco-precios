@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,8 @@ Route::get('fecha/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 Route::get('prueba/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 
 
-Route::get('categories', 'ServiciosRest@collectionDataApi');
+//Route::get('categories', 'ServiciosRest@collectionDataApi');
+Route::get('categories', 'ServiciosRest@VerifyActiveDepartments');
 
 Route::get('VerifyActiveDepartments','ServiciosRest@VerifyActiveDepartments');
 
