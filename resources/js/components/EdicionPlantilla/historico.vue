@@ -1,6 +1,17 @@
 <template>
     <div>
-        <el-table :data="DataResult" border stripe style="width: 100%">
+        <el-table
+            :data="
+                DataResult.slice(
+                    (currentPage - 1) * pagesize,
+                    currentPage * pagesize
+                )
+            "
+            border
+            stripe
+            style="width: 100%"
+            empty-text="Cargando datos, Espere un momento!"
+        >
             <el-table-column prop="NombreTemplate" label="Nombre">
             </el-table-column>
             <el-table-column prop="correlativo" label="Correlativo">
@@ -16,7 +27,7 @@
                     }}</span>
                 </template>
             </el-table-column> -->
-            <el-table-column width="220" label="Operaciones"> 
+            <el-table-column width="220" label="Operaciones">
                 <template slot-scope="scope">
                     <el-link
                         :underline="false"
@@ -46,6 +57,18 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div style="text-align: left;margin-top: 30px;">
+            <el-pagination
+                background
+                :page-size="10"
+                layout="total,sizes,prev, pager, next"
+                :total="total"
+                @current-change="current_change"
+                @size-change="handleSizeChange"
+                :current-page.sync="currentPage"
+                :page-sizes="[10, 20, 100,200]"
+            ></el-pagination>
+        </div>
     </div>
     <!-- </el-card> -->
 </template>
@@ -58,7 +81,11 @@ export default {
         return {
             DataResult: [],
             userInfo: [],
-            idUser: 0
+            idUser: 0,
+            total: 0,
+            currentPage: 1,
+            pagesize: 10,
+            currentPage2: 5,
         };
     },
     mounted() {
@@ -71,7 +98,8 @@ export default {
                 .get("/getEnviados")
                 .then(response => {
                     this.DataResult = response.data;
-                    console.log(this.DataResult);
+                    this.total = response.data.length;
+                    
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -83,6 +111,13 @@ export default {
                 this.userInfo = response.data;
                 this.idUser = this.userInfo[0].usuario_id;
             });
+        },
+        current_change: function(currentPage) {
+            this.currentPage = currentPage;
+        },
+        handleSizeChange(val) {
+            this.pagesize = val;
+            
         }
     }
 };

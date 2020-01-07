@@ -369,7 +369,9 @@ class catalogos extends Controller
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
-                              ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida,diaco_productocba.id_producto as code, diaco_vaciadocba.precioProducto as prices')
+                              ->join('diaco_asignarsedecba as asignacion','asignacion.correlativo','=','diaco_vaciadocba.Ncorrelativo')
+                              ->join('diaco_name_template_cba','diaco_name_template_cba.id','=','asignacion.idPlantilla')
+                              ->selectraw('distinct diaco_productocba.nombre as producto,diaco_medida.nombre as medida,diaco_productocba.id_producto as code, diaco_vaciadocba.precioProducto as prices,diaco_name_template_cba.cantidadColmna as columnas')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
                             //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
@@ -389,18 +391,40 @@ class catalogos extends Controller
             return response()->json($data, 200);
     }
 
-    public function getExportDataPrice($id,$user,$correlativo){ 
+    public function getExportDataPrice($id,$user,$correlativo){  
         // dd($id);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
                               ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
-                              ->selectraw('diaco_productocba.nombre as producto,diaco_medida.nombre as medida, CONVERT(decimal(18,2),diaco_vaciadocba.precioProducto) as price,diaco_vaciadocba.correlativo as codigo')
+                              ->join('diaco_asignarsedecba as asignacion','asignacion.correlativo','=','diaco_vaciadocba.Ncorrelativo')
+                              ->join('diaco_name_template_cba','diaco_name_template_cba.id','=','asignacion.idPlantilla')
+                              ->selectraw('diaco_medida.id_medida as cProducto ,diaco_productocba.nombre as producto,diaco_medida.nombre as medida, CONVERT(decimal(18,2),diaco_vaciadocba.precioProducto) as price,diaco_vaciadocba.correlativo as codigo, diaco_name_template_cba.cantidadColmna as columnas')
                               ->where('diaco_vaciadocba.idPlantilla','=',$id)
                             //   ->where('diaco_vaciadocba.idVerificador','=',$user)
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
+                              ->orderBy('diaco_medida.nombre ')
+                              ->orderBy('diaco_productocba.nombre')
                               ->get();
             return response()->json($data, 200);
     }
+
+    public function getExportDataPriceColumna($id,$user,$correlativo,$columna){  
+        //dd($columna);
+            $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
+                              ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
+                              ->join('diaco_tipoverificacioncba','diaco_tipoverificacioncba.id_TipoVerificacion','=','diaco_vaciadocba.tipoVerificacion')
+                              ->join('diaco_asignarsedecba as asignacion','asignacion.correlativo','=','diaco_vaciadocba.Ncorrelativo')
+                              ->join('diaco_name_template_cba','diaco_name_template_cba.id','=','asignacion.idPlantilla')
+                              ->selectraw('diaco_productocba.nombre as producto,diaco_medida.nombre as medida, CONVERT(decimal(18,2),diaco_vaciadocba.precioProducto) as price,diaco_vaciadocba.correlativo as codigo, diaco_name_template_cba.cantidadColmna as columnas')
+                              ->where('diaco_vaciadocba.idPlantilla','=',$id)
+                            //   ->where('diaco_vaciadocba.idVerificador','=',$user)
+                              ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
+                              ->limit('50')
+                              ->get();
+                              
+            return response()->json($data, 200);
+    }
+
     public function getExportDataPriceRepeat(Request $request){ 
         // dd($id);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
@@ -438,9 +462,24 @@ class catalogos extends Controller
         return response()->json($data, 200);
     }
     public function deletePricesSubmit(Request $request){
-        
-        $update = vaciadocba::where('correlativo',$request->code)->delete();
+        $cantidadProducto = count($request->code);
+        for ($i=0; $i < $cantidadProducto ; $i++) { 
+            //dd($request->code[$i]['codigo']);
+            $update = vaciadocba::where('correlativo',$request->code[$i]['codigo'])->delete();
+        }
         return response()->json($update, 200);
+    }
+
+    public function authorizeChange(Request $request){
+        try {
+            $update_asssignment = ListarAsignacion::where('correlativo',$request->correlativo)->update(['filtro' => 4,'estatus' => 0]);
+            $update_data = vaciadocba::where('Ncorrelativo',$request->correlativo)->update(['estado' => 'A']);
+            if($update_asssignment  && $update_data){
+                return response()->json(1, 200);
+            }
+        } catch (\Throwable $th) {
+            return response()->json($th,201);
+        }
     }
 
 }

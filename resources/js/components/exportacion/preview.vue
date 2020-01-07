@@ -84,7 +84,9 @@
                                                             <el-input v-for="(id,ix) in form.precios" v-bind:key="ix"  v-if="(id.id == x)" size="medium"   v-model="form.preciosP['valor_' + id.id]" :id="'inputs['  + id.id  + ']'"></el-input>
                                                             <span v-show="false">{{ x++}}</span>
                                                             <!-- {{ prices.price }} -->
-                                                  
+                             <el-button class="my-5" type="danger" @click="exportExcel"
+            >Rechazar</el-button
+        >                    
                                                       </td>
                                                 </tr>
                                                 

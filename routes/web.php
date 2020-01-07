@@ -163,10 +163,11 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // *******************
 
         // Export Excel 
-        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');
+        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView'); 
         Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
+        Route::get('getPriceExportColumn/{id}/{user}/{correlativo}/{columna}','catalogos@getExportDataPriceColumna');
         
         //***************
 
@@ -185,6 +186,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::put('deletePricesSubmit','catalogos@deletePricesSubmit');
         // Route::get('getExportDataPriceRepeat/{id}/{user}/{correlativo}/{producto}/{medida}','catalogos@getExportDataPriceRepeat');
         Route::post('getExportDataPriceRepeat','catalogos@getExportDataPriceRepeat');
+        Route::post('authorizeChange','catalogos@authorizeChange');
         //**********************
 
 
