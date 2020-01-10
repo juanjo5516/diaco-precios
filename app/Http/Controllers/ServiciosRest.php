@@ -484,7 +484,7 @@ class ServiciosRest extends Controller
             ->toArray();
 
         //return response()->json($response, 200);
-    }
+    } 
 
     public function collectionDataApi(){
         $depa = $this->collectionDepartamento();
