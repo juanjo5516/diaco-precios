@@ -194,6 +194,12 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');
 
         Route::get('getUserCba/{id}','plantillasController@getUserCba');
+
+        //******Api Movil
+        Route::get('verify2','MovilApp@movile_app');
+
+        //***************
+
         
     //------------------------------------------------------------------------------------------
     }); 

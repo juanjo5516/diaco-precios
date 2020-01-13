@@ -17,14 +17,15 @@ Route::get('prueba/{sede}/{categoria}', 'ServiciosRest@getPriceLastPrevious');
 
 
 //Route::get('categories', 'ServiciosRest@collectionDataApi');
-Route::get('categories', 'ServiciosRest@VerifyActiveDepartments');
+// Route::get('categories', 'ServiciosRest@VerifyActiveDepartments');
+Route::get('categories', 'MovilApp@movile_app');
 
 Route::get('VerifyActiveDepartments','ServiciosRest@VerifyActiveDepartments');
 
 
 
 //******Api Movil
-Route::get('verify','MovilApp@check');
+Route::get('verify','MovilApp@movile_app');
 
 //***************
 

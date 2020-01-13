@@ -10,58 +10,44 @@ use App\Transformers\DataDepartamento;
 
 class MovilApp extends Controller
 {
-    public function check(){
+    public function movile_app(){
         $departments = DB::SELECT('exec VerifyActiveDepartments');
         $coordenadas = DB::SELECT('EXEC department_coordinates');
         $coordenadas = collect($coordenadas);
-        // $coor = $coordenadas->where('code','=',2);
 
-        foreach ($departments as $branche)
-        {
-            $codeDepart = $branche->code;
-            // $sedes = DB::SELECT('exec getOfficesByDepartment :department',['department' => $codeDepart]);
-            $sedes = $coordenadas->where('codigo_departamento','=',$codeDepart);
-            $convert2 = collect($sedes);
-            $responseSede2[] = [
-                "data" => $convert2
+        foreach ($coordenadas as $sedes_producto) {
+            $data = DB::SELECT('exec sp_productos_cba :sede',['sede' => $sedes_producto->code]);
+            $nivel3[] = [
+                "code"          =>  $sedes_producto->code,
+                "name"          =>  $sedes_producto->name,
+                'latitude'      =>  $sedes_producto->latitut,
+                'longitude'     =>  $sedes_producto->longitud,
+                'departamento'  =>  $sedes_producto->codigo_departamento,
+                "categories"    =>  $data
             ];
-            $convert = collect($sedes);
-            foreach ($convert as $convertt)
-            {
-                // $data = DB::SELECT('exec getCategoriesForDepartament :sede',['sede' => $convertt->code]);
-                $responseSede[] = [
-                    'code' => $convertt->code,
-                    'name' => $convertt->name,
-                    'latitude' => $convertt->latitut,
-                    'longitude' => $convertt->longitud,
-                    'departamento' => $convertt->codigo_departamento,
-                    // 'categories' =>$data
-                ];
-            }
-
-
         }
-        /* $brancheData = collect($responseSede);
-        foreach ($departments as $department){
-            $branches = $department->code;
-            $sedes = DB::SELECT('exec getOfficesByDepartment :department',['department' => $branches]);
-            $data = $brancheData->where('departamento',$department->code);
-            //codigo_departamento
 
+        $branchData = collect($nivel3);
+
+        foreach ($departments as $union) {
+            $data = $branchData->where('departamento','=',$union->code);
             $response[] = [
-                'code' => $department->code,
-                'name' => $department->name,
-                'sedes' => $data
+                "code"      =>  $union->code,
+                "name"      =>  $union->name,
+                "sedes"     =>  $data
             ];
+        }
 
-        } */
-        /* return fractal()
+        
+        // return view('api.check',[
+        //     'data'      =>  $response
+        // ]);
+        return fractal()
             ->collection($response)
             ->transformWith(new DataDepartamento())
             ->includeCharacters()
-            ->toArray(); */
-
-        return response()->json($responseSede, 200);
+            ->toArray();
+        
     }
 
 

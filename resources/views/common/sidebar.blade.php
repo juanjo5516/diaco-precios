@@ -71,6 +71,26 @@
                     </li> --}}
                 </ul>
             </li>
+            <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#">Api</a>
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a class="nav-link" href=/verify2>
+                            <i class="nav-icon fas fa-angle-right"></i> Api</a>
+                    </li>
+                    {{-- <li class="nav-item">
+                        <a class="nav-link" href=/Edicion>
+                            <i class="nav-icon fas fa-angle-right"></i> Editor
+                        </a>
+                        <a class="nav-link" href=/AsignarSede>
+                            <i class="nav-icon fas fa-angle-right"></i> Asignación
+                        </a>
+                        <a class="nav-link" href=/clonar>
+                            <i class="nav-icon fas fa-angle-right"></i> Clonar plantillas
+                        </a>
+                    </li> --}}
+                </ul>
+            </li>
             @endif
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#">Vaciado</a>
