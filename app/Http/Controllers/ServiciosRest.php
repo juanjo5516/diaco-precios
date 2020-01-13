@@ -255,11 +255,12 @@ class ServiciosRest extends Controller
         $last = $this->getPriceNivel2($id,$idCategoria);
         $previous = $this->getPricePrevious($id,$idCategoria);
         $n2 = $this->getPriceLast($id,$idCategoria);
-
+        
         $getDataPrices = $this->getPriceLastPrevious($id,$idCategoria);
-
-
+        
+        
         $convert = collect($getDataPrices);
+        
         $array_price = array();
         $array_n2 = array();
         foreach ($last as $nivel1) {
@@ -276,8 +277,8 @@ class ServiciosRest extends Controller
                     }
             }
         }
-
         $codigo = $this->array_unique2($array_n2);
+        
         return fractal()
         ->collection($codigo)
         ->transformWith(new PricesData())
