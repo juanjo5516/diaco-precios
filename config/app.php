@@ -233,6 +233,9 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
+
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         
 
     ],
