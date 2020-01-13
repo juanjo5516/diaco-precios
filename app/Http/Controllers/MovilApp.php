@@ -70,31 +70,42 @@ class MovilApp extends Controller
         return $last_price;
     }
 
+   
+
     public function apiPrice_app($id,$idCategoria){
 
         $last = $this->getPriceMorning($id,$idCategoria);
         $getDataPrices = DB::select('exec getPriceWeekly :sede, :categoria',['sede' => $id, 'categoria' => $idCategoria]);
         $convert = collect($getDataPrices); 
-        $array_price = array();
+        $array_n2 = array();
         foreach ($last as $nivel1) {
             foreach($getDataPrices as $nivel2){
-                    if($nivel1->code  == $nivel2->code){
-                        $data = $convert->where('code',$nivel1->code);
-                            $array_n2[] = [
-                                'code' =>$nivel1->code,
-                                'name' => $nivel1->articulo,
-                                'uom' => $data
-                            ];
-
-                    }
+                if($nivel1->code  == $nivel2->code){
+                    $data = $convert->where('code',$nivel1->code);
+                    $array_n2[] = [
+                        'code' =>$nivel1->code,
+                        'name' => $nivel1->articulo,
+                        'uom' => $data
+                    ];
+                    
+                }
             }
         }
+        // $codigo = $this->array_unique2($array_n2);
         return fractal()
         ->collection($array_n2)
         ->transformWith(new PricesData())
         ->includeCharacters()
         ->toArray();
 
+    }
+
+
+    function array_unique2($a)
+    {
+        $n = array();
+        foreach ($a as $k=>$v) if (!in_array($v,$n))$n[$k]=$v;
+        return $n;
     }
 }
 
