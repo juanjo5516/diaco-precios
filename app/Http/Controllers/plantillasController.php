@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 class plantillasController extends Controller
 {
 
-    public function __construct(){
+    public function __construct(){ 
         $this->middleware('auth');
     }
     public function UserLogin(){ 
@@ -40,6 +40,12 @@ class plantillasController extends Controller
         return $user;
     }
 
+    public function getSedeData(){
+        $sede = DB::table('diaco_sede')
+                    // ->join()
+                    ->select('id_diaco_sede as code', 'nombre_sede as name')->get(); 
+        return response()->json($sede, 200);
+    }
    
     public function Asede(){
         
@@ -795,6 +801,37 @@ class plantillasController extends Controller
 
         //dd($buson);
         
+        return response()->json($buson); 
+    }
+    public function GetFilterSubmit(Request $req){
+            $buson = DB::table('diaco_asignarsedecba')
+            ->join('diaco_name_template_cba','diaco_asignarsedecba.idPlantilla','=','diaco_name_template_cba.id')
+            ->join('diaco_sede','diaco_asignarsedecba.idSede','=','diaco_sede.id_diaco_sede')
+            ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
+            ->join('diaco_usuario as usuarioss','diaco_asignarsedecba.idUsuario','=','diaco_usuario.id_usuario')
+            ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
+            ->selectraw("
+                                distinct 
+                                diaco_name_template_cba.id,
+                                diaco_name_template_cba.NombreTemplate,
+                                diaco_sede.nombre_sede,
+                                (
+                                    CASE 
+                                        WHEN (diaco_asignarsedecba.filtro = 2) THEN 'Ingresada'  
+                                        WHEN (diaco_asignarsedecba.filtro = 3) THEN 'Enviada'  
+                                        WHEN (diaco_asignarsedecba.filtro = 4) THEN 'Publicada'
+                                        ELSE  'Asignada'
+                                        END
+                                ) as estatus, 
+                                diaco_usuario.nombre,
+                                diaco_asignarsedecba.correlativo"
+                            )
+            ->where('diaco_asignarsedecba.estatus','=','1')
+            ->where('diaco_asignarsedecba.idSede','=',$req->sede)
+            ->Where('diaco_asignarsedecba.filtro','>','1')
+            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
+            ->get();
+    
         return response()->json($buson); 
     }
 

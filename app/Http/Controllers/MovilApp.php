@@ -70,8 +70,6 @@ class MovilApp extends Controller
         return $last_price;
     }
 
-   
-
     public function apiPrice_app($id,$idCategoria){
 
         $last = $this->getPriceMorning($id,$idCategoria);
