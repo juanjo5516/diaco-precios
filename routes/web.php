@@ -189,6 +189,10 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('authorizeChange','catalogos@authorizeChange');
         //**********************
 
+        // Sedes
+        Route::get('getSedeData','plantillasController@getSedeData');
+        Route::post('GetFilterSubmit','plantillasController@GetFilterSubmit');
+        //*************
 
 
         Route::post('getProductoAndMeasure','catalogos@getProductoAndMeasure');

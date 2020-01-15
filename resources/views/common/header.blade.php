@@ -1,4 +1,4 @@
-<header class="app-header navbar">
+<header class="app-header navbar " >  
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -7,7 +7,7 @@
         <img class="navbar-brand-minimized" src=" {{ asset('images/diaco/logo.webp') }} " width="30" height="30" alt="Diaco">
     </a>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span> 
     </button>
     
     <ul class="nav navbar-nav ml-auto" >

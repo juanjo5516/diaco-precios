@@ -1,9 +1,8 @@
-
-<nav class="sidebar-nav">
+<nav class="sidebar-nav"> 
     <ul class="nav">
         @if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda')
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#">Catálogos</a>
+                <a class="nav-link nav-dropdown-toggle" >Catálogos</a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href=/Producto>
@@ -36,7 +35,7 @@
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#">Plantillas</a>
+                <a class="nav-link nav-dropdown-toggle" >Plantillas</a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href=/Edicion>
@@ -52,7 +51,7 @@
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#">Reporte</a>
+                <a class="nav-link nav-dropdown-toggle" >Reporte</a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href=/revisarEnvio>
@@ -82,7 +81,7 @@
             </li> --}}
             @endif
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#">Vaciado</a>
+                <a class="nav-link nav-dropdown-toggle" >Vaciado</a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href=/Bandeja>

@@ -613,6 +613,7 @@ pre code {
 
 .container-fluid {
   width: 100%;
+  margin-top: 25px;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -23614,7 +23615,8 @@ canvas {
 }
 
 .app-header {
-  position: relative;
+  /* position: relative; */
+  position: fixed;
   flex-direction: row;
   height: 55px;
   padding: 0;
@@ -23623,7 +23625,7 @@ canvas {
   border-bottom: 1px solid #dee2e6;
 }
 
-.app-header .navbar-brand {
+.app-header .navbar-brand { 
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -24113,6 +24115,7 @@ canvas {
 
 .sidebar .sidebar-nav {
   position: relative;
+  /* position: fixed; */
   flex: 1;
   overflow-x: hidden;
   overflow-y: auto;

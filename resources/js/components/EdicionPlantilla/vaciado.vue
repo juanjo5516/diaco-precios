@@ -98,7 +98,7 @@
                 <el-dialog
                     title="Vaciado de Información"
                     :visible.sync="dialogFormVisible"
-                    width="52%"
+                    width="70%"
                     top="2vh"
                     destroy-on-close
                 >
