@@ -231,7 +231,7 @@
 
     },
        current_change: function(currentPage) {
-      console.log(currentPage);
+      // console.log(currentPage);
       this.currentPage = currentPage;
     },
     handleSizeChange(val) {

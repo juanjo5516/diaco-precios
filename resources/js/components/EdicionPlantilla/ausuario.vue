@@ -119,7 +119,7 @@ export default {
     mounted() {
       //   this.getAsignaciones();
         this.getDataAsignacion();
-        console.log(this.coleccion[0].sede);
+        // console.log(this.coleccion[0].sede);
     },
     methods: {
         onSubmit: function() {

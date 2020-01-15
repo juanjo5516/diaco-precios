@@ -559,7 +559,7 @@ export default {
             }
         },
         terminar() {
-            console.log(this.nColumna);
+            // console.log(this.nColumna);
             this.fullscreenTerminar = true;
             var url = "/updateStatusVaciado";
             const bandeja = "/Bandeja";
