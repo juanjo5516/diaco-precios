@@ -1,5 +1,4 @@
-
-<nav class="sidebar-nav">
+<nav class="sidebar-nav"> 
     <ul class="nav">
         @if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda')
             <li class="nav-item nav-dropdown">
