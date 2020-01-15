@@ -149,7 +149,7 @@ export default {
     },
     methods: {
         cellRow ({row, column, rowIndex, columnIndex}) {
-            console.log(column)
+            
             if(column.property == 'estatus'){
                 return 'warning-row';
             }

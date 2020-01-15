@@ -137,7 +137,7 @@ export default {
     methods: {
         viewPrinter: function() {
             axios.get("/Printer").then(response => {
-                console.log("s");
+                // console.log("s");
             });
         },
         getUserAuth() {
