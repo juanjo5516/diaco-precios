@@ -201,7 +201,11 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
         //******Api Movil
         Route::get('verify2','MovilApp@movile_app');
+        //***************
 
+        //******Reporte Chart 
+        Route::get('envio_sede','ReportChartController@submitData');
+        Route::get('getCountSubmit','ReportChartController@getCountSubmit');
         //***************
 
         

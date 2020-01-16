@@ -57,6 +57,10 @@
                         <a class="nav-link" href=/revisarEnvio>
                             <i class="nav-icon fas fa-angle-right"></i> Revisar</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=/envio_sede>
+                            <i class="nav-icon fas fa-angle-right"></i> Enviados por Sedes</a> 
+                    </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" href=/Edicion>
                             <i class="nav-icon fas fa-angle-right"></i> Editor

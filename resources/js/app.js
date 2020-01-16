@@ -60,7 +60,7 @@ Vue.component('ausuario-component', require('./components/EdicionPlantilla/ausua
 Vue.component('submit-component', require('./components/EdicionPlantilla/submitPreview.vue').default)
 Vue.component('authorize-component', require('./components/exportacion/authorize.vue').default);
 Vue.component('updateprices-component', require('./components/exportacion/updateprices.vue').default);
-
+Vue.component('submitdata-component', require('./components/chart/submitData.vue').default);
 
 
 Vue.component('api-component', require('./components/api/api.vue').default);
