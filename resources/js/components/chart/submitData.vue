@@ -1,8 +1,28 @@
 <template>
     <div>
-        <canvas ref="grafica"></canvas>
+        <div ref="leyends"></div>
+        <div>
+            <canvas ref="grafica"></canvas>
+        </div>
     </div>
+        <!-- <div>
+        <ul>
+            <li v-for="(index,x) in data_chart" :key="x">{{ index.name }}</li>
+        </ul>
+
+        </div> -->
 </template>
+
+<style scoped>
+    .cuadro{
+        width: 13px;
+        height: 13px;
+        border-radius: 0.1em;
+        border: 1px solid gray;
+    }
+</style>>
+
+</style>
 
 <script>
 import Chart from "chart.js";
@@ -10,17 +30,31 @@ export default {
     data() {
         return {
             data_chart: [],
-            names: []
+            names: [],
+            tableChart: []
         };
     },
     mounted() {
         this.getDataChart();
     },
     methods: {
+        showInfo(data) {
+            let index = data[0]["_index"];
+            let name = data[0]["_model"]["label"];
+            console.log(name);
+            // console.log(data)
+            console.log(
+                data[0]["_chart"]["data"]["datasets"][0]["data"][index]
+            );
+        },
+
         chartDataShow(tipe, request) {
             const ctx = this.$refs.grafica;
+            const legends = this.$refs.leyends
+            
             ctx.height = "500";
             ctx.width = "800";
+
             const myChart = new Chart(ctx, {
                 type: tipe,
                 data: {
@@ -40,13 +74,49 @@ export default {
                     ]
                 },
                 options: {
+                    onClick: (e, legendItem) => {
+                        var index = legendItem.index;
+                        var chart = this.chart;
+                        var i, ilen, meta;
+                        this.showInfo(legendItem);
+                    },
+
                     legend: {
-                        display: true,
+                        display: false,
+                        rtl: true,
                         labels: {
-                            fontColor: "rgb(255, 99, 132)"
-                        }
+                            // fontColor: "rgb(255, 99, 132)"
+                            boxWidth: 20,
+                            fontSize: 14,
+                            padding: 8,
+                            usePointStyle: false
+
+                            //fin
+                        },
+                        align: "center"
                     },
                     tooltips: {
+                        mode: "label",
+
+                        callbacks: {
+                            // label: function(tooltipItem, data) {
+                            //     console.log(data)
+                            //     var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                            //     label = data.labels[tooltipItem[0]]
+
+                            //     return label;
+
+                            // },
+                            labelColor: function(tooltipItem, chart) {
+                                return {
+                                    borderColor: "rgb(255, 0, 0)",
+                                    backgroundColor: "rgb(255, 0, 0)"
+                                };
+                            },
+                            labelTextColor: function(tooltipItem, chart) {
+                                return "#fff";
+                            }
+                        },
                         mode: "index",
                         intersect: false
                     },
@@ -60,27 +130,56 @@ export default {
                     //     console.log(votes);
                     // },
                     title: {
-                        display: true,
+                        display: false,
                         text: "Datos envias desde las sedes"
                     },
-                    // legendCallback: function(chart) {
-                    //     return "<h1>asf</h1>";
-                    // },
+                    legendCallback: function(chart) {
+                        var text = [];
+                        text.push('<ul class="0-legend">');
+                        var ds = chart.data.datasets[0];
+                        console.log(ds)
+                        var sum = ds.data.reduce(function add(a, b) {
+                            return a + b;
+                        }, 0);
+                        for (var i = 0; i < ds.data.length; i++) {
+                            text.push("<li>");
+                            // var perc = Math.round((100 * ds.data[i]) / sum, 0);
+                            text.push(
+                                '<span class="cuadro" style="background-color:' +
+                                    ds.backgroundColor[0] +
+                                    '">1' +
+                                    "</span>" +
+                                    chart.data.labels[i] +
+                                    " (" +
+                                    ds.data[i] +
+                                    ")"
+                            );
+                            text.push("</li>");
+                        }
+                        text.push("</ul>");
+                        
+                        return text.join("");
+                    },
+
                     scales: {
-                        xAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Month'
-                        }
-                    }],
-                    yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
+                        xAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true
+                                    // labelString: 'Month'
+                                }
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                display: true,
+                                scaleLabel: {
+                                    display: true
+                                    // labelString: 'Value'
+                                }
+                            }
+                        ]
                         // yAxes: [
                         //     {
                         //         // stacked: true
@@ -105,6 +204,7 @@ export default {
                     maintainAspectRatio: false
                 }
             });
+            legends.innerHTML = myChart.generateLegend();
         },
         getDataChart() {
             axios
@@ -120,7 +220,8 @@ export default {
                             borderColor: `rgba(${r()}, ${r()}, ${r()},1)`
                         });
                     }
-                    this.chartDataShow("pie", this.data_chart);
+                    // console.log(this.data_chart)
+                    this.chartDataShow("bar", this.data_chart);
                 })
                 .catch(err => {
                     console.log(err);
