@@ -18,6 +18,7 @@ class MovilApp extends Controller
         $coordenadas = DB::SELECT('EXEC department_coordinates');
         $coordenadas = collect($coordenadas);
 
+        
         foreach ($coordenadas as $sedes_producto) {
             $data = DB::SELECT('exec sp_productos_cba :sede',['sede' => $sedes_producto->code]);
             $nivel3[] = [
@@ -30,6 +31,7 @@ class MovilApp extends Controller
             ];
         }
 
+        
         $branchData = collect($nivel3);
 
         foreach ($departments as $union) {
@@ -38,8 +40,9 @@ class MovilApp extends Controller
                 "code"      =>  $union->code,
                 "name"      =>  $union->name,
                 "sedes"     =>  $data
-            ];
+            ]; 
         }
+        dd($branchData);
         return fractal()
             ->collection($response)
             ->transformWith(new DataDepartamento())
