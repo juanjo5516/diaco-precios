@@ -15,7 +15,7 @@
         "@coreui/icons": "0.3.0",
         "bootstrap": "^4.3.1",
         "buefy": "^0.7.8",
-        "chart.js": "2.7.3",
+        "chart.js": "^2.7.3",
         "core-js": "^2.6.5",
         "datatables.net-dt": "^1.10.19",
         "element-ui": "^2.10.0",
