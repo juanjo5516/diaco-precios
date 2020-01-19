@@ -42,7 +42,7 @@ class MovilApp extends Controller
                 "sedes"     =>  $data
             ]; 
         }
-        dd($branchData);
+        // dd($response);
         return fractal()
             ->collection($response)
             ->transformWith(new DataDepartamento())
