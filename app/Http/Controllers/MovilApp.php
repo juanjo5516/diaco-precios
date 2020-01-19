@@ -33,6 +33,7 @@ class MovilApp extends Controller
 
         
         $branchData = collect($nivel3);
+        
 
         foreach ($departments as $union) {
             $data = $branchData->where('departamento','=',$union->code);
@@ -42,7 +43,7 @@ class MovilApp extends Controller
                 "sedes"     =>  $data
             ]; 
         }
-        // dd($response);
+       
         return fractal()
             ->collection($response)
             ->transformWith(new DataDepartamento())
