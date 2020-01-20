@@ -49,6 +49,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // Route::post('Printer','plantillasController@showprinter');
         Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');  
         Route::post('mercadoCBA','plantillasController@vaciado');
+        Route::post('setDataSubmit','plantillasController@setDataSubmit');
         Route::get('clonar','plantillasController@clon');
         Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
         Route::get('getPlantillaClon','plantillasController@getPlantillasAll');

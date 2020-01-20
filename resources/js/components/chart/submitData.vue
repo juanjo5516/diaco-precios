@@ -5,7 +5,7 @@
             <canvas ref="grafica"></canvas>
         </div>
     </div>
-        <!-- <div>
+    <!-- <div>
         <ul>
             <li v-for="(index,x) in data_chart" :key="x">{{ index.name }}</li>
         </ul>
@@ -13,15 +13,30 @@
         </div> -->
 </template>
 
-<style scoped>
-    .cuadro{
-        width: 13px;
-        height: 13px;
-        border-radius: 0.1em;
-        border: 1px solid gray;
-    }
-</style>>
+<style>
+.cuadro {
+    width: 13px;
+    height: 13px;
+    border-radius: 0.1em;
+    border: 1px solid gray;
+    display: inline-block;
+    margin: 0.1em;
+}
+.card {
+    border: 1px solid black;
+    margin-bottom: 1em;
+    border-radius: 0.5em;
+    padding: 1em;
+    background: #fff;
+    color: #000;
+    transition: all 400ms ease-out;
+}
 
+.lista{
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 </style>
 
 <script>
@@ -50,8 +65,8 @@ export default {
 
         chartDataShow(tipe, request) {
             const ctx = this.$refs.grafica;
-            const legends = this.$refs.leyends
-            
+            const legends = this.$refs.leyends;
+
             ctx.height = "500";
             ctx.width = "800";
 
@@ -135,19 +150,19 @@ export default {
                     },
                     legendCallback: function(chart) {
                         var text = [];
-                        text.push('<ul class="0-legend">');
+                        text.push('<ul >');
                         var ds = chart.data.datasets[0];
-                        console.log(ds)
+                        console.log(ds);
                         var sum = ds.data.reduce(function add(a, b) {
                             return a + b;
                         }, 0);
                         for (var i = 0; i < ds.data.length; i++) {
-                            text.push("<li>");
+                            text.push("<li class='lista'>");
                             // var perc = Math.round((100 * ds.data[i]) / sum, 0);
                             text.push(
                                 '<span class="cuadro" style="background-color:' +
-                                    ds.backgroundColor[0] +
-                                    '">1' +
+                                    ds.backgroundColor[i] +
+                                    '">' +
                                     "</span>" +
                                     chart.data.labels[i] +
                                     " (" +
@@ -157,7 +172,7 @@ export default {
                             text.push("</li>");
                         }
                         text.push("</ul>");
-                        
+
                         return text.join("");
                     },
 

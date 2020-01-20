@@ -35,20 +35,32 @@
                             <div><b> Verificador: </b></div>
                             {{ item.nombre }}
                         </el-col>
-                        <el-col :xs="25" :sm="6" :md="10" :lg="8" :xl="10">
-                            <div><b> Lugar Visita: </b></div>
-                            <el-select
-                                :name="'LugarMercado'"
-                                v-model="sedes['mLugar']"
-                                filterable
-                            >
-                                <el-option
-                                    v-for="(sede, index) in mercados"
-                                    v-bind:key="index"
-                                    :label="sede.nombre"
-                                    :value="sede.idMercado"
-                                ></el-option>
-                            </el-select>
+                        <el-col
+                            :xs="25"
+                            :sm="6"
+                            :md="10"
+                            :lg="8"
+                            :xl="10"
+                            v-for="(index, x) in IdTipo"
+                            :key="x"
+                        >
+                            <div v-if="index.name !== 'Gas propano'">
+                                <div><b> Lugar Visita: </b></div>
+                                <el-select
+                                    :name="'LugarMercado'"
+                                    v-model="sedes['mLugar']"
+                                    filterable
+                                >
+                                    <el-option
+                                        v-for="(sede, index) in mercados"
+                                        v-bind:key="index"
+                                        :label="sede.nombre"
+                                        :value="sede.idMercado"
+                                    >
+
+                                    </el-option>
+                                </el-select>
+                            </div>
                         </el-col>
                     </el-row>
                 </div>
@@ -63,11 +75,15 @@
                         <el-table-column
                             label="Id"
                             type="index"
-                        ></el-table-column>
+                        >
+
+                        </el-table-column>
                         <el-table-column
                             label="Categoría"
                             prop="categoria"
-                        ></el-table-column>
+                        >
+
+                        </el-table-column>
                         <el-table-column label="Operaciones" width="200">
                             <template slot-scope="scope">
                                 <el-button-group>
@@ -95,9 +111,10 @@
                         </el-table-column>
                     </el-table>
                 </div>
+                <!-- Dialogos  -->
                 <el-dialog
-                    title="Vaciado de Información"
-                    :visible.sync="dialogFormVisible"
+                    title="Vaciado de Información gas"
+                    :visible.sync="dialogGas"
                     width="70%"
                     top="2vh"
                     destroy-on-close
@@ -112,39 +129,56 @@
                             <el-table-column
                                 label="No."
                                 type="index"
-                            ></el-table-column>
-                            <el-table-column label="No. Local" width="170">
-                                <template slot-scope="scope">
-                                    <el-input-number
-                                        size="small"
-                                        v-model="
-                                            inputMercados[
-                                                'mercado' + scope.row.index
-                                            ]
-                                        "
-                                        :min="0"
-                                        :max="1000"
-                                    ></el-input-number>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                label="Establecimiento (campo obligatorio)"
                             >
+
+                            </el-table-column>
+                            <el-table-column label="Nombre" width="350">
                                 <template slot-scope="scope">
                                     <el-input
                                         v-model="
-                                            sedes['select' + scope.row.index]
+                                            inputNombre[
+                                                'nombre' + scope.row.index
+                                            ]
                                         "
-                                        placeholder="Ingrese Establecimiento"
-                                    ></el-input>
-                                    <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
-                                                <el-option
-                                                v-for="(sede,index) in establecimientos"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  "
-                                                :value=" sede.idEstablecimiento "
-                                                ></el-option>
-                                          </el-select> -->
+                                    >
+
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="Dirección" >
+                                <template slot-scope="scope">
+                                    <el-input
+                                        v-model="
+                                            inputdireccion[
+                                                'direccion' + scope.row.index
+                                            ]
+                                        "
+                                    >
+
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="Departamento" width="200">
+                                <template slot-scope="scope">
+                                    <el-select
+                                        v-model="
+                                            inputDepartamento[
+                                                'departamento' + scope.row.index
+                                            ]
+                                        "
+
+                                        filterable
+
+                                    >
+                                        <el-option
+                                            v-for="(item,
+                                            index) in departamento"
+                                            :key="index"
+                                            :label="item.nombre_departamento"
+                                            :value="item.codigo_departamento"
+                                        >
+                                        </el-option>
+                                    </el-select>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -153,7 +187,8 @@
                                 <tr>
                                     <th style="width:40%">Producto</th>
                                     <th style="width:40%">Medida</th>
-                                    <th style="width:10%"
+                                    <th
+                                        style="width:10%"
                                         v-for="(index, x) in nColumna"
                                         v-bind:key="x"
                                     >
@@ -180,7 +215,119 @@
                                             :precision="2"
                                             :min="0"
                                             :max="1000000000"
-                                        ></el-input-number>
+                                        >
+
+                                        </el-input-number>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false"
+                            >Cancelar</el-button
+                        >
+                        <el-button type="primary" @click="onSubmit()"
+                            >Guardar</el-button
+                        >
+                    </span>
+                </el-dialog>
+                <!-- fin -->
+                <el-dialog
+                    title="Vaciado de Información"
+                    :visible.sync="dialogFormVisible"
+                    width="70%"
+                    top="2vh"
+                    destroy-on-close
+                >
+                    <el-form :model="form">
+                        <el-table
+                            :data="nColumna"
+                            style="width: 100%"
+                            border
+                            size="small"
+                        >
+                            <el-table-column
+                                label="No."
+                                type="index"
+                            >
+
+                            </el-table-column>
+                            <el-table-column label="No. Local" width="170">
+                                <template slot-scope="scope">
+                                    <el-input-number
+                                        size="small"
+                                        v-model="
+                                            inputMercados[
+                                                'mercado' + scope.row.index
+                                            ]
+                                        "
+                                        :min="0"
+                                        :max="1000"
+                                    >
+
+                                    </el-input-number>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                label="Establecimiento (campo obligatorio)"
+                            >
+                                <template slot-scope="scope">
+                                    <el-input
+                                        v-model="
+                                            sedes['select' + scope.row.index]
+                                        "
+                                        placeholder="Ingrese Establecimiento"
+                                    >
+
+                                    </el-input>
+                                    <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
+                                                <el-option
+                                                v-for="(sede,index) in establecimientos"
+                                                v-bind:key=" index "
+                                                :label=" sede.nombre  "
+                                                :value=" sede.idEstablecimiento "
+                                                ></el-option>
+                                          </el-select> -->
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <table class="table table-bordered head" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:40%">Producto</th>
+                                    <th style="width:40%">Medida</th>
+                                    <th
+                                        style="width:10%"
+                                        v-for="(index, x) in nColumna"
+                                        v-bind:key="x"
+                                    >
+                                        {{ index.index }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(index, ix) of Productos"
+                                    v-bind:key="ix"
+                                >
+                                    <td>{{ index.produto }}</td>
+                                    <td class="ReferencesName">
+                                        {{ index.medida }}
+                                    </td>
+                                    <td
+                                        v-for="(n, x) in nColumna"
+                                        v-bind:key="x"
+                                    >
+                                        <el-input-number
+                                            v-model="index['valor' + n.index]"
+                                            size="mini"
+                                            :precision="2"
+                                            :min="0"
+                                            :max="1000000000"
+                                        >
+
+                                        </el-input-number>
                                     </td>
                                 </tr>
                             </tbody>
@@ -201,7 +348,9 @@
                 :stroke-width="24"
                 :percentage="porcentaje"
                 status="success"
-            ></el-progress>
+            >
+
+            </el-progress>
             <el-button
                 class="my-5"
                 type="success"
@@ -363,6 +512,10 @@ export default {
             valor1: "",
             inputs1: {},
             sede: {},
+            inputDepartamento: [],
+            inputMunicipio: [],
+            inputNombre: [],
+            inputdireccion: [],
             inputMercados: {
                 mercado1: "",
                 mercado2: "",
@@ -382,6 +535,7 @@ export default {
             nColumna: [],
             plantillasall: [],
             dialogFormVisible: false,
+            dialogGas: false,
             form: {
                 name: "",
                 producto: "",
@@ -399,10 +553,15 @@ export default {
             button: "",
             type_error: "",
             result_error: "",
-            cantidadColumna: 0
+            cantidadColumna: 0,
+            departamento: [],
+            municipio: [],
+            dataNames:[],
+
         };
     },
     mounted() {
+
         this.getTipo();
         this.getPropano();
         this.getSMercado();
@@ -413,6 +572,15 @@ export default {
         }
     },
     methods: {
+        dataDepartamento() {
+            var url = "/getDepartamento";
+            axios.get(url).then(response => {
+                this.departamento = response.data;
+            });
+        },
+        dataMunicipio(dato) {
+            this.municipio = dato;
+        },
         getVisitas: function() {
             var url = "/findAllVisita";
             axios.get(url).then(response => {
@@ -421,7 +589,15 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
-            this.dialogFormVisible = true;
+            this.inputNombre = [];
+            this.inputdireccion = [];
+            this.inputDepartamento = []
+            if (producto == "Gas Propano") {
+                this.dataDepartamento();
+                this.dialogGas = true;
+            } else {
+                this.dialogFormVisible = true;
+            }
             this.categoriaFiltro = producto;
             this.DataProductos();
             this.button = button;
@@ -446,15 +622,9 @@ export default {
         },
         getTipo: function() {
             const tipos = this.idplantilla;
-            axios
-                .get("/visitas/" + tipos)
-                .then(response => {
-                    this.IdTipo = response.data;
-                })
-                .catch(function(error) {
-                    console.log(error);
-                })
-                .finally(function() {});
+            axios.get("/visitas/" + tipos).then(response => {
+                this.IdTipo = response.data;
+            });
         },
         getSMercado: function() {
             axios
@@ -494,6 +664,42 @@ export default {
                 });
         },
         onSubmit() {
+            for (let i = 1; i <= this.cantidadColumna ; i++) {
+                this.dataNames.push({
+                    'dataName': this.inputNombre['nombre'+i],
+                    'dataAddress': this.inputdireccion['direccion'+i],
+                    'dataDepartment': this.inputDepartamento['departamento'+i]
+                });
+
+            }
+            console.log(this.dataNames)
+            let option = [];
+            // axios.post(url, {
+            //             idP: this.idplantilla,
+            //             Mercados: this.inputMercados,
+            //             Sedes: this.sedes,
+            //             Usuarios: this.usuario[0].id_usuario,
+            //             Data: this.Productos,
+            //             idSede: this.usuario[0].id,
+            //             idTipo: this.IdTipo,
+            //             columnas: this.cantidadColumna,
+            //             Ncorrelativo: this.correlativo
+            //         })
+            if(this.IdTipo[0].tipoVerificacion === '6'){
+                option.push({
+                    idP: this.idplantilla,
+                    user: this.usuario[0].id_usuario,
+                    dataProduct: this.Productos,
+                    idOffice: this.usuario[0].id,
+                    idType: this.IdTipo,
+                    column: this.cantidadColumna,
+                    nCorrelative: this.correlativo,
+                    dataName: this.dataNames,
+                })
+                //console.log(option)
+            }else{
+                console.log('no')
+            }
             const h = this.$createElement;
             if (this.checkValidation(this.sedes) == true) {
                 this.fullscreenLoading = true;
@@ -506,23 +712,15 @@ export default {
                 //         });
                 //     }
                 // }
-                var url = "/mercadoCBA";
+                // var url = "/mercadoCBA";
+                var url = "/setDataSubmit";
                 const bandeja = "/Bandeja";
 
-                axios
-                    .post(url, {
-                        idP: this.idplantilla,
-                        Mercados: this.inputMercados,
-                        Sedes: this.sedes,
-                        Usuarios: this.usuario[0].id_usuario,
-                        Data: this.Productos,
-                        idSede: this.usuario[0].id,
-                        idTipo: this.IdTipo,
-                        columnas: this.cantidadColumna,
-                        Ncorrelativo: this.correlativo
+                axios.post(url, {
+                        option
                     })
                     .then(response => {
-                        const status = JSON.parse(response.status); 
+                        const status = JSON.parse(response.status);
                         if (status == "200") {
                             // window.location = bandeja;
                             this.dialogFormVisible = false;

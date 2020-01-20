@@ -10,6 +10,7 @@ use App\NameTemplate;
 use App\ListarAsignacion;
 use App\vaciadocba;
 use App\Models\local;
+use App\Models\market;
 use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
 use App\Models\Departamento;
@@ -494,7 +495,7 @@ class plantillasController extends Controller
 
     public function getCategoria($id){
         $categoria = DB::table('diaco_plantillascba')
-                            ->selectraw('distinct diaco_categoriacba.nombre as categoria')
+                            ->selectraw('distinct diaco_categoriacba.id_categoria as code,diaco_categoriacba.nombre as categoria')
                             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                             ->join('diaco_productocba','id_producto','=','idProducto')
                             ->join('diaco_medida','id_medida','=','idMedida')
@@ -518,7 +519,7 @@ class plantillasController extends Controller
         
         $tipo = DB::table('diaco_plantillascba')
                         ->join('diaco_name_template_cba','NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
-                        ->selectraw('distinct top 1 diaco_plantillascba.tipoVerificacion')
+                        ->selectraw('distinct top 1 diaco_plantillascba.tipoVerificacion, diaco_plantillascba.NombrePlantilla as name')
                         ->where('diaco_name_template_cba.id','=',$id)
                         ->get();
 
@@ -601,9 +602,46 @@ class plantillasController extends Controller
             ]);
     }
 
+
+    public function createMarket($data){
+        $id="";
+        $validar = $this->VerificarItem($nombre,'market','nombreMercado');
+        if($validar === 0){
+            $id = market::select('idMercado as code')->where('nombreMercado','=',$nombre)->get();
+            return $id[0]['code'];
+            
+        }else{
+            $data = new market;
+            $data->nombreMercado = $nombre;
+            $data->status = 'A';
+            $data->save();
+            $id = $data->id; 
+            return $id;
+            
+        }
+    }
+
+    public function setDataSubmit(Request $request){
+        $timeStamp = Carbon::now();
+        // $countProduct = count($request->dataProduct);
+        $columns = (int)$request->option[0]['column'];
+        
+
+        try {
+            for ($column=1; $column <= $columns; $column++) { 
+                for ($row=0; $row < $countProduct; $row++) { 
+                    $local = $this->createLocal();
+                }
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+    }
+
     public function vaciado(Request $request){
         
-        
+        dd($request);
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
         $columnas = (int)$request->columnas; 
@@ -913,6 +951,12 @@ class plantillasController extends Controller
     public function VerificarItem($nombre, $tabla,$campo){
         if ($tabla === 'local') {
             if (local::where($campo, '=', $nombre)->where('status','=','A')->exists()){
+                return 0;  
+            }else{
+                return 1;
+            }
+        }else if($tabla === 'market'){
+            if (market::where($campo, '=', $nombre)->where('status','=','A')->exists()){
                 return 0; 
             }else{
                 return 1;
