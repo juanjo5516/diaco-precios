@@ -207,8 +207,10 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //******Reporte Chart 
         Route::get('envio_sede','ReportChartController@submitData');
         Route::get('getCountSubmit','ReportChartController@getCountSubmit');
+        Route::get('getCountSubmit','ReportChartController@getCountSubmit');
         //***************
 
+        
         
     //------------------------------------------------------------------------------------------
     }); 

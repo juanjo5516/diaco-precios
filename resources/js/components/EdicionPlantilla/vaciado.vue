@@ -41,10 +41,10 @@
                             :md="10"
                             :lg="8"
                             :xl="10"
-                            v-for="(index, x) in IdTipo"
+                            v-for="(index, x) in categoria"
                             :key="x"
                         >
-                            <div v-if="index.name !== 'Gas propano'">
+                            <div v-if="index.categoria !== 'Gas propano'">
                                 <div><b> Lugar Visita: </b></div>
                                 <el-select
                                     :name="'LugarMercado'"
@@ -119,40 +119,49 @@
                     top="2vh"
                     destroy-on-close
                 >
-                    <el-form :model="form">
+                    <el-form :model="form" :rules="rules" ref="form">
                         <el-table
                             :data="nColumna"
-                            style="width: 100%"
                             border
                             size="small"
                         >
-                            <el-table-column
-                                label="No."
-                                type="index"
-                            >
+                                <el-table-column
+                                    label="No."
+                                    type="index"
+                                >
+                                </el-table-column>
+                                <el-table-column label="Nombre" width="350" >
+                                    <template slot-scope="scope">
+                                        <el-input
+                                            
+                                            :name="'nombre_'+scope.row.index"
 
-                            </el-table-column>
-                            <el-table-column label="Nombre" width="350">
-                                <template slot-scope="scope">
-                                    <el-input
-                                        v-model="
-                                            inputNombre[
-                                                'nombre' + scope.row.index
-                                            ]
-                                        "
-                                    >
+                                            v-model="
+                                                inputNombre[
+                                                    'nombre' + scope.row.index
+                                                ]
+                                            "
+                                            :ref="'nombre_'+scope.row.index"
 
-                                    </el-input>
-                                </template>
-                            </el-table-column>
+                                            @blur="handleInputl('nombre_'+scope.row.index)"
+                                        >
+
+                                        </el-input>
+                                        
+                                    </template>
+                                </el-table-column>
+
                             <el-table-column label="Dirección" >
                                 <template slot-scope="scope">
                                     <el-input
+                                        :name="'direccion_'+scope.row.index"
                                         v-model="
                                             inputdireccion[
                                                 'direccion' + scope.row.index
                                             ]
                                         "
+                                        :ref="'direccion_'+scope.row.index"
+                                        @blur="handleInputl('direccion_'+scope.row.index)"
                                     >
 
                                     </el-input>
@@ -166,7 +175,8 @@
                                                 'departamento' + scope.row.index
                                             ]
                                         "
-
+                                        :ref="'departamento_'+scope.row.index"
+                                        @blur="handleInputl('departamento_'+scope.row.index)"
                                         filterable
 
                                     >
@@ -365,6 +375,13 @@
 </template>
 
 <style>
+
+.validate_input input{
+    border:2px solid red;
+    background-color: #ffffcc
+    
+}
+
 .oculto {
     display: none;
 }
@@ -540,7 +557,18 @@ export default {
                 name: "",
                 producto: "",
                 medida: "",
-                seleccionMercado: []
+                seleccionMercado: [],
+
+
+            },
+            rules: {
+                inputNombre: [
+                {
+                    required: true,
+                    message: "Ingrese un Nombre de Categoria",
+                    trigger: "blur"
+                }
+                ]
             },
             formLabelWidth: "120px",
             ListadoProducto: [],
@@ -557,6 +585,9 @@ export default {
             departamento: [],
             municipio: [],
             dataNames:[],
+            handle_error_name:[],
+            
+
 
         };
     },
@@ -589,10 +620,11 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
+
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            if (producto == "Gas Propano") {
+            if (producto == "Gas propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -624,6 +656,7 @@ export default {
             const tipos = this.idplantilla;
             axios.get("/visitas/" + tipos).then(response => {
                 this.IdTipo = response.data;
+
             });
         },
         getSMercado: function() {
@@ -672,7 +705,7 @@ export default {
                 });
 
             }
-            console.log(this.dataNames)
+
             let option = [];
             // axios.post(url, {
             //             idP: this.idplantilla,
@@ -685,7 +718,7 @@ export default {
             //             columnas: this.cantidadColumna,
             //             Ncorrelativo: this.correlativo
             //         })
-            if(this.IdTipo[0].tipoVerificacion === '6'){
+            if(this.categoria[0].code === '16'){
                 option.push({
                     idP: this.idplantilla,
                     user: this.usuario[0].id_usuario,
@@ -694,11 +727,8 @@ export default {
                     idType: this.IdTipo,
                     column: this.cantidadColumna,
                     nCorrelative: this.correlativo,
-                    dataName: this.dataNames,
+                    dataNames: this.dataNames,
                 })
-                //console.log(option)
-            }else{
-                console.log('no')
             }
             const h = this.$createElement;
             if (this.checkValidation(this.sedes) == true) {
@@ -776,6 +806,21 @@ export default {
                     }
                 })
                 .catch(error => {});
+        },
+        handleInputl(val){
+            const ctx = this.$refs[val];
+            console.log(ctx)
+            if(ctx.value == undefined){
+                ctx.$el.classList.add('validate_input');
+                this.handle_error_name.push(
+                    val
+                )
+               
+            }else{
+                this.handle_error_name = this.handle_error_name.filter((i) => i !== val);
+                ctx.$el.classList.remove('validate_input');
+            }
+            
         },
         checkValidation(selecciones) {
             if (selecciones.mLugar === "Seleccione una Opción") {

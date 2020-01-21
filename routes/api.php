@@ -34,5 +34,8 @@ Route::get('prices/{id}/{categoria}','MovilApp@apiPrice_app');
 
 //***************
 
+// Route::post('createMarket','catalogos@addMarket');
+Route::post('createMarket','plantillasController@createMarket');
+
 
 

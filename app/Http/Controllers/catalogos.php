@@ -147,6 +147,7 @@ class catalogos extends Controller
     public function addMarket(Request $request){
 
         $validar = $this->VerificarItem($request->names,'lugar','nombreMercado');
+        dd($validar);
         if($validar === 0){
             return response()->json(false, 200);
         }else{
