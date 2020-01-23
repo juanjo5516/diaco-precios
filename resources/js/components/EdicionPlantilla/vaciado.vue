@@ -41,26 +41,22 @@
                             :md="10"
                             :lg="8"
                             :xl="10"
-                            v-for="(index, x) in categoria"
-                            :key="x"
+                            v-if="handle_categories !== true"
                         >
-                            <div v-if="index.categoria !== 'Gas propano'">
-                                <div><b> Lugar Visita: </b></div>
-                                <el-select
-                                    :name="'LugarMercado'"
-                                    v-model="sedes['mLugar']"
-                                    filterable
+                            <div><b> Lugar Visita: </b></div>
+                            <el-select
+                                :name="'LugarMercado'"
+                                v-model="sedes['mLugar']"
+                                filterable
+                            >
+                                <el-option
+                                    v-for="(sede, index) in mercados"
+                                    v-bind:key="index"
+                                    :label="sede.nombre"
+                                    :value="sede.idMercado"
                                 >
-                                    <el-option
-                                        v-for="(sede, index) in mercados"
-                                        v-bind:key="index"
-                                        :label="sede.nombre"
-                                        :value="sede.idMercado"
-                                    >
-
-                                    </el-option>
-                                </el-select>
-                            </div>
+                                </el-option>
+                            </el-select>
                         </el-col>
                     </el-row>
                 </div>
@@ -113,13 +109,13 @@
                 </div>
                 <!-- Dialogos  -->
                 <el-dialog
-                    title="Vaciado de Información gas"
+                    title="Llenado de Información"
                     :visible.sync="dialogGas"
                     width="70%"
                     top="2vh"
                     destroy-on-close
                 >
-                    <el-form :model="form" :rules="rules" ref="form">
+                    <el-form :model="form">
                         <el-table
                             :data="nColumna"
                             border
@@ -133,7 +129,7 @@
                                 <el-table-column label="Nombre" width="350" >
                                     <template slot-scope="scope">
                                         <el-input
-                                            
+
                                             :name="'nombre_'+scope.row.index"
 
                                             v-model="
@@ -143,11 +139,11 @@
                                             "
                                             :ref="'nombre_'+scope.row.index"
 
-                                            @blur="handleInputl('nombre_'+scope.row.index)"
+                                            @blur="handleInputl('nombre_'+scope.row.index, 'principal')"
                                         >
 
                                         </el-input>
-                                        
+
                                     </template>
                                 </el-table-column>
 
@@ -161,7 +157,7 @@
                                             ]
                                         "
                                         :ref="'direccion_'+scope.row.index"
-                                        @blur="handleInputl('direccion_'+scope.row.index)"
+                                        @blur="handleInputl('direccion_'+scope.row.index ,'principal')"
                                     >
 
                                     </el-input>
@@ -176,7 +172,7 @@
                                             ]
                                         "
                                         :ref="'departamento_'+scope.row.index"
-                                        @blur="handleInputl('departamento_'+scope.row.index)"
+                                        @blur="handleInputl('departamento_'+scope.row.index,'principal')"
                                         filterable
 
                                     >
@@ -192,52 +188,32 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <table class="table table-bordered head" width="100%">
-                            <thead>
-                                <tr>
-                                    <th style="width:40%">Producto</th>
-                                    <th style="width:40%">Medida</th>
-                                    <th
-                                        style="width:10%"
-                                        v-for="(index, x) in nColumna"
-                                        v-bind:key="x"
+                        <el-table border :data="Productos" class="table_header" max-height="350">
+                            <el-table-column label="Producto" prop="produto">
+                            </el-table-column>
+                            <el-table-column label="Medida" prop="medida">
+                            </el-table-column>
+                            <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
+                                <template slot-scope="scope">
+<!--                                    {{ index.index }}-->
+                                    <el-input
+                                        :name="'data_'+ scope.$index+ '_' + index.index"
+                                        class="input_precios"
+                                        v-model="inputprecios['data_'+ scope.$index+ '_' + index.index]"
+                                        size="mini"
+                                        :ref="'data_'+ scope.$index+ '_' + index.index"
+                                        @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
                                     >
-                                        {{ index.index }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(index, ix) of Productos"
-                                    v-bind:key="ix"
-                                >
-                                    <td>{{ index.produto }}</td>
-                                    <td class="ReferencesName">
-                                        {{ index.medida }}
-                                    </td>
-                                    <td
-                                        v-for="(n, x) in nColumna"
-                                        v-bind:key="x"
-                                    >
-                                        <el-input-number
-                                            v-model="index['valor' + n.index]"
-                                            size="mini"
-                                            :precision="2"
-                                            :min="0"
-                                            :max="1000000000"
-                                        >
-
-                                        </el-input-number>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisible = false"
+                        <el-button @click="dialogGas = false"
                             >Cancelar</el-button
                         >
-                        <el-button type="primary" @click="onSubmit()"
+                        <el-button type="primary" @click="ver()"
                             >Guardar</el-button
                         >
                     </span>
@@ -302,46 +278,66 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <table class="table table-bordered head" width="100%">
-                            <thead>
-                                <tr>
-                                    <th style="width:40%">Producto</th>
-                                    <th style="width:40%">Medida</th>
-                                    <th
-                                        style="width:10%"
-                                        v-for="(index, x) in nColumna"
-                                        v-bind:key="x"
+                        <el-table border :data="Productos" class="table_header" max-height="350">
+                            <el-table-column label="Producto" prop="produto">
+                            </el-table-column>
+                            <el-table-column label="Medida" prop="medida">
+                            </el-table-column>
+                            <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
+                                <template slot-scope="scope">
+                                    <!--                                    {{ index.index }}-->
+                                    <el-input
+                                        :name="'data_'+ scope.$index+ '_' + index.index"
+                                        class="input_precios"
+                                        v-model="inputprecios['data_'+ scope.$index+ '_' + index.index]"
+                                        size="mini"
+                                        :ref="'data_'+ scope.$index+ '_' + index.index"
+                                        @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
                                     >
-                                        {{ index.index }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(index, ix) of Productos"
-                                    v-bind:key="ix"
-                                >
-                                    <td>{{ index.produto }}</td>
-                                    <td class="ReferencesName">
-                                        {{ index.medida }}
-                                    </td>
-                                    <td
-                                        v-for="(n, x) in nColumna"
-                                        v-bind:key="x"
-                                    >
-                                        <el-input-number
-                                            v-model="index['valor' + n.index]"
-                                            size="mini"
-                                            :precision="2"
-                                            :min="0"
-                                            :max="1000000000"
-                                        >
+                                    </el-input>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+<!--                        <table class="table table-bordered head" width="100%">-->
+<!--                            <thead>-->
+<!--                                <tr>-->
+<!--                                    <th style="width:40%">Producto</th>-->
+<!--                                    <th style="width:40%">Medida</th>-->
+<!--                                    <th-->
+<!--                                        style="width:10%"-->
+<!--                                        v-for="(index, x) in nColumna"-->
+<!--                                        v-bind:key="x"-->
+<!--                                    >-->
+<!--                                        {{ index.index }}-->
+<!--                                    </th>-->
+<!--                                </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+<!--                                <tr-->
+<!--                                    v-for="(index, ix) of Productos"-->
+<!--                                    v-bind:key="ix"-->
+<!--                                >-->
+<!--                                    <td>{{ index.produto }}</td>-->
+<!--                                    <td class="ReferencesName">-->
+<!--                                        {{ index.medida }}-->
+<!--                                    </td>-->
+<!--                                    <td-->
+<!--                                        v-for="(n, x) in nColumna"-->
+<!--                                        v-bind:key="x"-->
+<!--                                    >-->
+<!--                                        <el-input-number-->
+<!--                                            v-model="index['valor' + n.index]"-->
+<!--                                            size="mini"-->
+<!--                                            :precision="2"-->
+<!--                                            :min="0"-->
+<!--                                            :max="1000000000"-->
+<!--                                        >-->
 
-                                        </el-input-number>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+<!--                                        </el-input-number>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false"
@@ -374,13 +370,34 @@
     </div>
 </template>
 
-<style>
+<style >
+    .table{
+        padding-top:1em !important;
+    }
+    .table_header th {
 
-.validate_input input{
-    border:2px solid red;
-    background-color: #ffffcc
-    
-}
+        background-color: #000 !important;
+        color: #fff;
+        text-align: center !important;
+    }
+    .validate_input input{
+        border:2px solid red;
+        background-color: #ffffcc
+
+    }
+
+    .input_precios{
+        font-size: medium;
+        text-align: center;
+
+    }
+
+
+    /*.el-table--enable-row-hover .el-table__body tr:hover>td{*/
+    /*    background: none !important;*/
+    /*    color: inherit;*/
+    /*    !* transition: all 400ms ease-out; *!*/
+    /*}*/
 
 .oculto {
     display: none;
@@ -533,6 +550,7 @@ export default {
             inputMunicipio: [],
             inputNombre: [],
             inputdireccion: [],
+            inputprecios:[],
             inputMercados: {
                 mercado1: "",
                 mercado2: "",
@@ -586,9 +604,7 @@ export default {
             municipio: [],
             dataNames:[],
             handle_error_name:[],
-            
-
-
+            handle_categories: false
         };
     },
     mounted() {
@@ -598,6 +614,11 @@ export default {
         this.getSMercado();
         this.getColumnas();
         this.cantitdadPorcentaje = parseInt(100 / this.categoria.length, 10);
+        for (let x = 0; x < this.categoria.length; x++){
+            if(this.categoria[x].code === '16'){
+                this.handle_categories= true
+            }
+        }
         if (this.categoria.length > 10) {
             this.cantitdadPorcentaje += 1;
         }
@@ -624,7 +645,8 @@ export default {
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            if (producto == "Gas propano") {
+            // if (producto == "Gas propano") {
+            if (producto == "Gas Propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -705,7 +727,6 @@ export default {
                 });
 
             }
-
             let option = [];
             // axios.post(url, {
             //             idP: this.idplantilla,
@@ -718,7 +739,8 @@ export default {
             //             columnas: this.cantidadColumna,
             //             Ncorrelativo: this.correlativo
             //         })
-            if(this.categoria[0].code === '16'){
+            // if(this.categoria[0].code === '16'){
+            if(this.categoria[0].code === '6'){
                 option.push({
                     idP: this.idplantilla,
                     user: this.usuario[0].id_usuario,
@@ -731,8 +753,8 @@ export default {
                 })
             }
             const h = this.$createElement;
-            if (this.checkValidation(this.sedes) == true) {
-                this.fullscreenLoading = true;
+            // if (this.checkValidation(this.sedes) == true) {
+            //     this.fullscreenLoading = true;
                 this.dataProductos = [];
                 // for (let a = 0; a <= this.coleccion.length - 1; a++) {
                 //     if (this.categoriaFiltro === this.coleccion[a].categoria) {
@@ -744,7 +766,7 @@ export default {
                 // }
                 // var url = "/mercadoCBA";
                 var url = "/setDataSubmit";
-                const bandeja = "/Bandeja";
+                // const bandeja = "/Bandeja";
 
                 axios.post(url, {
                         option
@@ -753,28 +775,28 @@ export default {
                         const status = JSON.parse(response.status);
                         if (status == "200") {
                             // window.location = bandeja;
-                            this.dialogFormVisible = false;
-                            document.getElementById(
-                                this.button
-                            ).disabled = true;
-                            this.porcentaje =
-                                this.porcentaje + this.cantitdadPorcentaje;
-                            this.fullscreenLoading = false;
-                            this.checkPorcentaje(this.porcentaje, this.button);
+                            // this.dialogFormVisible = false;
+                            // document.getElementById(
+                            //     this.button
+                            // ).disabled = true;
+                            // this.porcentaje =
+                            //     this.porcentaje + this.cantitdadPorcentaje;
+                            // this.fullscreenLoading = false;
+                            // this.checkPorcentaje(this.porcentaje, this.button);
                         }
                     })
                     .catch(error => {
                         this.fullscreenLoading = false;
                         console.log(error.message);
                     });
-            } else {
-                this.result_error = this.checkValidation(this.sedes);
-                this.$message.error({
-                    message: h("p", null, [
-                        h("i", { style: "color: red" }, this.result_error)
-                    ])
-                });
-            }
+            // } else {
+            //     this.result_error = this.checkValidation(this.sedes);
+            //     this.$message.error({
+            //         message: h("p", null, [
+            //             h("i", { style: "color: red" }, this.result_error)
+            //         ])
+            //     });
+            // }
         },
         checkPorcentaje(porcentaje, idBotton) {
             document.getElementById(idBotton).style.display = "none";
@@ -807,20 +829,37 @@ export default {
                 })
                 .catch(error => {});
         },
-        handleInputl(val){
-            const ctx = this.$refs[val];
-            console.log(ctx)
-            if(ctx.value == undefined){
-                ctx.$el.classList.add('validate_input');
-                this.handle_error_name.push(
-                    val
-                )
-               
-            }else{
-                this.handle_error_name = this.handle_error_name.filter((i) => i !== val);
-                ctx.$el.classList.remove('validate_input');
+        handleInputl(val,nivel){
+            if(nivel === 'principal'){
+                const ctx = this.$refs[val];
+
+                if(ctx.value === undefined){
+                    ctx.$el.classList.add('validate_input');
+                    this.handle_error_name.push(
+                        val
+                    )
+
+                }else{
+                    this.handle_error_name = this.handle_error_name.filter((i) => i !== val);
+                    ctx.$el.classList.remove('validate_input');
+                }
+            }else if(nivel === 'precio'){
+                const ctx = this.$refs[val][0];
+                if(ctx._props.value === undefined || ctx._props.value === '' ){
+                    ctx.$el.classList.add('validate_input');
+                    this.handle_error_name.push(
+                        val
+                    )
+                }else{
+                    this.handle_error_name = this.handle_error_name.filter((i) => i !== val);
+                    ctx.$el.classList.remove('validate_input');
+                }
             }
-            
+
+
+        },
+        ver (){
+            console.log(this.precios)
         },
         checkValidation(selecciones) {
             if (selecciones.mLugar === "Seleccione una Opción") {

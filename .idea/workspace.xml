@@ -63,6 +63,7 @@
     </commandsHistory>
   </component>
   <component name="Git.Settings">
+    <option name="PATH_TO_GIT" value="C:\Program Files\Git\bin\git.exe" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
@@ -201,12 +202,17 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/js/components/EdicionPlantilla" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Juan Jolon\Desktop\proyectos\diaco\resources\js\components\EdicionPlantilla" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -220,17 +226,7 @@
         <serviceView>
           <option name="contentProportion" value="0.05357143" />
           <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@3de1ff11" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </treeState>
         </serviceView>
@@ -257,6 +253,7 @@
       <workItem from="1579554260825" duration="95000" />
       <workItem from="1579554389334" duration="6000" />
       <workItem from="1579554412289" duration="25343000" />
+      <workItem from="1579788313410" duration="15645000" />
     </task>
     <servers />
   </component>
@@ -285,10 +282,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2472" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579556086408" />
-    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1579553503520">
+    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1579789282161">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579553503520" />
+    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789282161" />
     <state width="1748" height="183" key="GridCell.Tab.0.bottom" timestamp="1579645216210">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -313,10 +310,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="539" key="HiddenNamespacesPopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579626414737" />
-    <state x="2381" y="163" key="SettingsEditor" timestamp="1579554711714">
+    <state x="2381" y="163" key="SettingsEditor" timestamp="1579789286201">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2381" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579554711714" />
+    <state x="2381" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789286201" />
     <state x="2589" y="163" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1579556214083">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

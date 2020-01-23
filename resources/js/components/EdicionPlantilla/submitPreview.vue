@@ -7,7 +7,7 @@
                     v-model="selectSede"
                     placeholder="Seleccione"
                     @change="change"
-                    
+
                 >
                     <el-option
                         v-for="item in getSedes"
@@ -29,9 +29,9 @@
             "
             :empty-text="mensajeData"
             border
-            
+
             :cell-class-name="cellRow"
-            
+
             style="width: 100%;margin-top: 25px;"
         >
             <el-table-column prop="NombreTemplate" label="Nombre">
@@ -116,11 +116,11 @@
         color: #fff;
     }
 
-    .el-table--enable-row-hover .el-table__body tr:hover>td{
-        background-color: #212e3e !important;
-        color:#FFF;
-        /* transition: all 400ms ease-out; */
-    }
+    /*.el-table--enable-row-hover .el-table__body tr:hover>td{*/
+    /*    background-color: #212e3e !important;*/
+    /*    color:#FFF;*/
+    /*    !* transition: all 400ms ease-out; *!*/
+    /*}*/
 </style>
 
 
@@ -145,11 +145,11 @@ export default {
         this.getSede();
         // this.getData();
         this.getUserAuth();
-        
+
     },
     methods: {
         cellRow ({row, column, rowIndex, columnIndex}) {
-            
+
             if(column.property == 'estatus'){
                 return 'warning-row';
             }
@@ -178,15 +178,15 @@ export default {
         // }
         return '';
       },
-        
+
         change(index) {
             this.getData(index);
-            
+
             this.vista = true;
         },
         getSede() {
             axios
-                .get("/getSedeData") 
+                .get("/getSedeData")
                 .then(response => {
                     this.getSedes = response.data;
                 })
