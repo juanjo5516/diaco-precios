@@ -203,6 +203,8 @@
                                         size="mini"
                                         :ref="'data_'+ scope.$index+ '_' + index.index"
                                         @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
+                                        @keyup.enter.native="enter('data_',scope.$index,'_',index.index)"
+                                        type="text"
                                     >
                                     </el-input>
                                 </template>
@@ -641,12 +643,12 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
-
+            
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            // if (producto == "Gas propano") {
-            if (producto == "Gas Propano") {
+            if (producto == "Gas propano") {
+            // if (producto == "Gas Propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -828,6 +830,7 @@ export default {
                     }
                 })
                 .catch(error => {});
+
         },
         handleInputl(val,nivel){
             if(nivel === 'principal'){
@@ -845,6 +848,7 @@ export default {
                 }
             }else if(nivel === 'precio'){
                 const ctx = this.$refs[val][0];
+
                 if(ctx._props.value === undefined || ctx._props.value === '' ){
                     ctx.$el.classList.add('validate_input');
                     this.handle_error_name.push(
@@ -860,6 +864,23 @@ export default {
         },
         ver (){
             console.log(this.precios)
+        },
+        enter(data,index,guion,indexrow){
+
+            try {
+                if(indexrow < 5){
+                    let input_data = (data+index+guion+(indexrow+1));
+                    const ref = this.$refs[input_data][0].focus();
+                }else{
+                    indexrow = 1
+                    let input_data = (data+(index+1)+guion+(indexrow));
+                    const ref = this.$refs[input_data][0].focus();
+                }
+            }catch(err){
+
+            }
+
+
         },
         checkValidation(selecciones) {
             if (selecciones.mLugar === "Seleccione una Opción") {
