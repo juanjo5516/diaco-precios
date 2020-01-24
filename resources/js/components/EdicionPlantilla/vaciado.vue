@@ -193,6 +193,8 @@
                             </el-table-column>
                             <el-table-column label="Medida" prop="medida">
                             </el-table-column>
+                            <el-table-column label="Ref." prop="precio">
+                            </el-table-column>
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
 <!--                                    {{ index.index }}-->
@@ -284,6 +286,11 @@
                             <el-table-column label="Producto" prop="produto">
                             </el-table-column>
                             <el-table-column label="Medida" prop="medida">
+                            </el-table-column>
+                            <el-table-column label="Ref." prop="precio" v-if="(precio === undefined)">
+                                    sin Referencia
+                            </el-table-column>
+                            <el-table-column label="Ref." prop="precio" v-else>
                             </el-table-column>
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
@@ -615,6 +622,7 @@ export default {
         this.getPropano();
         this.getSMercado();
         this.getColumnas();
+
         this.cantitdadPorcentaje = parseInt(100 / this.categoria.length, 10);
         for (let x = 0; x < this.categoria.length; x++){
             if(this.categoria[x].code === '16'){
@@ -643,7 +651,7 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
-            
+
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
@@ -662,6 +670,7 @@ export default {
         },
 
         DataProductos: function() {
+            console.log(this.coleccion[0].precio);
             this.Productos = [];
             for (let i = 0; i <= this.coleccion.length - 1; i++) {
                 if (this.categoriaFiltro === this.coleccion[i].categoria) {
@@ -671,7 +680,8 @@ export default {
                         medida: this.coleccion[i].medida,
                         producto: this.coleccion[i].producto,
                         produto: this.coleccion[i].produto,
-                        medidaId: this.coleccion[i].idmedida
+                        medidaId: this.coleccion[i].idmedida,
+                        precio: this.coleccion[i].precio
                     });
                 }
             }
