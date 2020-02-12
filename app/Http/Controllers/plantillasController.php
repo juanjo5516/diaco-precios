@@ -236,7 +236,7 @@ class plantillasController extends Controller
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
                                 ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo ,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,diaco_asignarsedecba.filtro")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
-                                // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
+                                ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
                                 ->where('diaco_asignarsedecba.filtro','<','3')
                                 ->get();
@@ -316,8 +316,13 @@ class plantillasController extends Controller
                             ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
                             ->where('diaco_name_template_cba.id',$id)
                             ->get();
-            $categorias = DB::select('
-                                SELECT distinct cl.nombre as categoria FROM diaco_plantillascba pl
+            $categorias = DB::select("
+                                SELECT distinct cl.nombre as categoria, npl.NombreTemplate as tipo,
+                                (CASE
+                                    WHEN npl.NombreTemplate = 'Gas propano' THEN '1'
+                                    ELSE '0'
+                                END)  as paso
+                                    FROM diaco_plantillascba pl
                                     INNER JOIN diaco_categoriacba cl
                                         ON cl.id_Categoria = pl.idCategoria
                                     INNER JOIN diaco_productocba prl
@@ -326,8 +331,22 @@ class plantillasController extends Controller
                                         ON md.id_medida = pl.idMedida
                                     INNER JOIN diaco_name_template_cba npl
                                         ON npl.NombreTemplate = pl.NombrePlantilla
-                                    WHERE npl.id = :id',[
+                                    WHERE npl.id = :id",[
                                         'id' => $id]);
+
+            $cat_pro_gas = DB::select('
+                                    SELECT distinct dpc.nombre as producto 
+                                    FROM diaco_plantillascba dp 
+                                    INNER JOIN diaco_categoriacba dc 
+                                        ON dp.idCategoria = dc.id_Categoria
+                                    INNER JOIN diaco_productocba dpc 
+                                        ON dp.idProducto = dpc.id_producto
+                                    INNER JOIN diaco_medida dm 
+                                        ON dp.idMedida = dm.id_medida
+                                    INNER JOIN diaco_name_template_cba dnt
+                                        ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                    WHERE dnt.id = :id',['id' => $id]);
+            
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
             //     'fecha' => $fecha,
@@ -338,24 +357,48 @@ class plantillasController extends Controller
 
 
             // return view('Ediciones.pdfdata');
-            // return view('Ediciones.printer_data',[
-            //     'id' => $id,
-            //     'fecha' => $fecha,
-            //     'usuario' => $usuario,
-            //     'coleccion' => $query,
-            //      'categoria' => $categorias
-            // ]);
-            $pdf = \PDF::loadView('Ediciones.printer_data',[
+
+            // dd($categorias[0]->tipo);
+            // dd($cat_pro_gas);
+            return view('Ediciones.printer_data',[
                 'id' => $id,
                 'fecha' => $fecha,
                 'usuario' => $usuario,
                 'coleccion' => $query,
                 'categoria' => $categorias,
                 'Ncolumna' => $columna,
-                'correlativo' => $correlativo
+                'correlativo' => $correlativo,
+                'cat_pro_gas' => $cat_pro_gas
+                
             ]);
-            // $pdf->setPaper('Legal', 'portrait');
-            return $pdf->stream('Ediciones.pdf');
+
+                $paso = 0;
+            if($categorias[0]->tipo === 'Gas propano'){
+                // $pdf = \PDF::loadView('Ediciones.printer_data',[
+                //     'id' => $id,
+                //     'fecha' => $fecha,
+                //     'usuario' => $usuario,
+                //     'coleccion' => $query,
+                //     'categoria' => $categorias,
+                //     'Ncolumna' => $columna,
+                //     'correlativo' => $correlativo,
+                //     'cat_pro_gas' => $cat_pro_gas
+                // ]);
+                $pdf->setPaper('Legal', 'landscape');
+            }else{
+                // $pdf = \PDF::loadView('Ediciones.printer_data',[
+                //     'id' => $id,
+                //     'fecha' => $fecha,
+                //     'usuario' => $usuario,
+                //     'coleccion' => $query,
+                //     'categoria' => $categorias,
+                //     'Ncolumna' => $columna,
+                //     'correlativo' => $correlativo,
+                //     'cat_pro_gas' => $paso
+                // ]);
+                $pdf->setPaper('Legal', 'portrait');
+            }
+            return $pdf->stream('Ediciones.pdf'); 
             // return $pdf->save('Ediciones.pdf');
             // return $pdf->stream();
            // DB::commit();

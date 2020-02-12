@@ -655,8 +655,8 @@ export default {
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            if (producto == "Gas propano") {
-            // if (producto == "Gas Propano") {
+            // if (producto == "Gas propano") {
+            if (producto == "Gas Propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
