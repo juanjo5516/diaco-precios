@@ -10,6 +10,7 @@ use App\NameTemplate;
 use App\ListarAsignacion;
 use App\vaciadocba;
 use App\Models\local;
+use App\Models\market;
 use Illuminate\Support\Facades\Auth;
 use App\TipoVisitaPlantilla;
 use App\Models\Departamento;
@@ -20,10 +21,10 @@ use Illuminate\Support\Str;
 class plantillasController extends Controller
 {
 
-    public function __construct(){ 
+    public function __construct(){
         $this->middleware('auth');
     }
-    public function UserLogin(){ 
+    public function UserLogin(){
         // $user = DB::table('diaco_usuario')
         //             ->join('diaco_sede','id_diaco_sede', '=', 'diaco_usuario.id_sede_diaco')->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')->where('diaco_usuario.id_usuario', '=', 1)->get();
         //return response()->json($user);
@@ -34,37 +35,37 @@ class plantillasController extends Controller
                     ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario')
                     // ->select('diaco_sede.id_diaco_sede as id','diaco_sede.nombre_sede as sede','diaco_usuario.nombre','diaco_usuario.id_usuario as id_usuario','diaco_usuario_perfil.id_perfil_puesto as tipo')
                     ->where('diaco_usuario.id_usuario', '=', $user2->id_usuario)->get();
-        
-        
-        
+
+
+
         return $user;
     }
 
     public function getSedeData(){
         $sede = DB::table('diaco_sede')
                     // ->join()
-                    ->select('id_diaco_sede as code', 'nombre_sede as name')->get(); 
+                    ->select('id_diaco_sede as code', 'nombre_sede as name')->get();
         return response()->json($sede, 200);
     }
-   
-    public function Asede(){
-        
-        $Plantillas = DB::table('diaco_name_template_cba')->select('id','NombreTemplate')->get();
-        $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get(); 
-        
 
-       
-     
+    public function Asede(){
+
+        $Plantillas = DB::table('diaco_name_template_cba')->select('id','NombreTemplate')->get();
+        $sede = DB::table('diaco_sede')->select('id_diaco_sede', 'nombre_sede')->get();
+
+
+
+
         return view('Ediciones.sedes',
         [
             'Plantillas' => $Plantillas,
             'Sedes' =>$sede
         ]);
-        
+
     }
-    
+
     public function getAsede(){
-        
+
         try {
              $Lista = $this->ListarAsignaciones();
              return datatables()->collection($Lista)->toJson();
@@ -73,16 +74,16 @@ class plantillasController extends Controller
             DB::rollBack();
             print $e;
         }
-        
+
     }
     public function getAsedeJson(){
-        
+
         $Lista = $this->ListarAsignaciones();
         return response()->json($Lista, 200);
-  
+
     }
-    
-    public function getTipoVisita(){ 
+
+    public function getTipoVisita(){
         $Tipo = TipoVisitaPlantilla::all();
         return response()->json($Tipo, 200);
     }
@@ -94,17 +95,17 @@ class plantillasController extends Controller
         $producto = DB::table("diaco_productocba")->select('id_producto as id','nombre as Pnombre')->where('status','=','A')->get();
         $medida = DB::table('diaco_medida')->select('id_medida as id','nombre as nombre')->where('status','=','A')->get();
         //dd($categoria);
-        return view('Ediciones.index', 
+        return view('Ediciones.index',
         [
             'fecha' => $date,
-            'collection' => $categoria, 
+            'collection' => $categoria,
             'producto' => $producto,
             'medida' => $medida
         ]);
     }
 
     public function VerificarIdTemplate($nombre, $columnas){
-       
+
         if (NameTemplate::where('NombreTemplate', '=', $nombre)->exists()){
             return 0;
         }else{
@@ -115,8 +116,8 @@ class plantillasController extends Controller
                 $Template->estado = 1;
                 $Template->save();
 
-                
-                
+
+
                 return $TemplateId = $Template->id;
                 // $TemplateId = $Template->id;
                 // dd($TemplateId);
@@ -131,48 +132,23 @@ class plantillasController extends Controller
         $date = $date->format('d-m-Y');
         return $date;
     }
-   
+
     public function store(Request $request){
 
         $TIMESTAMP = Carbon::now();
-        
+
         DB::beginTransaction();
         $valor = sizeof($request->Dproducto);
         // dd($request->Dproducto[0]['codeProducto']);
-     
+
 
         $validar = $this->VerificarIdTemplate($request->Nplantilla, $request->NColumna);
         if ($validar != 0) {
             try {
-                for ($i=0; $i < $valor; $i++) { 
-                    
+                for ($i=0; $i < $valor; $i++) {
+
                     $Edicion = new EdicionPlantilla;
-     
-                    $Edicion->NombrePlantilla = $request->Nplantilla;
-                    $Edicion->idCategoria  = $request->categoriaVaciado;
-                    $Edicion->idProducto  = $request->Dproducto[$i]['codeProducto'];
-                    $Edicion->idMedida  = $request->Dproducto[$i]['codeMedida'];
-                    $Edicion->estado  = 1;
-                    $Edicion->created_at = $TIMESTAMP; 
-                    $Edicion->tipoVerificacion = $request->TipoVisita;
-                    $Edicion->save();
-    
-                }
-            
-                // print 200;
-                DB::commit();     
-                return response()->json('success', 200);
-            } catch (\Exceptio $e) {
-                DB::rollBack();
-                return $e;
-                
-            }  
-        }else{
-            try {
-                for ($i=0; $i < $valor; $i++) { 
-                    
-                    $Edicion = new EdicionPlantilla;
-     
+
                     $Edicion->NombrePlantilla = $request->Nplantilla;
                     $Edicion->idCategoria  = $request->categoriaVaciado;
                     $Edicion->idProducto  = $request->Dproducto[$i]['codeProducto'];
@@ -181,15 +157,40 @@ class plantillasController extends Controller
                     $Edicion->created_at = $TIMESTAMP;
                     $Edicion->tipoVerificacion = $request->TipoVisita;
                     $Edicion->save();
-    
+
+                }
+
+                // print 200;
+                DB::commit();
+                return response()->json('success', 200);
+            } catch (\Exceptio $e) {
+                DB::rollBack();
+                return $e;
+
+            }
+        }else{
+            try {
+                for ($i=0; $i < $valor; $i++) {
+
+                    $Edicion = new EdicionPlantilla;
+
+                    $Edicion->NombrePlantilla = $request->Nplantilla;
+                    $Edicion->idCategoria  = $request->categoriaVaciado;
+                    $Edicion->idProducto  = $request->Dproducto[$i]['codeProducto'];
+                    $Edicion->idMedida  = $request->Dproducto[$i]['codeMedida'];
+                    $Edicion->estado  = 1;
+                    $Edicion->created_at = $TIMESTAMP;
+                    $Edicion->tipoVerificacion = $request->TipoVisita;
+                    $Edicion->save();
+
                 }
                 // print 200;
-                DB::commit();     
+                DB::commit();
                 return response()->json('success', 200);
             } catch (\Exceptio $e) {
                 DB::rollBack();
                 print $e;
-            } 
+            }
         }
     }
 
@@ -202,7 +203,7 @@ class plantillasController extends Controller
                         ->where('diaco_asignarsedecba.estatus','>',0)
                         ->get();
         return $Listar;
-         
+
     }
 
     public function deleteByIdAsignacion(Request $request){
@@ -243,13 +244,13 @@ class plantillasController extends Controller
         // dd($usuario);
 
         //dd($buson);
-        
+
         return response()->json($buson);
     }
     public function storeLista(Request $request){
         $cantidadObjeto = sizeof($request->SSede);
         for($i = 0; $i < $cantidadObjeto; $i++){
-            $UserCba = $this->getUserCba($request->SSede[$i]); 
+            $UserCba = $this->getUserCba($request->SSede[$i]);
             $cantidadUser = sizeof($UserCba);
             if($cantidadUser > 0){
                 for($userCount = 0; $userCount < $cantidadUser; $userCount++ ){
@@ -261,7 +262,7 @@ class plantillasController extends Controller
                     $Lista->filtro = 1;
                     $Lista->idUsuario = $UserCba[$userCount]->code_user;
                     $Lista->save();
-                    
+
                     $ListaId = $Lista->id;
                     $Ncorrelativo = $this->createCorrelative($ListaId);
                     ListarAsignacion::where('id_Asignacion','=',$ListaId)
@@ -280,7 +281,7 @@ class plantillasController extends Controller
         $Lista->filtro = 1;
         $Lista->idUsuario = $request->Usuario;
         $Lista->save();
-        
+
         $ListaId = $Lista->id;
         $Ncorrelativo = $this->createCorrelative($ListaId);
         ListarAsignacion::where('id_Asignacion','=',$ListaId)
@@ -295,10 +296,10 @@ class plantillasController extends Controller
     }
 
     public function showInbox(){
-        return view('Ediciones.bandejaEntrada'); 
+        return view('Ediciones.bandejaEntrada');
     }
 
-    public function showprinter($id,$correlativo){ 
+    public function showprinter($id,$correlativo){
        // DB::beginTransaction();
         try {
 
@@ -306,9 +307,9 @@ class plantillasController extends Controller
             $usuario = $this->UserLogin();
             $columna = $this->getCountColumnfindId($id);
             // dd($columna);
-            
+
             $query = DB::table('diaco_plantillascba')
-                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida') 
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida')
                             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                             ->join('diaco_productocba','id_producto','=','idProducto')
                             ->join('diaco_medida','id_medida','=','idMedida')
@@ -335,16 +336,16 @@ class plantillasController extends Controller
             //     'categoria' => $categorias
             // ]);
 
-               
+
             // return view('Ediciones.pdfdata');
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
             //     'fecha' => $fecha,
             //     'usuario' => $usuario,
             //     'coleccion' => $query,
-            //      'categoria' => $categorias 
+            //      'categoria' => $categorias
             // ]);
-            $pdf = \PDF::loadView('Ediciones.printer_data',[ 
+            $pdf = \PDF::loadView('Ediciones.printer_data',[
                 'id' => $id,
                 'fecha' => $fecha,
                 'usuario' => $usuario,
@@ -357,46 +358,46 @@ class plantillasController extends Controller
             return $pdf->stream('Ediciones.pdf');
             // return $pdf->save('Ediciones.pdf');
             // return $pdf->stream();
-           // DB::commit(); 
+           // DB::commit();
         } catch (\Exceptio $e) {
             //DB::rollBack();
-            print $e;     
-        } 
+            print $e;
+        }
     }
 
     public function getProductoEdicionPlantilla(Request $request){
         $query = DB::table('diaco_plantillascba')
-                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla') 
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla')
                             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                             ->join('diaco_productocba','id_producto','=','idProducto')
                             ->join('diaco_medida','id_medida','=','idMedida')
                             ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
                             ->where('diaco_name_template_cba.id',$request->id)
                             ->get();
-                        
+
 
         return response()->json($query, 200);
     }
 
-    public function showEdit($id,$correlativo){ 
-         
+    public function showEdit($id,$correlativo){
+
         try {
             $fecha = $this->getFecha();
             $usuario = $this->UserLogin();
             // $columna = $this->getCountColumnfindId($id);
-            
+
             // dd($columna);
-           
-            
+
+
             $query = DB::table('diaco_plantillascba')
-                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla') 
+                            ->selectraw('diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida,diaco_plantillascba.idPlantilla')
                             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                             ->join('diaco_productocba','id_producto','=','idProducto')
                             ->join('diaco_medida','id_medida','=','idMedida')
                             ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
                             ->where('diaco_name_template_cba.id',$id)
                             ->get();
-                          
+
             $categorias = DB::select('
                                 SELECT distinct cl.nombre as categoria FROM diaco_plantillascba pl
                                     INNER JOIN diaco_categoriacba cl
@@ -417,7 +418,7 @@ class plantillasController extends Controller
             //     'categoria' => $categorias
             // ]);
 
-               
+
             // return view('Ediciones.pdfdata');
 
             return view('Ediciones.editPlantilla',[
@@ -440,61 +441,48 @@ class plantillasController extends Controller
             // ]);
             // return $pdf->download('Ediciones.pdf');
         } catch (\Exceptio $e) {
-            print $e;     
-        } 
+            print $e;
+        }
     }
 
     public function getPlantillas($id){
-        // $query = DB::table('diaco_plantillascba')
-        //                 // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
-        //                 ->selectraw("distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,	FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto AND created_at BETWEEN DATEADD(DAY,-20,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2")
-        //                 ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
-        //                 ->join('diaco_productocba','id_producto','=','idProducto')
-        //                 ->join('diaco_medida','id_medida','=','idMedida')
-        //                 ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
-        //                 ->where('diaco_name_template_cba.id',$id)
-        //                 ->get();
 
         $query = DB::table('diaco_plantillascba')
-                        // ->selectraw("diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = diaco_productocba.id_producto),0),'N2') as Precio") 
-                        
-                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion")
+                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,max(diaco_vaciadocba.precioProducto) as precio")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
                         ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+                        ->join('diaco_vaciadocba as dv','dv.idProducto','=','diaco_plantillascba.idProducto')
+                        ->join('diaco_vaciadocba','diaco_vaciadocba.idMedida','=','diaco_plantillascba.idMedida')
                         ->where('diaco_name_template_cba.id',$id)
+                        ->groupBy(['diaco_plantillascba.idCategoria','diaco_medida.id_medida','diaco_plantillascba.NombrePlantilla','diaco_plantillascba.created_at','diaco_categoriacba.nombre','diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_plantillascba.tipoVerificacion'])
+                        ->orderBy('diaco_productocba.nombre')
                         ->get();
 
-    //     $query2 = DB::select("
-    //     SELECT 
-	// dp.NombrePlantilla,
-	// dp.created_at,
-	// cb.nombre as categoria,
-	// pc.nombre as produto,
-	// dm.nombre as medida,
-	// pc.id_producto as idProducto,
-	// FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)-1) ) ,0),'N2') as Anterior1,
-	// FORMAT(ISNULL((select precioProducto from diaco_vaciadocba where idProducto = pc.id_producto AND created_at BETWEEN DATEADD(DAY,-1,CONVERT(date,GETDATE())) and CONVERT(date,GETDATE()) and ((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1) = (((Day(getdate()) + (Datepart(dw, Dateadd(Month, Datediff(Month, 0, getdate()), 0)) - 1) -1) / 7 + 1)) ) ,0),'N2') as Anterior2
-	// 	 FROM diaco_plantillascba dp
-	// INNER JOIN diaco_categoriacba cb
-	// 	ON cb.id_Categoria = dp.idCategoria
-	// INNER JOIN diaco_productocba pc
-	// 	ON pc.id_producto = dp.idProducto
-	// INNER JOIN diaco_medida dm
-	// 	ON dm.id_medida = dp.idMedida
-	// INNER JOIN diaco_name_template_cba nca
-	// 	ON nca.NombreTemplate = dp.NombrePlantilla
-	// WHERE nca.id = :id
-    //     ",['id' => $id]);
-
-    //dd($query);    
-        return $query;
+        $query_data = DB::table('diaco_plantillascba')
+            ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion")
+            ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+            ->join('diaco_productocba','id_producto','=','idProducto')
+            ->join('diaco_medida','id_medida','=','idMedida')
+            ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+//            ->join('diaco_vaciadocba as dv','dv.idProducto','=','diaco_plantillascba.idProducto')
+//            ->join('diaco_vaciadocba','diaco_vaciadocba.idMedida','=','diaco_plantillascba.idMedida')
+            ->where('diaco_name_template_cba.id',$id)
+//            ->groupBy(['diaco_plantillascba.idCategoria','diaco_medida.id_medida','diaco_plantillascba.NombrePlantilla','diaco_plantillascba.created_at','diaco_categoriacba.nombre','diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_plantillascba.tipoVerificacion'])
+//            ->orderBy('diaco_productocba.nombre')
+            ->get();
+        if(!$query->isEmpty()){
+            return $query;
+        }else{
+            return $query_data;
+        }
+//        return $query;
     }
 
     public function getCategoria($id){
         $categoria = DB::table('diaco_plantillascba')
-                            ->selectraw('distinct diaco_categoriacba.nombre as categoria')
+                            ->selectraw('distinct diaco_categoriacba.id_categoria as code,diaco_categoriacba.nombre as categoria')
                             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                             ->join('diaco_productocba','id_producto','=','idProducto')
                             ->join('diaco_medida','id_medida','=','idMedida')
@@ -513,34 +501,34 @@ class plantillasController extends Controller
         $mercado = DB::table('diaco_establecimientocba')->select('idEstablecimiento','nombreEstablecimiento as nombre')->get();
         return $mercado;
     }
-    
+
     public function getTipoVerificacionVaciado($id){
-        
+
         $tipo = DB::table('diaco_plantillascba')
                         ->join('diaco_name_template_cba','NombreTemplate','=','diaco_plantillascba.NombrePlantilla')
-                        ->selectraw('distinct top 1 diaco_plantillascba.tipoVerificacion')
+                        ->selectraw('distinct top 1 diaco_plantillascba.tipoVerificacion, diaco_plantillascba.NombrePlantilla as name')
                         ->where('diaco_name_template_cba.id','=',$id)
                         ->get();
 
-        
-        
+
+
         //return $tipo;
         return response()->json($tipo, 200);
-    } 
+    }
 
     public function showVaciado($id,$correlativo){
          $fecha = $this->getFecha();
          $usuario = $this->UserLogin();
-         $plantilla = $this->getPlantillas($id); 
+         $plantilla = $this->getPlantillas($id);
          $categoria = $this->getCategoria($id);
          $data = $this->getEstablecimiento();
          $lugarMercado = $this->getMercado();
         //  $tipos = $this->getTipoVerificacionVaciado($id);
         //dd($valores);
         //return response()->json($mercado);
-        
 
-        return view('Ediciones.vaciado', 
+
+        return view('Ediciones.vaciado',
             [
                 'fecha' => $fecha,
                 'user' => $usuario,
@@ -554,11 +542,11 @@ class plantillasController extends Controller
             ]
         );
     }
- 
+
     public function exportExcelView($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
-            $plantilla = $this->getPlantillas($id); 
-            return view('exportacion.datos',[ 
+            $plantilla = $this->getPlantillas($id);
+            return view('exportacion.datos',[
                   'categorias' => $categoria,
                   'producto' => $plantilla,
                   'correlativo' => $correlativo,
@@ -568,8 +556,8 @@ class plantillasController extends Controller
     }
     public function submitView($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
-            $plantilla = $this->getPlantillas($id); 
-            return view('exportacion.submitPreview',[ 
+            $plantilla = $this->getPlantillas($id);
+            return view('exportacion.submitPreview',[
                   'categorias' => $categoria,
                   'producto' => $plantilla,
                   'correlativo' => $correlativo,
@@ -579,8 +567,8 @@ class plantillasController extends Controller
     }
     public function submitViewEditPrices($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
-            $plantilla = $this->getPlantillas($id); 
-            return view('exportacion.submitEditPrices',[ 
+            $plantilla = $this->getPlantillas($id);
+            return view('exportacion.submitEditPrices',[
                   'categorias' => $categoria,
                   'producto' => $plantilla,
                   'correlativo' => $correlativo,
@@ -591,7 +579,7 @@ class plantillasController extends Controller
 
     public function preview($id,$correlativo,$user){
             $categoria = $this->getCategoria($id);
-            $plantilla = $this->getPlantillas($id); 
+            $plantilla = $this->getPlantillas($id);
             return view('exportacion.datospreview',[
                   'categorias' => $categoria,
                   'producto' => $plantilla,
@@ -601,23 +589,78 @@ class plantillasController extends Controller
             ]);
     }
 
+
+    public function createMarket($nombre,$direccion,$departamento){
+        $id="";
+        $validar = $this->VerificarItem($nombre,'market','nombreMercado');
+        if($validar === 0){
+            $id = market::select('idMercado as code')->where('nombreMercado','=',$nombre)->get();
+            return $id[0]['code'];
+        }else{
+                $data = new market;
+                $data->nombreMercado = $nombre;
+                $data->direccionMercado = $direccion;
+                $data->departamento_id = $departamento;
+                $data->municipio_id =  1;
+                $data->status = "A";
+                if($data->save()){
+                    $id = $data->id;
+                    return $id;
+                }
+        }
+    }
+
+
+    public function setDataSubmit(Request $request){
+        $timeStamp = Carbon::now();
+        $countProduct = count($request->option[0]['dataProduct']);
+        $columns = (int)$request->option[0]['column'];
+        try {
+            for ($column=0; $column < $columns; $column++) {
+                for ($row=0; $row < $countProduct; $row++) {
+                    $local = $this->createMarket($request->option[0]['dataNames'][$column]['dataName'],$request->option[0]['dataNames'][$column]['dataAddress'],$request->option[0]['dataNames'][$column]['dataDepartment']);
+                    $model = new vaciadocba;
+                    $model->numeroLocal = 0;
+                    $model->idLugarVisita = $local;
+                    $model->created_at = $timeStamp;
+                    $model->idPlantilla = $request->option[0]['idP'];
+                    $model->idVerificador = $request->option[0]['user'];
+                    $model->tipoVerificacion = $request->option[0]['idType'][0]['tipoVerificacion'];
+                    // $modelo->idEstablecimientoVisita = $local;
+                    $model->idProducto = $request->option[0]['dataProduct'][$row]['producto'];
+                    $model->idMedida = $request->option[0]['dataProduct'][$row]['medidaId'];
+                    $model->precioProducto = $request->option[0]['dataProduct'][$row]['valor'.($column+1)];
+                    $model->estado = 'I';
+                    $model->Ncorrelativo = $request->option[0]['nCorrelative'];
+                    $model->save();
+                }
+            }
+            $response = true;
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            print $th;
+        }
+
+    }
+
     public function vaciado(Request $request){
-        
-        
+
+//        dd($request);
         $TIMESTAMP = Carbon::now();
         $cantidadProducto = count($request->Data);
-        $columnas = (int)$request->columnas; 
+        $columnas = (int)$request->columnas;
 
         try {
-            for ($ii=1; $ii <= $columnas ; $ii++) { 
+            for ($ii=1; $ii <= $columnas ; $ii++) {
                 // $fila = $ii + 1;
                     // $modelo = local::create(['nombreEstablecimiento' => $request->get('Sedes')['select'.$fila]]);
-                    for ($i=0; $i  < $cantidadProducto ; $i++) { 
+                    for ($i=0; $i  < $cantidadProducto ; $i++) {
                         $local = $this->createLocal($request->get('Sedes')['select'.$ii]);
                         $modelo = new vaciadocba;
                         $modelo->numeroLocal = $request->get('Mercados')['mercado'.$ii];
-                        // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila]; 
-                        $modelo->idLugarVisita = $request->get('Sedes')['mLugar']; 
+                        // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila];
+                        $modelo->idLugarVisita = $request->get('Sedes')['mLugar'];
                         $modelo->created_at = $TIMESTAMP;
                         $modelo->idPlantilla = $request->idP;
                         $modelo->idVerificador = $request->Usuarios;
@@ -638,23 +681,23 @@ class plantillasController extends Controller
                         // if($modelo->save()){
                         //     $respuesta = 'ingresado';
                         //     return response()->json($respuesta, 200);
-                        // }    
+                        // }
                     }
             }
             $respuesta = 'ingresado';
             // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);
             // return response()->json(true, 200);
-             
+
         }
-        
+
         catch (\Exceptio $e) {
             DB::rollBack();
                 print "ERROR";
         }
     }
     public function updateStatusVaciado(Request $request){
-        
+
         $updateById = ListarAsignacion::where('idPlantilla', $request->idP)
                                                          ->where('idSede',$request->idSede)
                                                          ->where('idUsuario',$request->Usuarios)
@@ -663,7 +706,7 @@ class plantillasController extends Controller
         return response()->json($updateById, 200);
     }
 
-    public function clon(){ 
+    public function clon(){
         $plantillasAll = $this->getPlantillasAll();
         //$comprobar = $this->getPlantillas($id);
         return view('Ediciones.clon');
@@ -675,10 +718,10 @@ class plantillasController extends Controller
                         ->selectraw('id,NombreTemplate')
                         ->where('diaco_name_template_cba.estado','>',0)
                         ->get();
-        
+
         // // return $query;
         return response()->json($query, 200);
-        
+
     }
     public function getDataPlantillas(Request $request){
 
@@ -689,29 +732,29 @@ class plantillasController extends Controller
         $cantidadColumna = $this->getCountColumnfindId((int)$request->SPlantilla);
         // dd($cantidadColumna);
         $validar = $this->VerificarIdTemplate($request->dataResponse,$cantidadColumna);
-        
+
         if ($validar != 0) {
             try {
-                for ($i=0; $i < $cantidadProducto; $i++) { 
-                    
+                for ($i=0; $i < $cantidadProducto; $i++) {
+
                     $Edicion = new EdicionPlantilla;
-     
+
                     $Edicion->NombrePlantilla = $request->dataResponse;
                     $Edicion->idCategoria  = $comprobar[$i]->idCategoria;
                     $Edicion->idProducto  = $comprobar[$i]->producto;
                     $Edicion->idMedida  = $comprobar[$i]->idmedida;
                     $Edicion->estado  = 1;
-                    $Edicion->created_at = $TIMESTAMP; 
+                    $Edicion->created_at = $TIMESTAMP;
                     $Edicion->tipoVerificacion = $comprobar[$i]->tipoVerificacion;
                     $Edicion->save();
-    
+
                 }
                 print 1;
-                DB::commit();     
+                DB::commit();
             } catch (\Exceptio $e) {
                 DB::rollBack();
                 print $e;
-            }  
+            }
        }
 
         dd($comprobar);
@@ -724,7 +767,7 @@ class plantillasController extends Controller
         $plantilla = $this->getPlantillas(1);
         $all = $this->getPlantillasAll();
         $enviado = $this->GetEnviados();
-        
+
         $user2 = Auth::user()->id_usuario;
 
         //$userId = auth()->user()->id_usuario;
@@ -748,23 +791,23 @@ class plantillasController extends Controller
             ->join('diaco_usuario as usuarioss','diaco_asignarsedecba.idUsuario','=','diaco_usuario.id_usuario')
             ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
             ->selectraw("
-                                distinct 
+                                distinct
                                 diaco_name_template_cba.id,
                                 diaco_name_template_cba.NombreTemplate,
                                 diaco_sede.nombre_sede,
-                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,
                                 diaco_usuario.nombre,
                                 diaco_asignarsedecba.correlativo"
                             )
             ->where('diaco_asignarsedecba.estatus','=','1')
             ->orWhere('diaco_asignarsedecba.filtro','=','3')
-            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
+            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC')
             ->get();
                             // ->selectraw("
                             //                     distinct diaco_name_template_cba.id,
                             //                     diaco_name_template_cba.NombreTemplate,
                             //                     diaco_sede.nombre_sede,
-                            //                     (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                            //                     (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,
                             //                     diaco_plantillascba.tipoVerificacion as Tipo,
                             //                     diaco_vaciadocba.created_at,
                             //                     diaco_usuario.nombre"
@@ -784,11 +827,11 @@ class plantillasController extends Controller
             // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
             ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
             ->selectraw("
-                                distinct 
+                                distinct
                                 diaco_name_template_cba.id,
                                 diaco_name_template_cba.NombreTemplate,
                                 diaco_sede.nombre_sede,
-                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus, 
+                                (CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Enviado' END) as estatus,
                                 diaco_usuario.nombre,
                                 diaco_asignarsedecba.correlativo"
                             )
@@ -800,8 +843,8 @@ class plantillasController extends Controller
         }
 
         //dd($buson);
-        
-        return response()->json($buson); 
+
+        return response()->json($buson);
     }
     public function GetFilterSubmit(Request $req){
             $buson = DB::table('diaco_asignarsedecba')
@@ -811,35 +854,35 @@ class plantillasController extends Controller
             ->join('diaco_usuario as usuarioss','diaco_asignarsedecba.idUsuario','=','diaco_usuario.id_usuario')
             ->join('diaco_vaciadocba','diaco_vaciadocba.Ncorrelativo','=','diaco_asignarsedecba.correlativo')
             ->selectraw("
-                                distinct 
+                                distinct
                                 diaco_name_template_cba.id,
                                 diaco_name_template_cba.NombreTemplate,
                                 diaco_sede.nombre_sede,
                                 (
-                                    CASE 
-                                        WHEN (diaco_asignarsedecba.filtro = 2) THEN 'Ingresada'  
-                                        WHEN (diaco_asignarsedecba.filtro = 3) THEN 'Enviada'  
+                                    CASE
+                                        WHEN (diaco_asignarsedecba.filtro = 2) THEN 'Ingresada'
+                                        WHEN (diaco_asignarsedecba.filtro = 3) THEN 'Enviada'
                                         WHEN (diaco_asignarsedecba.filtro = 4) THEN 'Publicada'
                                         ELSE  'Asignada'
                                         END
-                                ) as estatus, 
+                                ) as estatus,
                                 diaco_usuario.nombre,
                                 diaco_asignarsedecba.correlativo"
                             )
             ->where('diaco_asignarsedecba.estatus','=','1')
             ->where('diaco_asignarsedecba.idSede','=',$req->sede)
             ->Where('diaco_asignarsedecba.filtro','>','1')
-            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC') 
+            ->orderBy('diaco_asignarsedecba.correlativo', 'DESC')
             ->get();
-    
-        return response()->json($buson); 
+
+        return response()->json($buson);
     }
 
     public function showEnviados(){
 
         return view('Ediciones.Enviados');
     }
-    
+
     public function previewSubmit(){
         return view('Ediciones.previewSubmit');
     }
@@ -869,7 +912,7 @@ class plantillasController extends Controller
     }
 
     public function createCorrelative($id){
-            
+
             $sede = ListarAsignacion::select('diaco_sede.nombre_sede as sede','diaco_tipoverificacioncba.nombreVerificacion as tipo')
                                                     ->join('diaco_sede','idSede','=','diaco_sede.id_diaco_sede')
                                                     ->join('diaco_name_template_cba','idPlantilla','=','diaco_name_template_cba.id')
@@ -877,8 +920,8 @@ class plantillasController extends Controller
                                                     ->join('diaco_tipoverificacioncba','diaco_plantillascba.tipoVerificacion','=','diaco_tipoverificacioncba.id_TipoVerificacion')
                                                     ->where('diaco_asignarsedecba.id_Asignacion','=',$id)
                                                     ->get();
-            
-            $Nsede = Str::substr($sede[0]->sede,0,2); 
+
+            $Nsede = Str::substr($sede[0]->sede,0,2);
             $Ntipo = Str::substr($sede[0]->tipo,0,2);
             $date = Carbon::now('America/Guatemala');
             $date->toDateTimeString();
@@ -890,7 +933,7 @@ class plantillasController extends Controller
     }
 
     public function createLocal($nombre){
-        
+
         $id="";
         $validar = $this->VerificarItem($nombre,'local','nombreEstablecimiento');
         if($validar === 0){
@@ -898,22 +941,29 @@ class plantillasController extends Controller
             $id = local::select('idEstablecimiento as code')->where('nombreEstablecimiento','=',$nombre)->get();
             // print $id[0]['code'];
             return $id[0]['code'];
-            
+
         }else{
             $data = new local;
             $data->nombreEstablecimiento = $nombre;
             $data->status = 'A';
             $data->save();
-            $id = $data->id; 
+            $id = $data->id;
             return $id;
-            
+
         }
     }
+
 
     public function VerificarItem($nombre, $tabla,$campo){
         if ($tabla === 'local') {
             if (local::where($campo, '=', $nombre)->where('status','=','A')->exists()){
-                return 0; 
+                return 0;
+            }else{
+                return 1;
+            }
+        }else if($tabla === 'market'){
+            if (market::where($campo, '=', $nombre)->where('status','=','A')->exists()){
+                return 0;
             }else{
                 return 1;
             }

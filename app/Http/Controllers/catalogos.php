@@ -22,14 +22,14 @@ class catalogos extends Controller
 {
     public function dataCategory(){
         $categoria = categoria::select('id_Categoria','nombre')->where('status','=','A')->orderBy('nombre','asc')->get();
-        return $categoria; 
+        return $categoria;
     }
 
     public function deleteByIdCategory(Request $request){
         $deleteById = categoria::where('id_Categoria', $request->id)->update(['status' => 'I']);
         return $deleteById;
     }
-    public function addCategory(Request $request){   
+    public function addCategory(Request $request){
 
         $validar = $this->VerificarItem($request->names,'categoria','nombre');
         if($validar === 0){
@@ -41,7 +41,7 @@ class catalogos extends Controller
             };
         }
 
-        
+
     }
 
     public function UpdateById(Request $request){
@@ -147,6 +147,7 @@ class catalogos extends Controller
     public function addMarket(Request $request){
 
         $validar = $this->VerificarItem($request->names,'lugar','nombreMercado');
+        dd($validar);
         if($validar === 0){
             return response()->json(false, 200);
         }else{
@@ -156,13 +157,13 @@ class catalogos extends Controller
             $data->departamento_id = $request->departamento_id;
             $data->municipio_id =  $request->municipio_id;
             $data->status = $request->status;
-            
+
             if($data->save()){
                 return response()->json(true, 200);
             };
         }
 
-        
+
     }
     public function deleteByIdMarket(Request $request){
         $deleteById = market::where('idMercado', $request->id)->update(['status' => 'I']);
@@ -176,7 +177,7 @@ class catalogos extends Controller
     public function findAllLocal(){
         $product = local::select('idEstablecimiento as code','nombreEstablecimiento as name','direccionEstablecimiento as address','departamento.nombre_departamento as departamento','municipio.nombre_municipio as municipio')
                                     ->join('departamento','departamento_id','=','departamento.codigo_departamento')
-                                    ->join('municipio','municipio_id','=','municipio.codigo_municipio')                            
+                                    ->join('municipio','municipio_id','=','municipio.codigo_municipio')
                                     ->where('status','=','A')->orderBy('nombreEstablecimiento','asc')->get();
         return response()->json($product, 200);
     }
@@ -193,7 +194,7 @@ class catalogos extends Controller
             $data->departamento_id = $request->departamento_id;
             $data->municipio_id = $request->municipio_id;
             $data->status = $request->status;
-            
+
             if($data->save()){
                 return response()->json(true, 200);
             };
@@ -223,7 +224,7 @@ class catalogos extends Controller
         };
     }
     public function deleteByIdSmarket(Request $request){
-        $deleteById = smarket::where('code', $request->id)->update(['status' => 'I']); 
+        $deleteById = smarket::where('code', $request->id)->update(['status' => 'I']);
         return response()->json($deleteById, 200);
     }
 
@@ -232,7 +233,7 @@ class catalogos extends Controller
         return response()->json($updateById, 200);
     }
 
-    public function findAllVisit(){ 
+    public function findAllVisit(){
         $product = TipoVisitaPlantilla::select('id_TipoVerificacion as code','nombreVerificacion as name')->where('status','=','A')->orderBy('nombreVerificacion','asc')->get();
         return response()->json($product, 200);
     }
@@ -248,7 +249,7 @@ class catalogos extends Controller
                 $query = DB::statement("exec AddTipo :name",
                 [
                     'name' => $request->names
-                ]); 
+                ]);
              DB::commit();
              return response()->json(true, 200);
          } catch (\Exceptio $e) {
@@ -272,7 +273,7 @@ class catalogos extends Controller
         $producto = $this->findByIdProduct($request->producto);
         $medida = $this->findByIdmeasure($request->medida);
         $array = array();
-        for ($i=0; $i < 1; $i++) { 
+        for ($i=0; $i < 1; $i++) {
              array_push($array,[
                 'codeProducto' => $producto->original[0]->code,
                 'nameProducto' => $producto->original[0]->name,
@@ -304,19 +305,19 @@ class catalogos extends Controller
             }
         }elseif ($tabla === 'lugar') {
             if (market::where($campo, '=', $nombre)->where('status','=','A')->exists()){
-                return 0; 
+                return 0;
             }else{
                 return 1;
             }
         }elseif ($tabla === 'local') {
             if (local::where($campo, '=', $nombre)->where('status','=','A')->exists()){
-                return 0; 
+                return 0;
             }else{
                 return 1;
             }
         }elseif ($tabla === 'tipo') {
             if (TipoVisitaPlantilla::where($campo, '=', $nombre)->where('status','=','A')->exists()){
-                return 0; 
+                return 0;
             }else{
                 return 1;
             }
@@ -347,7 +348,7 @@ class catalogos extends Controller
     }
 
     public function addUserSystem(Request $request){
-        $data = new UsuarioSistema; 
+        $data = new UsuarioSistema;
         $data->code_user = $request->usuario;
         $data->code_sede = $request->sede;
         $data->status = 'A';
@@ -356,7 +357,7 @@ class catalogos extends Controller
         };
     }
     public function deleteByIdUserSystem(Request $request){
-        $deleteById = UsuarioSistema::where('code', $request->id)->update(['status' => 'I']); 
+        $deleteById = UsuarioSistema::where('code', $request->id)->update(['status' => 'I']);
         return response()->json($deleteById, 200);
     }
 
@@ -391,7 +392,7 @@ class catalogos extends Controller
             return response()->json($data, 200);
     }
 
-    public function getExportDataPrice($id,$user,$correlativo){  
+    public function getExportDataPrice($id,$user,$correlativo){
         // dd($id);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -408,7 +409,7 @@ class catalogos extends Controller
             return response()->json($data, 200);
     }
 
-    public function getExportDataPriceColumna($id,$user,$correlativo,$columna){  
+    public function getExportDataPriceColumna($id,$user,$correlativo,$columna){
         //dd($columna);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -421,11 +422,11 @@ class catalogos extends Controller
                               ->where('diaco_vaciadocba.Ncorrelativo','=',$correlativo)
                               ->limit('50')
                               ->get();
-                              
+
             return response()->json($data, 200);
     }
 
-    public function getExportDataPriceRepeat(Request $request){ 
+    public function getExportDataPriceRepeat(Request $request){
         // dd($id);
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
@@ -445,10 +446,10 @@ class catalogos extends Controller
     public function updatePrice(Request $request){
         $cantidadProducto = count($request->get('data'));
         try {
-            for ($i=0; $i  < $cantidadProducto ; $i++) { 
-                $data = vaciadocba::where('correlativo', $request->get('data')[$i]['code'])->update(['precioProducto' => $request->get('data')[$i]['current']]);   
+            for ($i=0; $i  < $cantidadProducto ; $i++) {
+                $data = vaciadocba::where('correlativo', $request->get('data')[$i]['code'])->update(['precioProducto' => $request->get('data')[$i]['current']]);
             }
-            return response()->json($data, 200);    
+            return response()->json($data, 200);
         }
         catch (\Exceptio $e) {
             DB::rollBack();
@@ -456,14 +457,14 @@ class catalogos extends Controller
         }
     }
 
-    
+
     public function changeStatusPlantilla(Request $request){
         $data = ListarAsignacion::where('correlativo',$request->correlativo)->update(['filtro' => 3]);
         return response()->json($data, 200);
     }
     public function deletePricesSubmit(Request $request){
         $cantidadProducto = count($request->code);
-        for ($i=0; $i < $cantidadProducto ; $i++) { 
+        for ($i=0; $i < $cantidadProducto ; $i++) {
             //dd($request->code[$i]['codigo']);
             $update = vaciadocba::where('correlativo',$request->code[$i]['codigo'])->delete();
         }
@@ -481,5 +482,7 @@ class catalogos extends Controller
             return response()->json($th,201);
         }
     }
+
+
 
 }

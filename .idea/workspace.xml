@@ -3,13 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="767f9c85-afa5-418d-a1e4-13c3777252f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ServiciosRest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ServiciosRest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Transformers/DataDepartamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Transformers/DataDepartamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Transformers/categories.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Transformers/categories.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Transformers/dataSede.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Transformers/dataSede.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/catalogos.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/catalogos.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/plantillasController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/plantillasController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/EdicionPlantilla/vaciado.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/EdicionPlantilla/vaciado.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,6 +36,24 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="@128.5.8.229" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@128.5.8.229" type="feb32156:DbDataSourceImpl" />
+        <item name="diaco_db: database" type="ccb7ac2a:MsImplModel$Database" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@128.5.8.229" type="feb32156:DbDataSourceImpl" />
+        <item name="diaco_db: database" type="ccb7ac2a:MsImplModel$Database" />
+        <item name="dbo: schema" type="2865ee2e:MsImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@128.5.8.229" type="feb32156:DbDataSourceImpl" />
+        <item name="diaco_db: database" type="ccb7ac2a:MsImplModel$Database" />
+        <item name="dbo: schema" type="2865ee2e:MsImplModel$Schema" />
+        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
     </expand>
     <select />
   </component>
@@ -46,6 +63,7 @@
     </commandsHistory>
   </component>
   <component name="Git.Settings">
+    <option name="PATH_TO_GIT" value="C:\Program Files\Git\bin\git.exe" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
@@ -154,6 +172,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/mime" />
       <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/vendor/symfony/contracts" />
+      <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar" />
+      <path value="$PROJECT_DIR$/vendor/maximebf/debugbar" />
     </include_path>
   </component>
   <component name="ProjectConfigurationFiles">
@@ -178,27 +198,21 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="sqlserver" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/js/components/EdicionPlantilla" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Juan Jolon\Desktop\proyectos\diaco\resources\js\components\EdicionPlantilla" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -207,19 +221,26 @@
     </configuration>
   </component>
   <component name="ServiceViewManager">
-    <option name="allServicesViewState">
-      <serviceView>
-        <option name="contentProportion" value="0.034749035" />
-        <treeState>
-          <expand>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@fecc48ac" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-            </path>
-          </expand>
-          <select />
-        </treeState>
-      </serviceView>
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <option name="contentProportion" value="0.05357143" />
+          <treeState>
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@2a9c6414" type="9fbbdea:ServiceModel$ServiceNode" />
+              </path>
+            </expand>
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
     </option>
   </component>
   <component name="SvnConfiguration">
@@ -237,6 +258,13 @@
       <workItem from="1565387671971" duration="5000" />
       <workItem from="1576080585833" duration="1105000" />
       <workItem from="1576799499852" duration="10495000" />
+      <workItem from="1579550495571" duration="659000" />
+      <workItem from="1579553460807" duration="731000" />
+      <workItem from="1579554260825" duration="95000" />
+      <workItem from="1579554389334" duration="6000" />
+      <workItem from="1579554412289" duration="25343000" />
+      <workItem from="1579788313410" duration="20836000" />
+      <workItem from="1579897047676" duration="7436000" />
     </task>
     <servers />
   </component>
@@ -255,5 +283,55 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2472" y="179" key="#Notifications" timestamp="1579553609600">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2472" y="179" key="#Notifications/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579553609600" />
+    <state x="2472" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579556086408">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2472" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579556086408" />
+    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1579789282161">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789282161" />
+    <state width="1783" height="992" key="GridCell.Tab.0.bottom" timestamp="1579900310713">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1783" height="992" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310713" />
+    <state width="1748" height="183" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
+    <state width="1783" height="992" key="GridCell.Tab.0.center" timestamp="1579900310703">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1783" height="992" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1748" height="183" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
+    <state width="1783" height="992" key="GridCell.Tab.0.left" timestamp="1579900310703">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1783" height="992" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1748" height="183" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
+    <state width="1783" height="992" key="GridCell.Tab.0.right" timestamp="1579900310703">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1783" height="992" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1748" height="183" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
+    <state width="196" height="539" key="HiddenNamespacesPopup" timestamp="1579626414737">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="196" height="539" key="HiddenNamespacesPopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579626414737" />
+    <state x="2381" y="163" key="SettingsEditor" timestamp="1579789286201">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2381" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789286201" />
+    <state x="2589" y="163" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1579556214083">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2589" y="163" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579556214083" />
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1579550506912">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="636" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579550506912" />
   </component>
 </project>

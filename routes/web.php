@@ -3,9 +3,9 @@
 Auth::routes();
 
 Route::get('/', 'menu@GetSelectMedida');
-Route::get('/home', 'menu@GetSelectMedida')->name('home'); 
-// Route::get('/','menu@GetSelectMedida'); 
-Route::get('Productos','menu@GetTabla');  
+Route::get('/home', 'menu@GetSelectMedida')->name('home');
+// Route::get('/','menu@GetSelectMedida');
+Route::get('Productos','menu@GetTabla');
 Route::get('addProducto','menu@addProductos');
 Route::get('index','menu@GetSelectMedida');
 Route::get('Producto','menu@viewProducto');
@@ -30,13 +30,13 @@ Route::get('GetTablaEstablecimiento','menu@GetTablaEstablecimiento');
 Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 /*Graficos */
-Route::get('bar-chart', 'ChartController@ChartProductos');  
+Route::get('bar-chart', 'ChartController@ChartProductos');
 
 /* Rutas de Editor de Plantillas */
 
     Route::group(['middleware' => 'cors'], function(){
         Route::get('Edicion','plantillasController@index');
-        // Route::get('addPlantillas','plantillasController@store'); 
+        // Route::get('addPlantillas','plantillasController@store');
         Route::post('addPlantillas','plantillasController@store');
         Route::get('AsignarSede','plantillasController@Asede');
         Route::get('ListarAsignacion','plantillasController@ListarAsignaciones');
@@ -45,15 +45,16 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('GetListaAsede','plantillasController@getAsedeJson');
         Route::get('Bandeja','plantillasController@showInbox');
         Route::get('getinbox','plantillasController@getInbox');
-        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter'); 
+        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter');
         // Route::post('Printer','plantillasController@showprinter');
-        Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');  
+        Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');
         Route::post('mercadoCBA','plantillasController@vaciado');
+        Route::post('setDataSubmit','plantillasController@setDataSubmit');
         Route::get('clonar','plantillasController@clon');
-        Route::post('getPlantillaClone','plantillasController@getDataPlantillas'); 
+        Route::post('getPlantillaClone','plantillasController@getDataPlantillas');
         Route::get('getPlantillaClon','plantillasController@getPlantillasAll');
         Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-        Route::get('getTipo','plantillasController@getTipoVisita'); 
+        Route::get('getTipo','plantillasController@getTipoVisita');
         Route::get('visitas/{id}','plantillasController@getTipoVerificacionVaciado');
         Route::get('check','plantillasController@check');
         Route::get('GasPropano','menu@viewGasPropano');
@@ -63,7 +64,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getEnviados','plantillasController@GetEnviados');
         Route::put('DeleteAsginacionById','plantillasController@deleteByIdAsignacion');
 
-    //-----------------------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------------------
         // Categoria
         Route::get('getCategory','catalogos@dataCategory');
         Route::post('addCategory','catalogos@addCategory');
@@ -110,7 +111,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // -------------
 
         // Tipos de visita
-        Route::get('viewVisita','menu@viewVisita');  
+        Route::get('viewVisita','menu@viewVisita');
         Route::get('findAllVisita','catalogos@findAllVisit');
         Route::post('addVisita','catalogos@addSVisit');
         Route::put('deleteByIdVisita','catalogos@deleteByIdVisit');
@@ -126,15 +127,16 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getDepartamento','plantillasController@getDepartament');
         Route::post('getMunicipio','plantillasController@getMunicipioById');
         // -------------
-        
+
         // Get Data Pdf Generate
         Route::get('get-pdf/{id}','PdfController@getPdf');
         Route::get('getInfoUser','PdfController@getInfoUser');
         Route::post('getCategoriaPdf', 'PdfController@getCategoria');
         Route::post('getProductosPdf','PdfController@getPlantillas');
+
         // -------------
 
-      
+
 
         // Count Column
         Route::post('getCountColumn','plantillasController@getCountColumn');
@@ -155,24 +157,24 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //---------------
 
         // Usuarios Sistema
-        Route::get('viewUsuariosSistema','menu@viewUsuariosSistema');  
+        Route::get('viewUsuariosSistema','menu@viewUsuariosSistema');
         Route::get('findAllUserSystem','catalogos@findAllUserSystem');
         Route::post('addUserSystem','catalogos@addUserSystem');
         Route::put('deleteByIdUserSystem','catalogos@deleteByIdUserSystem');
         Route::put('updateByIdUserSystem','catalogos@updateByIdUserSystem');
         // *******************
 
-        // Export Excel 
-        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView'); 
+        // Export Excel
+        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');
         Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
         Route::get('getPriceExportColumn/{id}/{user}/{correlativo}/{columna}','catalogos@getExportDataPriceColumna');
-        
+
         //***************
 
         // Asignacion Sede Usuario
-        Route::get('asignacionUsuario','menu@viewUsuariosSistemaById'); 
+        Route::get('asignacionUsuario','menu@viewUsuariosSistemaById');
         Route::post('AUsuario', 'plantillasController@storeListaUsuario');
         //******************************
 
@@ -200,23 +202,25 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getUserCba/{id}','plantillasController@getUserCba');
 
         //******Api Movil
-        Route::get('verify2','MovilApp@movile_app'); 
+        Route::get('verify2','MovilApp@movile_app');
         //***************
 
-        //******Reporte Chart 
+        //******Reporte Chart
         Route::get('envio_sede','ReportChartController@submitData');
+        Route::get('getCountSubmit','ReportChartController@getCountSubmit');
         Route::get('getCountSubmit','ReportChartController@getCountSubmit');
         //***************
 
-        
+
+
     //------------------------------------------------------------------------------------------
-    }); 
+    });
 
 
 
 
 // Route::group(['middleware' => ['admin']], function () {
-    
+
 
 // });
 
