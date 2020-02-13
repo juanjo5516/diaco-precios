@@ -249,7 +249,7 @@
                                         size="small"
                                         v-model="
                                             inputMercados[
-                                                'mercado' + scope.row.index
+                                                'local' + scope.row.index
                                             ]
                                         "
                                         :min="0"
@@ -265,7 +265,7 @@
                                 <template slot-scope="scope">
                                     <el-input
                                         v-model="
-                                            sedes['select' + scope.row.index]
+                                            sedes['establecimiento' + scope.row.index]
                                         "
                                         placeholder="Ingrese Establecimiento"
                                     >
@@ -352,7 +352,7 @@
                         <el-button @click="dialogFormVisible = false"
                             >Cancelar</el-button
                         >
-                        <el-button type="primary" @click="onSubmit()"
+                        <el-button type="primary" @click="onSubmit('dialogFormVisible')"
                             >Guardar</el-button
                         >
                     </span>
@@ -517,15 +517,15 @@ export default {
     data() {
         return {
             Fecha: "fecha",
-            sedes: {
-                select1: "",
-                select2: "",
-                select3: "",
-                select4: "",
-                select5: "",
-                mLugar: ""
-            },
-            // sedes:[],
+            // sedes: {
+            //     select1: "",
+            //     select2: "",
+            //     select3: "",
+            //     select4: "",
+            //     select5: "",
+            //     mLugar: ""
+            // },
+            sedes:[],
             input1: "",
             input2: "",
             input3: "",
@@ -560,14 +560,15 @@ export default {
             inputNombre: [],
             inputdireccion: [],
             inputprecios:[],
-            inputMercados: {
-                mercado1: "",
-                mercado2: "",
-                mercado3: "",
-                mercado4: "",
-                mercado5: ""
-            },
-            // DataAdd:[],
+            dataPrice:[],
+            // inputMercados: {
+            //     mercado1: "",
+            //     mercado2: "",
+            //     mercado3: "",
+            //     mercado4: "",
+            //     mercado5: ""
+            // },
+            inputMercados:[],
             Data: [],
             idP: "",
             Mercados: [],
@@ -676,6 +677,7 @@ export default {
                 if (this.categoriaFiltro === this.coleccion[i].categoria) {
                     this.Productos.push({
                         categoria: this.coleccion[i].categoria,
+                        categoria_id: this.coleccion[i].idCategoria,
                         created_at: this.coleccion[i].created_at,
                         medida: this.coleccion[i].medida,
                         producto: this.coleccion[i].producto,
@@ -730,15 +732,47 @@ export default {
                     console.log(error);
                 });
         },
-        onSubmit() {
-            for (let i = 1; i <= this.cantidadColumna ; i++) {
-                this.dataNames.push({
+        onSubmit(tipo_form) {
+
+            this.dataNames = []
+            if(tipo_form == 'dialogFormVisible'){
+                for (let i = 1; i <= this.cantidadColumna ; i++) {
+                    this.dataNames.push({
+                    'dataName': this.sedes['establecimiento'+i],
+                    'dataAddress': this.inputMercados['local'+i]
+                    
+                    });
+                }
+            }else{
+                for (let i = 1; i <= this.cantidadColumna ; i++) {
+                    this.dataNames.push({
                     'dataName': this.inputNombre['nombre'+i],
                     'dataAddress': this.inputdireccion['direccion'+i],
                     'dataDepartment': this.inputDepartamento['departamento'+i]
-                });
-
+                    });
+                }
             }
+
+            
+            
+            this.dataPrice = [];
+            for(let p = 0; p < this.Productos.length; p++){
+                for(let f = 1; f < this.cantidadColumna; f++){
+                   this.dataPrice.push({
+                        categoria: this.Productos[p].categoria,
+                        categoria_id: this.Productos[p].categoria_id,
+                        created_at: this.Productos[p].created_at,
+                        medida: this.Productos[p].medida,
+                        medidaId: this.Productos[p].medidaId,
+                        producto_id: this.Productos[p].producto,
+                        producto: this.Productos[p].produto,
+                        price: [this.inputprecios['data_'+p+'_'+f] , this.inputprecios['data_'+p+'_'+(f+1)]]
+                   })
+                    
+                }
+            }
+            
+            
             let option = [];
             // axios.post(url, {
             //             idP: this.idplantilla,
@@ -763,6 +797,20 @@ export default {
                     nCorrelative: this.correlativo,
                     dataNames: this.dataNames,
                 })
+                var url = "/setDataSubmit";
+            }else{
+                option.push({
+                    idP: this.idplantilla,
+                    user: this.usuario[0].id_usuario,
+                    dataProduct: this.dataPrice,
+                    idOffice: this.usuario[0].id,
+                    idType: this.IdTipo,
+                    column: this.cantidadColumna,
+                    nCorrelative: this.correlativo,
+                    dataNames: this.dataNames,
+                    mLugar: this.sedes['mLugar']
+                })
+                var url = "/mercadoCBA";
             }
             const h = this.$createElement;
             // if (this.checkValidation(this.sedes) == true) {
@@ -777,7 +825,7 @@ export default {
                 //     }
                 // }
                 // var url = "/mercadoCBA";
-                var url = "/setDataSubmit";
+                // var url = "/setDataSubmit";
                 // const bandeja = "/Bandeja";
 
                 axios.post(url, {
@@ -785,16 +833,17 @@ export default {
                     })
                     .then(response => {
                         const status = JSON.parse(response.status);
-                        if (status == "200") {
+                        
+                        if (status == "200" || response == 'ingresado') {
                             // window.location = bandeja;
-                            // this.dialogFormVisible = false;
+                            this.dialogFormVisible = false;
                             // document.getElementById(
                             //     this.button
                             // ).disabled = true;
-                            // this.porcentaje =
-                            //     this.porcentaje + this.cantitdadPorcentaje;
+                            this.porcentaje =
+                                this.porcentaje + this.cantitdadPorcentaje;
                             // this.fullscreenLoading = false;
-                            // this.checkPorcentaje(this.porcentaje, this.button);
+                            this.checkPorcentaje(this.porcentaje, this.button);
                         }
                     })
                     .catch(error => {

@@ -86,6 +86,7 @@
             .tableData{
                 padding-bottom: 10px;
                 /* border:1px solid $000; */
+                width:100% !important;
             }
     
             /* .tableData td{
@@ -99,13 +100,19 @@
                 
             }
             .tableData td p{
-                width: 200;
+                width: 300;
                 font-size: 14px;
                 text-align: center;
             }
 
             .categoria{
                 text-align: center;
+            }
+
+            hr{
+                color:#000 !important;
+                margin-top:25px;
+                background-color: #000 !important;
             }
         /* .border th {
             border: 1px solid #ccc;
@@ -120,18 +127,17 @@
 </head>
 <body>
     <div >
-                <table class=" tableData">
+                <table class="tableData" >
                     <tr>
-                        <td><img src="img/Ndiaco.jpg" alt="diaco"  ></td>
-                        {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco"  ></td> --}}
-                        <td>
+                        <td style="width:30%;"><img src="img/Ndiaco.jpg" alt="diaco"></td>
+                        <td style="width:40%;">
                             <p>
                                 Dirección de Atención y Asistencia al Consumidor -DIACO-
-                            </p> <br>
+                            </p> 
+                            <br>
                             <p>Ministerio de Economia</p>
                         </td>
-                        <td><img src="img/Ndiaco.jpg" alt="diaco" ></td>
-                        {{-- <td><img src="{{ asset('img/Ndiaco.jpg') }}" alt="diaco" ></td> --}}
+                        <td style="width:30%;"><img src="img/Ndiaco.jpg" alt="diaco" ></td>
                     </tr>
                 </table>
 
@@ -216,82 +222,96 @@
                                                     @endfor           
                                             </tbody>
                                         </table>
+                                        <table class="table table-bordered descripcion border table-sm" >
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Producto
+                                                    </th>
+                                                    <th>
+                                                        Medida
+                                                    </th>
+                                                        @for ($i = 1; $i <= $Ncolumna; $i++)
+                                                                <th > Visita {{ $i }} </th>
+                                                        @endfor
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($coleccion as $item)
+                                                    @if ($item->categoria == $dataCategoria->categoria)
+                                                            <tr class="my-1">
+                                                                <td >
+                                                                    {{ $item->produto }}
+                                                                </td>
+                                                                <td >
+                                                                    {{ $item->medida }}
+                                                                </td>
+                                                                @for ($i = 1; $i <= $Ncolumna; $i++)    
+                                                                    <td >
+                                                                        &nbsp;
+                                                                    </td>
+                                                                @endfor
+                                                            </tr> 
+                                                    @endif
+                                                @endforeach
+                                                <tr>
+                                                    <td colspan="7"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     @elseif($dataCategoria->tipo == 'Gas propano' && $dataCategoria->paso == '1')
-                                        <table class="table  table-sm  table-bordered descripcion border" >
+                                        <table class="table    table-bordered descripcion border" >
                                             <thead>
                                                 <tr>
                                                     <th colspan="3"></th>
                                                     @for ($e = 0; $e < count($cat_pro_gas) ; $e++)
-                                                        <th>{{ $cat_pro_gas[$e]->producto }}</th>
+                                                        <th colspan="{{ $cat_pro_gas[$e]->coulspan}}" class="categoria">{{ $cat_pro_gas[$e]->producto }}</th>
                                                     @endfor
                                                 </tr>
                                                 <tr >
                                                     <th style="width:2%">No.</th>
-                                                    <th >Nombre</th>
-                                                    <th >Dirección</th>
-                                                    <!-- <th >Departamento</th> -->
-                                                    @foreach ($coleccion as $item)
-                                                        @for ($e = 0; $e < count($cat_pro_gas) ; $e++)
-                                                            <th>{{ $cat_pro_gas[$e]->producto }}</th>
-                                                            
+                                                    <th style="width:20%">Nombre</th>
+                                                    <th style="width:20%">Dirección</th>
+                                                    @for ($e = 0; $e < count($cat_pro_gas) ; $e++)
+                                                        @for ($i = 0; $i < count($coleccion) ; $i++)
+                                                            @if($coleccion[$i]->produto == $cat_pro_gas[$e]->producto)
+                                                                <th style="font-size:10px;text-align: center;">{{$coleccion[$i]->medida}}</th>
+                                                            @endif
                                                         @endfor
-                                                        @if($item->produto == )
-                                                            <th>{{ $item->medida}}</th>
-                                                        @endif
-                                                    @endforeach
+                                                    @endfor
+                                                   
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                    
                                                     @for ($i = 1; $i <= $Ncolumna; $i++)
                                                             <tr > 
                                                                 <td >{{ $i}}</td>
                                                                 <td ></td>
                                                                 <td ></td>
-                                                                
+                                                                @for($fila = 0; $fila < count($coleccion) ; $fila++)
+                                                                    <td></td>
+                                                                @endfor
                                                             </tr>
                                                     @endfor
                                             </tbody>
                                         </table> 
-                                    @endif
-                            
-                                    <table class="table table-bordered descripcion border table-sm" >
-                                        <thead>
+                                        <table class="table" >
                                             <tr>
-                                                <th>
-                                                    Producto
-                                                </th>
-                                                <th>
-                                                    Medida
-                                                </th>
-                                                    @for ($i = 1; $i <= $Ncolumna; $i++)
-                                                            <th > Visita {{ $i }} </th>
+                                                <td>
+                                                    Observaciones:  
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <span>
+                                                    @for($linea = 1; $linea < 4; $linea++)
+                                                        <hr>
                                                     @endfor
+                                                </span>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($coleccion as $item)
-                                                @if ($item->categoria == $dataCategoria->categoria)
-                                                        <tr class="my-1">
-                                                            <td >
-                                                                {{ $item->produto }}
-                                                            </td>
-                                                            <td >
-                                                                {{ $item->medida }}
-                                                            </td>
-                                                            @for ($i = 1; $i <= $Ncolumna; $i++)    
-                                                                <td >
-                                                                    &nbsp;
-                                                                </td>
-                                                            @endfor
-                                                        </tr> 
-                                                @endif
-                                            @endforeach
-                                            <tr>
-                                                <td colspan="7"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
+                                            
+                                        </table>
+                                    @endif
                         @endforeach
                     </div>
                 </div>

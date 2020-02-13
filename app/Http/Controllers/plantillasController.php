@@ -335,7 +335,7 @@ class plantillasController extends Controller
                                         'id' => $id]);
 
             $cat_pro_gas = DB::select('
-                                    SELECT distinct dpc.nombre as producto 
+                                    SELECT distinct dpc.nombre as producto,count(dpc.nombre) as coulspan 
                                     FROM diaco_plantillascba dp 
                                     INNER JOIN diaco_categoriacba dc 
                                         ON dp.idCategoria = dc.id_Categoria
@@ -345,7 +345,10 @@ class plantillasController extends Controller
                                         ON dp.idMedida = dm.id_medida
                                     INNER JOIN diaco_name_template_cba dnt
                                         ON  dp.NombrePlantilla = dnt.NombreTemplate
-                                    WHERE dnt.id = :id',['id' => $id]);
+                                    WHERE dnt.id = :id
+                                    group by dpc.nombre',['id' => $id]);
+            
+        
             
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
@@ -360,42 +363,42 @@ class plantillasController extends Controller
 
             // dd($categorias[0]->tipo);
             // dd($cat_pro_gas);
-            return view('Ediciones.printer_data',[
-                'id' => $id,
-                'fecha' => $fecha,
-                'usuario' => $usuario,
-                'coleccion' => $query,
-                'categoria' => $categorias,
-                'Ncolumna' => $columna,
-                'correlativo' => $correlativo,
-                'cat_pro_gas' => $cat_pro_gas
+            // return view('Ediciones.printer_data',[
+            //     'id' => $id,
+            //     'fecha' => $fecha,
+            //     'usuario' => $usuario,
+            //     'coleccion' => $query,
+            //     'categoria' => $categorias,
+            //     'Ncolumna' => $columna,
+            //     'correlativo' => $correlativo,
+            //     'cat_pro_gas' => $cat_pro_gas
                 
-            ]);
+            // ]);
 
                 $paso = 0;
             if($categorias[0]->tipo === 'Gas propano'){
-                // $pdf = \PDF::loadView('Ediciones.printer_data',[
-                //     'id' => $id,
-                //     'fecha' => $fecha,
-                //     'usuario' => $usuario,
-                //     'coleccion' => $query,
-                //     'categoria' => $categorias,
-                //     'Ncolumna' => $columna,
-                //     'correlativo' => $correlativo,
-                //     'cat_pro_gas' => $cat_pro_gas
-                // ]);
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas
+                ]);
                 $pdf->setPaper('Legal', 'landscape');
             }else{
-                // $pdf = \PDF::loadView('Ediciones.printer_data',[
-                //     'id' => $id,
-                //     'fecha' => $fecha,
-                //     'usuario' => $usuario,
-                //     'coleccion' => $query,
-                //     'categoria' => $categorias,
-                //     'Ncolumna' => $columna,
-                //     'correlativo' => $correlativo,
-                //     'cat_pro_gas' => $paso
-                // ]);
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas
+                ]);
                 $pdf->setPaper('Legal', 'portrait');
             }
             return $pdf->stream('Ediciones.pdf'); 
@@ -655,6 +658,7 @@ class plantillasController extends Controller
 
 
     public function setDataSubmit(Request $request){
+        dd($request);
         $timeStamp = Carbon::now();
         $countProduct = count($request->option[0]['dataProduct']);
         $columns = (int)$request->option[0]['column'];
@@ -689,42 +693,32 @@ class plantillasController extends Controller
 
     public function vaciado(Request $request){
 
-//        dd($request);
         $TIMESTAMP = Carbon::now();
-        $cantidadProducto = count($request->Data);
-        $columnas = (int)$request->columnas;
+        $cantidadProducto = count($request->option[0]['dataProduct']);
+        $columnas = (int)$request->option[0]['column'];
+        // dd($request);
+        // dd($request->option[0]['dataProduct'][0]['price'][0]);
 
         try {
-            for ($ii=1; $ii <= $columnas ; $ii++) {
-                // $fila = $ii + 1;
-                    // $modelo = local::create(['nombreEstablecimiento' => $request->get('Sedes')['select'.$fila]]);
+            for ($ii=0; $ii < $columnas ; $ii++) {
                     for ($i=0; $i  < $cantidadProducto ; $i++) {
-                        $local = $this->createLocal($request->get('Sedes')['select'.$ii]);
+                        $local = $this->createLocal($request->option[0]['dataNames'][$ii]['dataName']);
                         $modelo = new vaciadocba;
-                        $modelo->numeroLocal = $request->get('Mercados')['mercado'.$ii];
-                        // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila];
-                        $modelo->idLugarVisita = $request->get('Sedes')['mLugar'];
+                        $modelo->numeroLocal = $request->option[0]['dataNames'][$ii]['dataAddress'];
+                        $modelo->idLugarVisita = $request->option[0]['mLugar'];
                         $modelo->created_at = $TIMESTAMP;
-                        $modelo->idPlantilla = $request->idP;
-                        $modelo->idVerificador = $request->Usuarios;
-                        $modelo->tipoVerificacion = $request->get('idTipo')[0]['tipoVerificacion'] ;
-                        if($request->get('Sedes')['select'.$ii] == 'Seleccione una Opción'){
-                           $modelo->idEstablecimientoVisita = 0;
-                        }else{
-                            // $modelo->idEstablecimientoVisita = $request->get('Sedes')['select'.$fila];
-                            $modelo->idEstablecimientoVisita = $local;
-                        }
-
-                        $modelo->idProducto = $request->get('Data')[$i]['producto'];
-                        $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
-                        $modelo->precioProducto = $request->get('Data')[$i]['valor'.$ii];
+                        $modelo->idPlantilla = $request->option[0]['idP'];
+                        $modelo->idVerificador = $request->option[0]['user'];
+                        $modelo->tipoVerificacion = $request->option[0]['idType'][0]['tipoVerificacion'];
+                        $modelo->idEstablecimientoVisita = $local;
+                        $modelo->idProducto = $request->option[0]['dataProduct'][$i]['producto_id'];
+                        $modelo->idMedida = $request->option[0]['dataProduct'][$i]['medidaId'];
+                        $modelo->precioProducto = $request->option[0]['dataProduct'][$i]['price'][$ii];
                         $modelo->estado = 'I';
-                        $modelo->Ncorrelativo = $request->get('Ncorrelativo');
+                        $modelo->Ncorrelativo = $request->option[0]['nCorrelative'];
+                        $modelo->id_Categoria = $request->option[0]['dataProduct'][$i]['categoria_id'];
                         $modelo->save();
-                        // if($modelo->save()){
-                        //     $respuesta = 'ingresado';
-                        //     return response()->json($respuesta, 200);
-                        // }
+                        
                     }
             }
             $respuesta = 'ingresado';
