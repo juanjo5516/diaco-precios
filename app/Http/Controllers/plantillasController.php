@@ -317,11 +317,13 @@ class plantillasController extends Controller
                             ->where('diaco_name_template_cba.id',$id)
                             ->get();
             $categorias = DB::select("
-                                SELECT distinct cl.nombre as categoria, npl.NombreTemplate as tipo,
+                                SELECT distinct 
                                 (CASE
-                                    WHEN npl.NombreTemplate = 'Gas propano' THEN '1'
+                                    WHEN pl.tipoVerificacion = '5' THEN '1'
+                                    WHEN pl.tipoVerificacion = '11' THEN '11'
                                     ELSE '0'
-                                END)  as paso
+                                END)  as paso,
+                                dtv.nombreVerificacion as type_verify
                                     FROM diaco_plantillascba pl
                                     INNER JOIN diaco_categoriacba cl
                                         ON cl.id_Categoria = pl.idCategoria
@@ -331,6 +333,29 @@ class plantillasController extends Controller
                                         ON md.id_medida = pl.idMedida
                                     INNER JOIN diaco_name_template_cba npl
                                         ON npl.NombreTemplate = pl.NombrePlantilla
+                                    INNER JOIN diaco_tipoverificacioncba dtv 
+                                        ON pl.tipoVerificacion = dtv.id_TipoVerificacion 
+                                    WHERE npl.id = :id",[
+                                        'id' => $id]);
+            $categorias_mercado = DB::select("
+                                SELECT distinct cl.nombre,
+                                (CASE
+                                    WHEN pl.tipoVerificacion = '5' THEN '1'
+                                    WHEN pl.tipoVerificacion = '11' THEN '11'
+                                    ELSE '0'
+                                END)  as paso,
+                                dtv.nombreVerificacion as type_verify
+                                    FROM diaco_plantillascba pl
+                                    INNER JOIN diaco_categoriacba cl
+                                        ON cl.id_Categoria = pl.idCategoria
+                                    INNER JOIN diaco_productocba prl
+                                        ON prl.id_producto = pl.idProducto
+                                    INNER JOIN diaco_medida md
+                                        ON md.id_medida = pl.idMedida
+                                    INNER JOIN diaco_name_template_cba npl
+                                        ON npl.NombreTemplate = pl.NombrePlantilla
+                                    INNER JOIN diaco_tipoverificacioncba dtv 
+                                        ON pl.tipoVerificacion = dtv.id_TipoVerificacion 
                                     WHERE npl.id = :id",[
                                         'id' => $id]);
 
@@ -347,7 +372,34 @@ class plantillasController extends Controller
                                         ON  dp.NombrePlantilla = dnt.NombreTemplate
                                     WHERE dnt.id = :id
                                     group by dpc.nombre',['id' => $id]);
+            $cat_pro_com = DB::select('
+                                    SELECT distinct dpc.nombre as producto,count(dpc.nombre) as coulspan, dc.nombre as category 
+                                    FROM diaco_plantillascba dp 
+                                    INNER JOIN diaco_categoriacba dc 
+                                        ON dp.idCategoria = dc.id_Categoria
+                                    INNER JOIN diaco_productocba dpc 
+                                        ON dp.idProducto = dpc.id_producto
+                                    INNER JOIN diaco_medida dm 
+                                        ON dp.idMedida = dm.id_medida
+                                    INNER JOIN diaco_name_template_cba dnt
+                                        ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                    WHERE dnt.id = :id
+                                    group by dpc.nombre,dc.nombre',['id' => $id]);
             
+            $category_handle = DB::select('
+                                SELECT distinct dc.id_categoria as code,dc.nombre as categoria, count(dpc.nombre) as coulspan 
+                                FROM diaco_plantillascba dp 
+                                INNER JOIN diaco_categoriacba dc 
+                                    ON dp.idCategoria = dc.id_Categoria
+                                INNER JOIN diaco_productocba dpc 
+                                    ON dp.idProducto = dpc.id_producto
+                                INNER JOIN diaco_medida dm 
+                                    ON dp.idMedida = dm.id_medida
+                                INNER JOIN diaco_name_template_cba dnt
+                                    ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                WHERE dnt.id = :id
+                                group by dc.id_categoria,dc.nombre',['id' => $id]);
+
         
             
             // return view('Ediciones.printer_data',[
@@ -361,8 +413,8 @@ class plantillasController extends Controller
 
             // return view('Ediciones.pdfdata');
 
-            // dd($categorias[0]->tipo);
-            // dd($cat_pro_gas);
+            // dd($coleccion[0]);
+            // dd($categorias);
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
             //     'fecha' => $fecha,
@@ -371,12 +423,15 @@ class plantillasController extends Controller
             //     'categoria' => $categorias,
             //     'Ncolumna' => $columna,
             //     'correlativo' => $correlativo,
-            //     'cat_pro_gas' => $cat_pro_gas
+            //     'cat_pro_gas' => $cat_pro_gas,
+            //     "type_category" => $category_handle,
+            //     "data_pro_category" => $cat_pro_com,
+            //     "category_mer" => $categorias_mercado
                 
             // ]);
 
                 $paso = 0;
-            if($categorias[0]->tipo === 'Gas propano'){
+            if($categorias[0]->type_verify === 'Gas Propano'){
                 $pdf = \PDF::loadView('Ediciones.printer_data',[
                     'id' => $id,
                     'fecha' => $fecha,
@@ -385,10 +440,13 @@ class plantillasController extends Controller
                     'categoria' => $categorias,
                     'Ncolumna' => $columna,
                     'correlativo' => $correlativo,
-                    'cat_pro_gas' => $cat_pro_gas
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
                 ]);
                 $pdf->setPaper('Legal', 'landscape');
-            }else{
+            }elseif($categorias[0]->type_verify === 'Combustibles'){
                 $pdf = \PDF::loadView('Ediciones.printer_data',[
                     'id' => $id,
                     'fecha' => $fecha,
@@ -397,7 +455,26 @@ class plantillasController extends Controller
                     'categoria' => $categorias,
                     'Ncolumna' => $columna,
                     'correlativo' => $correlativo,
-                    'cat_pro_gas' => $cat_pro_gas
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'portrait');
+            }
+            else{
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
                 ]);
                 $pdf->setPaper('Legal', 'portrait');
             }

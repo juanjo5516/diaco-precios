@@ -1,154 +1,108 @@
 <template>
     <div>
-        <div
-            class="card bg-light mb-3"
-            v-for="(index, x) in getCategoria"
-            v-bind:key="x"
-        >
-            <div class="card-header"></div>
-            <div class="card-body">
-                <table class="table" id="out-table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Medida</th>
-                            <!-- v-for="(prices, p) in getPriceData" v-bind:key="p"  -->
-                            <th
-                                v-for="(correlativo, c) in getColumnaCount"
-                                v-bind:key="c"
-                            >
-                                Precio
-                            </th>
-                            <th>Operaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- v-if="(item.categoria == index.categoria)" -->
-                        <tr
-                            v-for="(item, i) in Getdata"
-                            v-bind:key="i"
-                            :id="'id_' + item.code"
-                        >
-                            <td>{{ item.producto }}</td>
-                            <td>{{ item.medida }}</td>
-                            <td
-                                v-for="(prices, p) in getPriceData"
-                                v-bind:key="p"
-                                v-if="
-                                    item.medida == prices.medida &&
-                                        item.producto == prices.producto
-                                "
-                                :id="prices.codigo"
-                            >
-                                {{ prices.price }}
-                            </td>
-                            <td>
-                                <el-button-group>
-                                    <el-button
-                                        size="mini"
-                                        @click="showDialogEdit(item.code)"
-                                        >Editar
-                                    </el-button>
-                                </el-button-group>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <el-dialog
-                    title="Vaciado de Información"
-                    :visible.sync="dialogFormVisible"
-                    width="60%"
-                    top="1vh">
-                    <el-form :model="form">
-                        <table class="table" id="out-table">
-                                          <thead>
-                                                <tr>
-                                                      <th>Producto</th>
-                                                      <th>Medida</th>
-                                                      <th
-                                                            v-for="(correlativo, c) in getColumnaCount"
-                                                            v-bind:key="c" style="width:16%">
-                                                            
-                                                            Precio
-                                                      </th>
-                                                </tr>
-                                          </thead>
-                                          <tbody>
-                                                <tr
-                                                v-for="(item, i) in Getdata" v-bind:key="i" v-if="(item.code == itemData)"
-                                                >
-                                                      <td>{{ item.producto }}</td>
-                                                      <td>{{ item.medida }}</td>
-                                                      <td v-for="(prices, p) in getPriceData" v-bind:key="p"  v-if="item.medida == prices.medida && item.producto == prices.producto">
-                                                            
-                                                            <el-input v-for="(id,ix) in form.precios" v-bind:key="ix"  v-if="(id.id == x)" size="medium"   v-model="form.preciosP['valor_' + id.id]" :id="'inputs['  + id.id  + ']'"></el-input>
-                                                            <span v-show="false">{{ x++}}</span>
-                                                            <!-- {{ prices.price }} -->
-                             <el-button class="my-5" type="danger" @click="exportExcel"
-            >Rechazar</el-button
-        >                    
-                                                      </td>
-                                                </tr>
-                                                
-                                                
-                                          </tbody>
-                                    </table>
-
-                        
-                        <!-- <table class="table table-bordered head" width="100%">
-                            <thead>
-                                <tr>
-                                    <th style="width:200px">Producto</th>
-                                    <th style="width:200px">Medida</th>
-                                    <th
-                                        v-for="(index, x) in nColumna"
-                                        v-bind:key="x"
-                                    >
-                                        {{ index.index }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="(index, ix) of Productos"
-                                    v-bind:key="ix"
-                                >
-                                    <td>{{ index.produto }}</td>
-                                    <td class="ReferencesName">
-                                        {{ index.medida }}
-                                    </td>
-                                    <td
-                                        v-for="(n, x) in nColumna"
-                                        v-bind:key="x"
-                                    >
-                                        <el-input-number
-                                            v-model="index['valor' + n.index]"
-                                            size="mini"
-                                            :precision="2"
-                                            :min="0"
-                                            :max="1000"
-                                        ></el-input-number>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table> -->
-                    </el-form>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormVisible = false"
-                            >Cancelar</el-button
-                        >
-                        <el-button type="primary" @click="onSubmit()"
-                            >Guardar</el-button
-                        >
-                    </span>
-                </el-dialog>
-            </div>
-        </div>
-        <el-button class="my-5" type="success" @click="envio" v-loading.fullscreen.lock="fullscreenTerminar"
-            >Enviar</el-button
-        >
+        <el-row :gutter="30"> 
+            <el-col :xs="30" :sm="30" :md="30" :lg="25" :xl="12" v-for="(index,x) in categorias" v-bind:key="x">
+                <el-card >
+                    <div slot="header" class="clearfix">
+                        <span>{{ index.categoria }}</span> 
+                    </div>
+                    <table class="table table-striped table-bordered table-hover table-responsive">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th >Código</th>
+                                <th>Producto</th>
+                                <th>Medida</th>
+                                <th>Precio</th>
+                                <th class="title_header">Operación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row_data, r) in Getdata" :key="r" class="tr">
+                                <td v-if="row_data.code_category === index.code">{{ row_data.code }}</td>
+                                <td v-if="row_data.code_category === index.code">{{ row_data.name_product }}</td>
+                                <td v-if="row_data.code_category === index.code">{{ row_data.name_measure }}</td>
+                                <td v-if="row_data.code_category === index.code">{{ row_data.price_product }}</td>
+                                <td v-if="row_data.code_category === index.code">
+                                    <el-button-group>
+                                        <el-button
+                                            type="primary" icon="el-icon-edit" circle
+                                            
+                                            @click="showDialogEdit(row_data.code)">
+                                        </el-button>
+                                    </el-button-group>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </el-card>
+            </el-col>
+        </el-row>
+       <el-dialog
+            
+            :visible.sync="dialogFormVisible"
+            width="50%"
+            top="2vh"
+            show-close
+            destroy-on-close
+            
+            lock-scroll>
+                <el-form :model="form">
+                    <table class="table table-striped table-bordered table-hover table-responsive" id="out-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Código</th>
+                                <th>Producto</th>
+                                <th>Medida</th>
+                                <th>Precio</th>
+                                <th style="width:20%">Nuevo Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row_data_handle, r) in price_filter" :key="r" class="tr">
+                                <td >{{ row_data_handle.code }}</td>
+                                <td >{{ row_data_handle.name_product }}</td>
+                                <td >{{ row_data_handle.name_measure }}</td>
+                                <td >{{ row_data_handle.price_product }}</td>
+                                <td><el-input 
+                                            placeholder="Nuevo Precio" 
+                                            v-model="new_price"
+                                             
+                                            >
+                                    </el-input>
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </el-form> 
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">Cancelar</el-button>
+                    <el-button type="primary" @click="onSubmit()">Guardar</el-button>
+                </span>
+        </el-dialog>
+        <el-button class="my-5" type="success" @click="envio" v-loading.fullscreen.lock="fullscreenTerminar">Enviar</el-button>
     </div>
 </template>
+<style lang="css" scoped>
+    .tr{
+        border: 1px solid #000 !important;
+    }
+
+    .tr td{
+        border: 1px solid #000 !important;
+        text-align: center
+    }
+
+    .thead-dark tr th{
+        text-align: center;
+    }
+
+    .title_header{
+        width: 11%;
+    }
+
+    
+</style>
 <script>
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
@@ -158,6 +112,8 @@ export default {
     data() {
         return {
             Getdata: [],
+            price_filter:[],
+            new_price: "",
             getCategoria: [],
             getPriceData: [],
             getColumnaCount: [],
@@ -189,23 +145,21 @@ export default {
 
     },
     methods: {
+        
         onSubmit () {
             const h = this.$createElement;
             this.pricesUpdate= [];
-            for (let index = 0; index < this.form.precios.length; index++) {
-                  this.pricesUpdate.push({
-                        code: this.form.precios[index].codePrice,
-                        current: this.form.preciosP['valor_' + index],
-                        previous:this.form.precios[index].priceValue
-                  })
-            }
-            var url = '/updatePrice';
-            // const bandeja = "/Bandeja";
-
+            this.pricesUpdate.push({
+                code: this.itemData,
+                new_price_data: this.new_price
+            })
+            
+            var url = '/change_prices_data';
+            
             axios.post(url,{
                   data:this.pricesUpdate
             }).then(response => {
-                  console.log(response.data)
+                  
                   const status = JSON.parse(response.status);
                   if(status == '200'){
                         this.dialogFormVisible = false;
@@ -221,12 +175,7 @@ export default {
                         this.getColumn();
                   }
 
-            })
-
-            for (let cambio = 0; cambio < this.form.precios.length; cambio++) {
-                        this.form.preciosP['valor_' + cambio] = "";
-            }
-           
+            })           
             
         },
         getPreciosVaciado() {
@@ -250,29 +199,26 @@ export default {
             // console.log(this.dataIndexPrice);
         },
         showDialogEdit(data) {
+              this.new_price = ""
               this.inicio = 0;
-              this.form.precios = [];
+              this.price_filter = []
               this.dialogFormVisible = true;
               this.itemData = data;
-            //   console.log(this.getPriceData)
             for (let index = 0; index < this.Getdata.length; index++) {
                   if (this.Getdata[index].code == this.itemData) {
-                        for (let Fproducto = 0; Fproducto < this.getPriceData.length; Fproducto++) {
-                             if ((this.getPriceData[Fproducto].medida == this.Getdata[index].medida) && (this.getPriceData[Fproducto].producto == this.Getdata[index].producto) ) {
-                              //      console.log(this.getPriceData[Fproducto])
-                                   this.form.precios.push({
-                                         id: this.inicio,
-                                         codePrice: this.getPriceData[Fproducto].codigo,
-                                         priceValue: this.getPriceData[Fproducto].price,
-                                         nameProduct: this.Getdata[index].producto,
-                                          nameMedida: this.Getdata[index].medida,
-                                         updateP:0
-                                   })
-                                    this.inicio ++;
-                             }
-                        }
+                        this.price_filter.push({
+                            code: this.Getdata[index].code,
+                            code_product: this.Getdata[index].code_product,
+                            name_product: this.Getdata[index].name_product,
+                            code_measure: this.Getdata[index].code_measure,
+                            name_measure: this.Getdata[index].name_measure,
+                            price_product: this.Getdata[index].price_product,
+                            count_column: this.Getdata[index].count_column,
+                            code_category: this.Getdata[index].code_category,
+                        })
                   }
             }
+            
         },
         getExportCategoria() {
             var url =
