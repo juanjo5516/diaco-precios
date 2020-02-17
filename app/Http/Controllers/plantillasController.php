@@ -754,14 +754,18 @@ class plantillasController extends Controller
 
 
     public function setDataSubmit(Request $request){
-        dd($request);
+        // dd($request);
         $timeStamp = Carbon::now();
         $countProduct = count($request->option[0]['dataProduct']);
         $columns = (int)$request->option[0]['column'];
+        $columns = 1;
+        // dd($countProduct);
         try {
-            for ($column=0; $column < $columns; $column++) {
-                for ($row=0; $row < $countProduct; $row++) {
-                    $local = $this->createMarket($request->option[0]['dataNames'][$column]['dataName'],$request->option[0]['dataNames'][$column]['dataAddress'],$request->option[0]['dataNames'][$column]['dataDepartment']);
+            for ($row=0; $row < $countProduct; $row++) {
+                // for ($column=0; $column < $columns; $column++) {
+                    $local = $this->createMarket($request->option[0]['dataProduct'][$row]['prices'][$row]['dataName'],
+                                                 $request->option[0]['dataProduct'][$row]['prices'][$row]['dataAddress'],
+                                                 $request->option[0]['dataProduct'][$row]['prices'][$row]['dataDepartment']);
                     $model = new vaciadocba;
                     $model->numeroLocal = 0;
                     $model->idLugarVisita = $local;
@@ -770,16 +774,18 @@ class plantillasController extends Controller
                     $model->idVerificador = $request->option[0]['user'];
                     $model->tipoVerificacion = $request->option[0]['idType'][0]['tipoVerificacion'];
                     // $modelo->idEstablecimientoVisita = $local;
-                    $model->idProducto = $request->option[0]['dataProduct'][$row]['producto'];
+                    $model->idProducto = $request->option[0]['dataProduct'][$row]['producto_id'];
                     $model->idMedida = $request->option[0]['dataProduct'][$row]['medidaId'];
-                    $model->precioProducto = $request->option[0]['dataProduct'][$row]['valor'.($column+1)];
+                    // $model->precioProducto = $request->option[0]['dataProduct'][$row]['price'][$column];
+                    $model->precioProducto = $request->option[0]['dataProduct'][$row]['prices'][$row]['price'][0];
                     $model->estado = 'I';
                     $model->Ncorrelativo = $request->option[0]['nCorrelative'];
+                    $model->id_Categoria = $request->option[0]['dataProduct'][$row]['categoria_id'];
                     $model->save();
-                }
+                // }
             }
-            $response = true;
-            return response()->json($response, 200);
+            $respuesta = 'ingresado';
+            return response()->json($respuesta, 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             print $th;
@@ -793,14 +799,14 @@ class plantillasController extends Controller
         $cantidadProducto = count($request->option[0]['dataProduct']);
         $columnas = (int)$request->option[0]['column'];
         // dd($request);
-        // dd($request->option[0]['dataProduct'][0]['price'][0]);
+        // dd($request->option[0]['mLugar']);
 
         try {
-            for ($ii=0; $ii < $columnas ; $ii++) {
+            // for ($ii=0; $ii < $columnas ; $ii++) {
                     for ($i=0; $i  < $cantidadProducto ; $i++) {
-                        $local = $this->createLocal($request->option[0]['dataNames'][$ii]['dataName']);
+                        $local = $this->createLocal($request->option[0]['dataProduct'][$i]['prices'][$i]['dataName']);
                         $modelo = new vaciadocba;
-                        $modelo->numeroLocal = $request->option[0]['dataNames'][$ii]['dataAddress'];
+                        $modelo->numeroLocal = $request->option[0]['dataProduct'][$i]['prices'][$i]['dataAddress'];
                         $modelo->idLugarVisita = $request->option[0]['mLugar'];
                         $modelo->created_at = $TIMESTAMP;
                         $modelo->idPlantilla = $request->option[0]['idP'];
@@ -809,14 +815,14 @@ class plantillasController extends Controller
                         $modelo->idEstablecimientoVisita = $local;
                         $modelo->idProducto = $request->option[0]['dataProduct'][$i]['producto_id'];
                         $modelo->idMedida = $request->option[0]['dataProduct'][$i]['medidaId'];
-                        $modelo->precioProducto = $request->option[0]['dataProduct'][$i]['price'][$ii];
+                        $modelo->precioProducto = $request->option[0]['dataProduct'][$i]['prices'][$i]['price'][0];
                         $modelo->estado = 'I';
                         $modelo->Ncorrelativo = $request->option[0]['nCorrelative'];
                         $modelo->id_Categoria = $request->option[0]['dataProduct'][$i]['categoria_id'];
                         $modelo->save();
                         
                     }
-            }
+            // }
             $respuesta = 'ingresado';
             // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);

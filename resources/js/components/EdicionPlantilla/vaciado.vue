@@ -211,7 +211,7 @@
                         <el-button @click="dialogGas = false"
                             >Cancelar</el-button
                             >
-                        <el-button type="primary" @click="ver()"
+                        <el-button type="primary" @click="onSubmit('dialogGas')"
                             >Guardar</el-button
                             >
                     </span>
@@ -567,7 +567,9 @@ export default {
             municipio: [],
             dataNames:[],
             handle_error_name:[],
-            handle_categories: false
+            handle_categories: false,
+            handle_result_price:[],
+            handle_prices_data:[]
         };
     },
     mounted() {
@@ -609,8 +611,8 @@ export default {
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            // if (producto == "Gas propano") {
-            if (producto == "Gas Propano") {
+            if (producto == "Gas propano") {
+            // if (producto == "Gas Propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -624,7 +626,7 @@ export default {
         },
 
         DataProductos: function() {
-            console.log(this.coleccion[0].precio);
+            // console.log(this.coleccion[0].precio);
             this.Productos = [];
             for (let i = 0; i <= this.coleccion.length - 1; i++) {
                 if (this.categoriaFiltro === this.coleccion[i].categoria) {
@@ -690,41 +692,118 @@ export default {
 
             this.dataNames = []
             if(tipo_form == 'dialogFormVisible'){
-                for (let i = 1; i <= this.cantidadColumna ; i++) {
-                    this.dataNames.push({
-                    'dataName': this.sedes['establecimiento'+i],
-                    'dataAddress': this.inputMercados['local'+i]
+                // for (let i = 1; i <= this.cantidadColumna ; i++) {
+                //     this.dataNames.push({
+                //     'dataName': this.sedes['establecimiento'+i],
+                //     'dataAddress': this.inputMercados['local'+i]
                     
-                    });
+                //     });
+                // }
+
+
+                for(let $file = 0; $file < this.Productos.length; $file++){
+                    for(let $rowss = 1; $rowss <= this.cantidadColumna; $rowss++){
+                        this.handle_prices_data.push({
+                            'price': [this.inputprecios['data_'+$file+'_'+$rowss]],
+                            'dataName': this.sedes['establecimiento'+$rowss],
+                            'dataAddress': this.inputMercados['local'+$rowss],
+                            
+                        })
+                    }
                 }
+
+                const prices_data = {
+                    ...this.handle_prices_data
+                }
+                
+                this.handle_result_price = prices_data
+
+                this.dataPrice = [];
+                for(let p = 0; p < this.Productos.length; p++){
+                    for(let f = 1; f < this.cantidadColumna; f++){
+                    this.dataPrice.push({
+                            categoria: this.Productos[p].categoria,
+                            categoria_id: this.Productos[p].categoria_id,
+                            created_at: this.Productos[p].created_at,
+                            medida: this.Productos[p].medida,
+                            medidaId: this.Productos[p].medidaId,
+                            producto_id: this.Productos[p].producto,
+                            producto: this.Productos[p].produto,
+                            prices: this.handle_result_price
+                    })
+                        
+                    }
+                }
+            
+
             }else{
-                for (let i = 1; i <= this.cantidadColumna ; i++) {
-                    this.dataNames.push({
-                    'dataName': this.inputNombre['nombre'+i],
-                    'dataAddress': this.inputdireccion['direccion'+i],
-                    'dataDepartment': this.inputDepartamento['departamento'+i]
-                    });
+                // for (let i = 1; i <= this.cantidadColumna ; i++) {
+                //     this.dataNames.push({
+                //     'dataName': this.inputNombre['nombre'+i],
+                //     'dataAddress': this.inputdireccion['direccion'+i],
+                //     'dataDepartment': this.inputDepartamento['departamento'+i]
+                //     });
+                // }
+
+                for(let $file = 0; $file < this.Productos.length; $file++){
+                    for(let $rowss = 1; $rowss <= this.cantidadColumna; $rowss++){
+                        this.handle_prices_data.push({
+                            'price': [this.inputprecios['data_'+$file+'_'+$rowss]],
+                            'dataName': this.inputNombre['nombre'+$rowss],
+                            'dataAddress': this.inputdireccion['direccion'+$rowss],
+                            'dataDepartment': this.inputDepartamento['departamento'+$rowss]
+                        })
+                    }
                 }
+                
+                const prices_data = {
+                    ...this.handle_prices_data
+                }
+                
+                this.handle_result_price = prices_data
+                this.dataPrice = [];
+                for(let p = 0; p < this.Productos.length; p++){
+                    for(let f = 1; f <= this.cantidadColumna; f++){
+                        this.dataPrice.push({
+                                categoria: this.Productos[p].categoria,
+                                categoria_id: this.Productos[p].categoria_id,
+                                created_at: this.Productos[p].created_at,
+                                medida: this.Productos[p].medida,
+                                medidaId: this.Productos[p].medidaId,
+                                producto_id: this.Productos[p].producto,
+                                producto: this.Productos[p].produto,
+                                prices: this.handle_result_price
+                        })
+                    }
+                }
+
+                
+                
+               
+            
             }
 
             
             
-            this.dataPrice = [];
-            for(let p = 0; p < this.Productos.length; p++){
-                for(let f = 1; f < this.cantidadColumna; f++){
-                   this.dataPrice.push({
-                        categoria: this.Productos[p].categoria,
-                        categoria_id: this.Productos[p].categoria_id,
-                        created_at: this.Productos[p].created_at,
-                        medida: this.Productos[p].medida,
-                        medidaId: this.Productos[p].medidaId,
-                        producto_id: this.Productos[p].producto,
-                        producto: this.Productos[p].produto,
-                        price: [this.inputprecios['data_'+p+'_'+f] , this.inputprecios['data_'+p+'_'+(f+1)]]
-                   })
+            
+
+            
+            // this.dataPrice = [];
+            // for(let p = 0; p < this.Productos.length; p++){
+            //     for(let f = 1; f < this.cantidadColumna; f++){
+            //        this.dataPrice.push({
+            //             categoria: this.Productos[p].categoria,
+            //             categoria_id: this.Productos[p].categoria_id,
+            //             created_at: this.Productos[p].created_at,
+            //             medida: this.Productos[p].medida,
+            //             medidaId: this.Productos[p].medidaId,
+            //             producto_id: this.Productos[p].producto,
+            //             producto: this.Productos[p].produto,
+            //             price: [this.inputprecios['data_'+p+'_'+f] , this.inputprecios['data_'+p+'_'+(f+1)]]
+            //        })
                     
-                }
-            }
+            //     }
+            // }
             
             
             let option = [];
@@ -739,17 +818,18 @@ export default {
             //             columnas: this.cantidadColumna,
             //             Ncorrelativo: this.correlativo
             //         })
-            // if(this.categoria[0].code === '16'){
-            if(this.categoria[0].code === '6'){
+            if(this.categoria[0].code === '16'){
+            // if(this.categoria[0].code === '6'){
                 option.push({
                     idP: this.idplantilla,
                     user: this.usuario[0].id_usuario,
-                    dataProduct: this.Productos,
+                    dataProduct: this.dataPrice,
                     idOffice: this.usuario[0].id,
                     idType: this.IdTipo,
                     column: this.cantidadColumna,
                     nCorrelative: this.correlativo,
-                    dataNames: this.dataNames,
+                    // dataNames: this.dataNames,
+                    // price: this.inputprecios[0]
                 })
                 var url = "/setDataSubmit";
             }else{
@@ -761,7 +841,7 @@ export default {
                     idType: this.IdTipo,
                     column: this.cantidadColumna,
                     nCorrelative: this.correlativo,
-                    dataNames: this.dataNames,
+                    // dataNames: this.dataNames,
                     mLugar: this.sedes['mLugar']
                 })
                 var url = "/mercadoCBA";
@@ -791,6 +871,7 @@ export default {
                         if (status == "200" || response == 'ingresado') {
                             // window.location = bandeja;
                             this.dialogFormVisible = false;
+                            this.dialogGas = false;
                             // document.getElementById(
                             //     this.button
                             // ).disabled = true;
