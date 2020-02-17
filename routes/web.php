@@ -213,6 +213,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //***************
 
 
+        Route::get ('github', 'PdfController@github');
 
     //------------------------------------------------------------------------------------------
     });

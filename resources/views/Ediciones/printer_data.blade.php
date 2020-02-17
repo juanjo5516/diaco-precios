@@ -5,30 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>pdf</title>
-   
+    <link rel="stylesheet" href="{{public_path('css/css/bootstrap.min.css')}}">
     <style>
-        @page { margin: 4em 1em 4em 1em; }
+        /* @page { margin: 4em 1em 4em 1em; } */
         
-        /* html{
-           font-family: verdana !important;
-            font-size: 12px;
-        } */
-        /* .font-lg {
-            font-size: 13px;
-            font-weight:bold;
-            text-align: center;
-        }
-        .text-center  {
-            text-align: center;
-        }
-        .text-left  {
-            text-align:left;
-            border: 1px solid #ccc;
-        }
-        .w-number {
-            width: 20px;
-            text-align: center !important;
-        } */
+        
         .table {
             font-family: verdana !important;
             font-size: 12px;
@@ -39,7 +20,7 @@
             border-top: none !important;
             margin-bottom: none !important;
         }
-         .card {
+        .card {
             position: relative;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -56,80 +37,50 @@
             border-radius: 0.25rem;
             }
     
-            .card-body {
+        .card-body {
             -webkit-box-flex: 1;
             -ms-flex: 1 1 auto;
             flex: 1 1 auto;
-            /* padding: 1.25rem; */
             }
-            .border  tr, .border th, .border td{
+        .border  tr, .border th, .border td{
                 border: 1px solid #000 !important;
             }
-        
-        /*    .card-header {
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0;
-            background-color: rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-            } */
-
-            /* .card-header:first-child {
-            border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
-            }
-
-            .card-header + .list-group .list-group-item:first-child {
-            border-top: 0;
-            }
-             */
             
-            
-            .tableData{
+        .tableData{
                 padding-bottom: 10px;
-                /* border:1px solid $000; */
                 width:100% !important;
             }
-    
-            /* .tableData td{
-                border:1px solid #000;
-            } */
 
-            .tableData img{
+
+        .tableData img{
                 padding: 0 auto;
                 margin:0 auto;
                 width:200px;
                 
             }
-            .tableData td p{
+        .tableData td p{
                 width: 300;
                 font-size: 14px;
                 text-align: center;
             }
 
-            .categoria{
+        .categoria{
                 text-align: center;
             }
 
-            hr{
+        hr{
                 color:#000 !important;
                 margin-top:25px;
                 background-color: #000 !important;
             }
-        /* .border th {
-            border: 1px solid #ccc;
-    
-        } */
-       
-       /* .header{
-            background-color: #dddddd !important;
-           height:25px ;
-        }   */
+
     </style>
 </head>
 <body>
     <div >
                 <table class="tableData" >
                     <tr>
-                        <td style="width:30%;"><img src="img/Ndiaco.jpg" alt="diaco"></td>
+                        <td style="width:30%;"><img src="{{public_path('img/Ndiaco.jpg')}}" alt="diaco"></td>
                         <td style="width:40%;">
                             <p>
                                 Dirección de Atención y Asistencia al Consumidor -DIACO-
@@ -137,7 +88,7 @@
                             <br>
                             <p>Ministerio de Economia</p>
                         </td>
-                        <td style="width:30%;"><img src="img/Ndiaco.jpg" alt="diaco" ></td>
+                        <td style="width:30%;"><img src="{{public_path('img/Ndiaco.jpg')}}" alt="diaco" ></td>
                     </tr>
                 </table>
 
