@@ -236,7 +236,7 @@ class plantillasController extends Controller
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
                                 ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo ,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,diaco_asignarsedecba.filtro")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
-                                // ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
+                                ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')
                                 ->where('diaco_asignarsedecba.filtro','<','3')
                                 ->get();
@@ -316,8 +316,15 @@ class plantillasController extends Controller
                             ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
                             ->where('diaco_name_template_cba.id',$id)
                             ->get();
-            $categorias = DB::select('
-                                SELECT distinct cl.nombre as categoria FROM diaco_plantillascba pl
+            $categorias = DB::select("
+                                SELECT distinct 
+                                (CASE
+                                    WHEN pl.tipoVerificacion = '6' THEN '1'
+                                    WHEN pl.tipoVerificacion = '52' THEN '11'
+                                    ELSE '0'
+                                END)  as paso,
+                                dtv.nombreVerificacion as type_verify
+                                    FROM diaco_plantillascba pl
                                     INNER JOIN diaco_categoriacba cl
                                         ON cl.id_Categoria = pl.idCategoria
                                     INNER JOIN diaco_productocba prl
@@ -326,8 +333,79 @@ class plantillasController extends Controller
                                         ON md.id_medida = pl.idMedida
                                     INNER JOIN diaco_name_template_cba npl
                                         ON npl.NombreTemplate = pl.NombrePlantilla
-                                    WHERE npl.id = :id',[
+                                    INNER JOIN diaco_tipoverificacioncba dtv 
+                                        ON pl.tipoVerificacion = dtv.id_TipoVerificacion 
+                                    WHERE npl.id = :id",[
                                         'id' => $id]);
+                                        // WHEN pl.tipoVerificacion = '5' THEN '1' //para desarrollo
+                                        // WHEN pl.tipoVerificacion = '11' THEN '11'
+                                        // WHEN pl.tipoVerificacion = '6' THEN '1' //para produccion
+                                        // WHEN pl.tipoVerificacion = '52' THEN '11'
+            $categorias_mercado = DB::select("
+                                SELECT distinct cl.nombre,
+                                (CASE
+                                    WHEN pl.tipoVerificacion = '6' THEN '1'
+                                    WHEN pl.tipoVerificacion = '52' THEN '11'
+                                    ELSE '0'
+                                END)  as paso,
+                                dtv.nombreVerificacion as type_verify
+                                    FROM diaco_plantillascba pl
+                                    INNER JOIN diaco_categoriacba cl
+                                        ON cl.id_Categoria = pl.idCategoria
+                                    INNER JOIN diaco_productocba prl
+                                        ON prl.id_producto = pl.idProducto
+                                    INNER JOIN diaco_medida md
+                                        ON md.id_medida = pl.idMedida
+                                    INNER JOIN diaco_name_template_cba npl
+                                        ON npl.NombreTemplate = pl.NombrePlantilla
+                                    INNER JOIN diaco_tipoverificacioncba dtv 
+                                        ON pl.tipoVerificacion = dtv.id_TipoVerificacion 
+                                    WHERE npl.id = :id",[
+                                        'id' => $id]);
+
+            $cat_pro_gas = DB::select('
+                                    SELECT distinct dpc.nombre as producto,count(dpc.nombre) as coulspan 
+                                    FROM diaco_plantillascba dp 
+                                    INNER JOIN diaco_categoriacba dc 
+                                        ON dp.idCategoria = dc.id_Categoria
+                                    INNER JOIN diaco_productocba dpc 
+                                        ON dp.idProducto = dpc.id_producto
+                                    INNER JOIN diaco_medida dm 
+                                        ON dp.idMedida = dm.id_medida
+                                    INNER JOIN diaco_name_template_cba dnt
+                                        ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                    WHERE dnt.id = :id
+                                    group by dpc.nombre',['id' => $id]);
+            $cat_pro_com = DB::select('
+                                    SELECT distinct dpc.nombre as producto,count(dpc.nombre) as coulspan, dc.nombre as category 
+                                    FROM diaco_plantillascba dp 
+                                    INNER JOIN diaco_categoriacba dc 
+                                        ON dp.idCategoria = dc.id_Categoria
+                                    INNER JOIN diaco_productocba dpc 
+                                        ON dp.idProducto = dpc.id_producto
+                                    INNER JOIN diaco_medida dm 
+                                        ON dp.idMedida = dm.id_medida
+                                    INNER JOIN diaco_name_template_cba dnt
+                                        ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                    WHERE dnt.id = :id
+                                    group by dpc.nombre,dc.nombre',['id' => $id]);
+            
+            $category_handle = DB::select('
+                                SELECT distinct dc.id_categoria as code,dc.nombre as categoria, count(dpc.nombre) as coulspan 
+                                FROM diaco_plantillascba dp 
+                                INNER JOIN diaco_categoriacba dc 
+                                    ON dp.idCategoria = dc.id_Categoria
+                                INNER JOIN diaco_productocba dpc 
+                                    ON dp.idProducto = dpc.id_producto
+                                INNER JOIN diaco_medida dm 
+                                    ON dp.idMedida = dm.id_medida
+                                INNER JOIN diaco_name_template_cba dnt
+                                    ON  dp.NombrePlantilla = dnt.NombreTemplate
+                                WHERE dnt.id = :id
+                                group by dc.id_categoria,dc.nombre',['id' => $id]);
+
+        
+            
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
             //     'fecha' => $fecha,
@@ -338,24 +416,88 @@ class plantillasController extends Controller
 
 
             // return view('Ediciones.pdfdata');
+
+            // dd($query);
+            // dd($categorias);
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
             //     'fecha' => $fecha,
             //     'usuario' => $usuario,
             //     'coleccion' => $query,
-            //      'categoria' => $categorias
+            //     'categoria' => $categorias,
+            //     'Ncolumna' => $columna,
+            //     'correlativo' => $correlativo,
+            //     'cat_pro_gas' => $cat_pro_gas,
+            //     "type_category" => $category_handle,
+            //     "data_pro_category" => $cat_pro_com,
+            //     "category_mer" => $categorias_mercado
+                
             // ]);
-            $pdf = \PDF::loadView('Ediciones.printer_data',[
-                'id' => $id,
-                'fecha' => $fecha,
-                'usuario' => $usuario,
-                'coleccion' => $query,
-                'categoria' => $categorias,
-                'Ncolumna' => $columna,
-                'correlativo' => $correlativo
-            ]);
-            // $pdf->setPaper('Legal', 'portrait');
-            return $pdf->stream('Ediciones.pdf');
+
+                $paso = 0;
+            if($categorias[0]->type_verify === 'Gas Propano'){
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'landscape');
+            }elseif($categorias[0]->type_verify === 'Tortillería'){
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'landscape');
+            }elseif($categorias[0]->type_verify === 'Combustibles'){
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'portrait');
+            }
+            else{
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'portrait');
+            }
+            return $pdf->stream($correlativo.'.pdf'); 
             // return $pdf->save('Ediciones.pdf');
             // return $pdf->stream();
            // DB::commit();
@@ -448,7 +590,7 @@ class plantillasController extends Controller
     public function getPlantillas($id){
 
         $query = DB::table('diaco_plantillascba')
-                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,max(diaco_vaciadocba.precioProducto) as precio")
+                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,CONCAT('Q ',CONVERT(decimal(18,2),avg(diaco_vaciadocba.precioProducto))) as precio")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -527,7 +669,7 @@ class plantillasController extends Controller
         //dd($valores);
         //return response()->json($mercado);
 
-
+        // dd($plantilla);
         return view('Ediciones.vaciado',
             [
                 'fecha' => $fecha,
@@ -612,13 +754,18 @@ class plantillasController extends Controller
 
 
     public function setDataSubmit(Request $request){
+        // dd($request);
         $timeStamp = Carbon::now();
         $countProduct = count($request->option[0]['dataProduct']);
         $columns = (int)$request->option[0]['column'];
+        $columns = 1;
+        // dd($countProduct);
         try {
-            for ($column=0; $column < $columns; $column++) {
-                for ($row=0; $row < $countProduct; $row++) {
-                    $local = $this->createMarket($request->option[0]['dataNames'][$column]['dataName'],$request->option[0]['dataNames'][$column]['dataAddress'],$request->option[0]['dataNames'][$column]['dataDepartment']);
+            for ($row=0; $row < $countProduct; $row++) {
+                // for ($column=0; $column < $columns; $column++) {
+                    $local = $this->createMarket($request->option[0]['dataProduct'][$row]['prices'][$row]['dataName'],
+                                                 $request->option[0]['dataProduct'][$row]['prices'][$row]['dataAddress'],
+                                                 $request->option[0]['dataProduct'][$row]['prices'][$row]['dataDepartment']);
                     $model = new vaciadocba;
                     $model->numeroLocal = 0;
                     $model->idLugarVisita = $local;
@@ -627,16 +774,18 @@ class plantillasController extends Controller
                     $model->idVerificador = $request->option[0]['user'];
                     $model->tipoVerificacion = $request->option[0]['idType'][0]['tipoVerificacion'];
                     // $modelo->idEstablecimientoVisita = $local;
-                    $model->idProducto = $request->option[0]['dataProduct'][$row]['producto'];
+                    $model->idProducto = $request->option[0]['dataProduct'][$row]['producto_id'];
                     $model->idMedida = $request->option[0]['dataProduct'][$row]['medidaId'];
-                    $model->precioProducto = $request->option[0]['dataProduct'][$row]['valor'.($column+1)];
+                    // $model->precioProducto = $request->option[0]['dataProduct'][$row]['price'][$column];
+                    $model->precioProducto = $request->option[0]['dataProduct'][$row]['prices'][$row]['price'][0];
                     $model->estado = 'I';
                     $model->Ncorrelativo = $request->option[0]['nCorrelative'];
+                    $model->id_Categoria = $request->option[0]['dataProduct'][$row]['categoria_id'];
                     $model->save();
-                }
+                // }
             }
-            $response = true;
-            return response()->json($response, 200);
+            $respuesta = 'ingresado';
+            return response()->json($respuesta, 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             print $th;
@@ -646,44 +795,34 @@ class plantillasController extends Controller
 
     public function vaciado(Request $request){
 
-//        dd($request);
         $TIMESTAMP = Carbon::now();
-        $cantidadProducto = count($request->Data);
-        $columnas = (int)$request->columnas;
+        $cantidadProducto = count($request->option[0]['dataProduct']);
+        $columnas = (int)$request->option[0]['column'];
+        // dd($request);
+        // dd($request->option[0]['mLugar']);
 
         try {
-            for ($ii=1; $ii <= $columnas ; $ii++) {
-                // $fila = $ii + 1;
-                    // $modelo = local::create(['nombreEstablecimiento' => $request->get('Sedes')['select'.$fila]]);
+            // for ($ii=0; $ii < $columnas ; $ii++) {
                     for ($i=0; $i  < $cantidadProducto ; $i++) {
-                        $local = $this->createLocal($request->get('Sedes')['select'.$ii]);
+                        $local = $this->createLocal($request->option[0]['dataProduct'][$i]['prices'][$i]['dataName']);
                         $modelo = new vaciadocba;
-                        $modelo->numeroLocal = $request->get('Mercados')['mercado'.$ii];
-                        // $modelo->idLugarVisita = $request->get('Sedes')['select'.$fila];
-                        $modelo->idLugarVisita = $request->get('Sedes')['mLugar'];
+                        $modelo->numeroLocal = $request->option[0]['dataProduct'][$i]['prices'][$i]['dataAddress'];
+                        $modelo->idLugarVisita = $request->option[0]['mLugar'];
                         $modelo->created_at = $TIMESTAMP;
-                        $modelo->idPlantilla = $request->idP;
-                        $modelo->idVerificador = $request->Usuarios;
-                        $modelo->tipoVerificacion = $request->get('idTipo')[0]['tipoVerificacion'] ;
-                        if($request->get('Sedes')['select'.$ii] == 'Seleccione una Opción'){
-                           $modelo->idEstablecimientoVisita = 0;
-                        }else{
-                            // $modelo->idEstablecimientoVisita = $request->get('Sedes')['select'.$fila];
-                            $modelo->idEstablecimientoVisita = $local;
-                        }
-
-                        $modelo->idProducto = $request->get('Data')[$i]['producto'];
-                        $modelo->idMedida = $request->get('Data')[$i]['medidaId'];
-                        $modelo->precioProducto = $request->get('Data')[$i]['valor'.$ii];
+                        $modelo->idPlantilla = $request->option[0]['idP'];
+                        $modelo->idVerificador = $request->option[0]['user'];
+                        $modelo->tipoVerificacion = $request->option[0]['idType'][0]['tipoVerificacion'];
+                        $modelo->idEstablecimientoVisita = $local;
+                        $modelo->idProducto = $request->option[0]['dataProduct'][$i]['producto_id'];
+                        $modelo->idMedida = $request->option[0]['dataProduct'][$i]['medidaId'];
+                        $modelo->precioProducto = $request->option[0]['dataProduct'][$i]['prices'][$i]['price'][0];
                         $modelo->estado = 'I';
-                        $modelo->Ncorrelativo = $request->get('Ncorrelativo');
+                        $modelo->Ncorrelativo = $request->option[0]['nCorrelative'];
+                        $modelo->id_Categoria = $request->option[0]['dataProduct'][$i]['categoria_id'];
                         $modelo->save();
-                        // if($modelo->save()){
-                        //     $respuesta = 'ingresado';
-                        //     return response()->json($respuesta, 200);
-                        // }
+                        
                     }
-            }
+            // }
             $respuesta = 'ingresado';
             // DB::update('update diaco_asignarsedecba set estatus = 0 where idPlantilla = ? and idSede = ?', [$request->idP,$request->idSede]);
             return response()->json($respuesta, 200);

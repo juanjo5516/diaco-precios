@@ -114,36 +114,32 @@
                     width="70%"
                     top="2vh"
                     destroy-on-close
-                >
+                    >
                     <el-form :model="form">
                         <el-table
                             :data="nColumna"
                             border
                             size="small"
-                        >
+                            >
                                 <el-table-column
                                     label="No."
                                     type="index"
-                                >
+                                    >
                                 </el-table-column>
                                 <el-table-column label="Nombre" width="350" >
                                     <template slot-scope="scope">
                                         <el-input
-
                                             :name="'nombre_'+scope.row.index"
-
                                             v-model="
                                                 inputNombre[
                                                     'nombre' + scope.row.index
                                                 ]
                                             "
                                             :ref="'nombre_'+scope.row.index"
-
                                             @blur="handleInputl('nombre_'+scope.row.index, 'principal')"
-                                        >
+                                            >
 
                                         </el-input>
-
                                     </template>
                                 </el-table-column>
 
@@ -158,8 +154,7 @@
                                         "
                                         :ref="'direccion_'+scope.row.index"
                                         @blur="handleInputl('direccion_'+scope.row.index ,'principal')"
-                                    >
-
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
@@ -175,14 +170,14 @@
                                         @blur="handleInputl('departamento_'+scope.row.index,'principal')"
                                         filterable
 
-                                    >
+                                        >
                                         <el-option
                                             v-for="(item,
                                             index) in departamento"
                                             :key="index"
                                             :label="item.nombre_departamento"
                                             :value="item.codigo_departamento"
-                                        >
+                                            >
                                         </el-option>
                                     </el-select>
                                 </template>
@@ -197,7 +192,6 @@
                             </el-table-column>
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
-<!--                                    {{ index.index }}-->
                                     <el-input
                                         :name="'data_'+ scope.$index+ '_' + index.index"
                                         class="input_precios"
@@ -207,7 +201,7 @@
                                         @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
                                         @keyup.enter.native="enter('data_',scope.$index,'_',index.index)"
                                         type="text"
-                                    >
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
@@ -216,10 +210,10 @@
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogGas = false"
                             >Cancelar</el-button
-                        >
-                        <el-button type="primary" @click="ver()"
+                            >
+                        <el-button type="primary" @click="onSubmit('dialogGas')"
                             >Guardar</el-button
-                        >
+                            >
                     </span>
                 </el-dialog>
                 <!-- fin -->
@@ -229,18 +223,18 @@
                     width="70%"
                     top="2vh"
                     destroy-on-close
-                >
+                    >
                     <el-form :model="form">
                         <el-table
                             :data="nColumna"
                             style="width: 100%"
                             border
                             size="small"
-                        >
+                            >
                             <el-table-column
                                 label="No."
                                 type="index"
-                            >
+                                >
 
                             </el-table-column>
                             <el-table-column label="No. Local" width="170">
@@ -249,36 +243,32 @@
                                         size="small"
                                         v-model="
                                             inputMercados[
-                                                'mercado' + scope.row.index
+                                                'local' + scope.row.index
                                             ]
                                         "
                                         :min="0"
                                         :max="1000"
-                                    >
+                                        :ref="'local_'+scope.row.index"
+                                        @blur="handleInputl('local_'+scope.row.index, 'principal')"
+                                        >
 
                                     </el-input-number>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                 label="Establecimiento (campo obligatorio)"
-                            >
+                                >
                                 <template slot-scope="scope">
                                     <el-input
                                         v-model="
-                                            sedes['select' + scope.row.index]
+                                            sedes['establecimiento' + scope.row.index]
                                         "
                                         placeholder="Ingrese Establecimiento"
-                                    >
+                                        :ref="'establecimiento_'+scope.row.index"
+                                        @blur="handleInputl('establecimiento_'+scope.row.index, 'principal')"
+                                        >
 
                                     </el-input>
-                                    <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
-                                                <el-option
-                                                v-for="(sede,index) in establecimientos"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  "
-                                                :value=" sede.idEstablecimiento "
-                                                ></el-option>
-                                          </el-select> -->
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -287,14 +277,16 @@
                             </el-table-column>
                             <el-table-column label="Medida" prop="medida">
                             </el-table-column>
-                            <el-table-column label="Ref." prop="precio" v-if="(precio === undefined)">
+                            <el-table-column lable="Ref." prop="precio">
+                            </el-table-column>
+                            <!-- <el-table-column label="Ref." prop="precio" v-if="(precio == undefined)">
                                     sin Referencia
                             </el-table-column>
                             <el-table-column label="Ref." prop="precio" v-else>
-                            </el-table-column>
+                            </el-table-column> -->
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
-                                    <!--                                    {{ index.index }}-->
+                                    
                                     <el-input
                                         :name="'data_'+ scope.$index+ '_' + index.index"
                                         class="input_precios"
@@ -302,59 +294,20 @@
                                         size="mini"
                                         :ref="'data_'+ scope.$index+ '_' + index.index"
                                         @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
-                                    >
+                                        @keyup.enter.native="enter('data_',scope.$index,'_',index.index)"
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
-<!--                        <table class="table table-bordered head" width="100%">-->
-<!--                            <thead>-->
-<!--                                <tr>-->
-<!--                                    <th style="width:40%">Producto</th>-->
-<!--                                    <th style="width:40%">Medida</th>-->
-<!--                                    <th-->
-<!--                                        style="width:10%"-->
-<!--                                        v-for="(index, x) in nColumna"-->
-<!--                                        v-bind:key="x"-->
-<!--                                    >-->
-<!--                                        {{ index.index }}-->
-<!--                                    </th>-->
-<!--                                </tr>-->
-<!--                            </thead>-->
-<!--                            <tbody>-->
-<!--                                <tr-->
-<!--                                    v-for="(index, ix) of Productos"-->
-<!--                                    v-bind:key="ix"-->
-<!--                                >-->
-<!--                                    <td>{{ index.produto }}</td>-->
-<!--                                    <td class="ReferencesName">-->
-<!--                                        {{ index.medida }}-->
-<!--                                    </td>-->
-<!--                                    <td-->
-<!--                                        v-for="(n, x) in nColumna"-->
-<!--                                        v-bind:key="x"-->
-<!--                                    >-->
-<!--                                        <el-input-number-->
-<!--                                            v-model="index['valor' + n.index]"-->
-<!--                                            size="mini"-->
-<!--                                            :precision="2"-->
-<!--                                            :min="0"-->
-<!--                                            :max="1000000000"-->
-<!--                                        >-->
-
-<!--                                        </el-input-number>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false"
                             >Cancelar</el-button
-                        >
-                        <el-button type="primary" @click="onSubmit()"
+                            >
+                        <el-button type="primary" @click="onSubmit('dialogFormVisible')"
                             >Guardar</el-button
-                        >
+                            >
                     </span>
                 </el-dialog>
             </el-card>
@@ -363,7 +316,7 @@
                 :stroke-width="24"
                 :percentage="porcentaje"
                 status="success"
-            >
+                >
 
             </el-progress>
             <el-button
@@ -374,7 +327,7 @@
                 @click="terminar"
                 v-loading.fullscreen.lock="fullscreenTerminar"
                 >Guardar</el-button
-            >
+                >
         </el-form>
     </div>
 </template>
@@ -517,15 +470,15 @@ export default {
     data() {
         return {
             Fecha: "fecha",
-            sedes: {
-                select1: "",
-                select2: "",
-                select3: "",
-                select4: "",
-                select5: "",
-                mLugar: ""
-            },
-            // sedes:[],
+            // sedes: {
+            //     select1: "",
+            //     select2: "",
+            //     select3: "",
+            //     select4: "",
+            //     select5: "",
+            //     mLugar: ""
+            // },
+            sedes:[],
             input1: "",
             input2: "",
             input3: "",
@@ -560,14 +513,15 @@ export default {
             inputNombre: [],
             inputdireccion: [],
             inputprecios:[],
-            inputMercados: {
-                mercado1: "",
-                mercado2: "",
-                mercado3: "",
-                mercado4: "",
-                mercado5: ""
-            },
-            // DataAdd:[],
+            dataPrice:[],
+            // inputMercados: {
+            //     mercado1: "",
+            //     mercado2: "",
+            //     mercado3: "",
+            //     mercado4: "",
+            //     mercado5: ""
+            // },
+            inputMercados:[],
             Data: [],
             idP: "",
             Mercados: [],
@@ -613,7 +567,9 @@ export default {
             municipio: [],
             dataNames:[],
             handle_error_name:[],
-            handle_categories: false
+            handle_categories: false,
+            handle_result_price:[],
+            handle_prices_data:[]
         };
     },
     mounted() {
@@ -655,8 +611,8 @@ export default {
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            if (producto == "Gas propano") {
-            // if (producto == "Gas Propano") {
+            // if (producto == "Gas propano") {
+            if (producto == "Gas Propano") {
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -670,12 +626,13 @@ export default {
         },
 
         DataProductos: function() {
-            console.log(this.coleccion[0].precio);
+            // console.log(this.coleccion[0].precio);
             this.Productos = [];
             for (let i = 0; i <= this.coleccion.length - 1; i++) {
                 if (this.categoriaFiltro === this.coleccion[i].categoria) {
                     this.Productos.push({
                         categoria: this.coleccion[i].categoria,
+                        categoria_id: this.coleccion[i].idCategoria,
                         created_at: this.coleccion[i].created_at,
                         medida: this.coleccion[i].medida,
                         producto: this.coleccion[i].producto,
@@ -685,6 +642,7 @@ export default {
                     });
                 }
             }
+            // console.log(this.Productos)
         },
         getTipo: function() {
             const tipos = this.idplantilla;
@@ -730,15 +688,124 @@ export default {
                     console.log(error);
                 });
         },
-        onSubmit() {
-            for (let i = 1; i <= this.cantidadColumna ; i++) {
-                this.dataNames.push({
-                    'dataName': this.inputNombre['nombre'+i],
-                    'dataAddress': this.inputdireccion['direccion'+i],
-                    'dataDepartment': this.inputDepartamento['departamento'+i]
-                });
+        onSubmit(tipo_form) {
 
+            this.dataNames = []
+            if(tipo_form == 'dialogFormVisible'){
+                // for (let i = 1; i <= this.cantidadColumna ; i++) {
+                //     this.dataNames.push({
+                //     'dataName': this.sedes['establecimiento'+i],
+                //     'dataAddress': this.inputMercados['local'+i]
+                    
+                //     });
+                // }
+
+
+                for(let $file = 0; $file < this.Productos.length; $file++){
+                    for(let $rowss = 1; $rowss <= this.cantidadColumna; $rowss++){
+                        this.handle_prices_data.push({
+                            'price': [this.inputprecios['data_'+$file+'_'+$rowss]],
+                            'dataName': this.sedes['establecimiento'+$rowss],
+                            'dataAddress': this.inputMercados['local'+$rowss],
+                            
+                        })
+                    }
+                }
+
+                const prices_data = {
+                    ...this.handle_prices_data
+                }
+                
+                this.handle_result_price = prices_data
+
+                this.dataPrice = [];
+                for(let p = 0; p < this.Productos.length; p++){
+                    for(let f = 1; f < this.cantidadColumna; f++){
+                    this.dataPrice.push({
+                            categoria: this.Productos[p].categoria,
+                            categoria_id: this.Productos[p].categoria_id,
+                            created_at: this.Productos[p].created_at,
+                            medida: this.Productos[p].medida,
+                            medidaId: this.Productos[p].medidaId,
+                            producto_id: this.Productos[p].producto,
+                            producto: this.Productos[p].produto,
+                            prices: this.handle_result_price
+                    })
+                        
+                    }
+                }
+            
+
+            }else{
+                // for (let i = 1; i <= this.cantidadColumna ; i++) {
+                //     this.dataNames.push({
+                //     'dataName': this.inputNombre['nombre'+i],
+                //     'dataAddress': this.inputdireccion['direccion'+i],
+                //     'dataDepartment': this.inputDepartamento['departamento'+i]
+                //     });
+                // }
+
+                for(let $file = 0; $file < this.Productos.length; $file++){
+                    for(let $rowss = 1; $rowss <= this.cantidadColumna; $rowss++){
+                        this.handle_prices_data.push({
+                            'price': [this.inputprecios['data_'+$file+'_'+$rowss]],
+                            'dataName': this.inputNombre['nombre'+$rowss],
+                            'dataAddress': this.inputdireccion['direccion'+$rowss],
+                            'dataDepartment': this.inputDepartamento['departamento'+$rowss]
+                        })
+                    }
+                }
+                
+                const prices_data = {
+                    ...this.handle_prices_data
+                }
+                
+                this.handle_result_price = prices_data
+                this.dataPrice = [];
+                for(let p = 0; p < this.Productos.length; p++){
+                    for(let f = 1; f <= this.cantidadColumna; f++){
+                        this.dataPrice.push({
+                                categoria: this.Productos[p].categoria,
+                                categoria_id: this.Productos[p].categoria_id,
+                                created_at: this.Productos[p].created_at,
+                                medida: this.Productos[p].medida,
+                                medidaId: this.Productos[p].medidaId,
+                                producto_id: this.Productos[p].producto,
+                                producto: this.Productos[p].produto,
+                                prices: this.handle_result_price
+                        })
+                    }
+                }
+
+                
+                
+               
+            
             }
+
+            
+            
+            
+
+            
+            // this.dataPrice = [];
+            // for(let p = 0; p < this.Productos.length; p++){
+            //     for(let f = 1; f < this.cantidadColumna; f++){
+            //        this.dataPrice.push({
+            //             categoria: this.Productos[p].categoria,
+            //             categoria_id: this.Productos[p].categoria_id,
+            //             created_at: this.Productos[p].created_at,
+            //             medida: this.Productos[p].medida,
+            //             medidaId: this.Productos[p].medidaId,
+            //             producto_id: this.Productos[p].producto,
+            //             producto: this.Productos[p].produto,
+            //             price: [this.inputprecios['data_'+p+'_'+f] , this.inputprecios['data_'+p+'_'+(f+1)]]
+            //        })
+                    
+            //     }
+            // }
+            
+            
             let option = [];
             // axios.post(url, {
             //             idP: this.idplantilla,
@@ -751,18 +818,33 @@ export default {
             //             columnas: this.cantidadColumna,
             //             Ncorrelativo: this.correlativo
             //         })
-            // if(this.categoria[0].code === '16'){
-            if(this.categoria[0].code === '6'){
+            if(this.categoria[0].code === '16'){
+            // if(this.categoria[0].code === '6'){
                 option.push({
                     idP: this.idplantilla,
                     user: this.usuario[0].id_usuario,
-                    dataProduct: this.Productos,
+                    dataProduct: this.dataPrice,
                     idOffice: this.usuario[0].id,
                     idType: this.IdTipo,
                     column: this.cantidadColumna,
                     nCorrelative: this.correlativo,
-                    dataNames: this.dataNames,
+                    // dataNames: this.dataNames,
+                    // price: this.inputprecios[0]
                 })
+                var url = "/setDataSubmit";
+            }else{
+                option.push({
+                    idP: this.idplantilla,
+                    user: this.usuario[0].id_usuario,
+                    dataProduct: this.dataPrice,
+                    idOffice: this.usuario[0].id,
+                    idType: this.IdTipo,
+                    column: this.cantidadColumna,
+                    nCorrelative: this.correlativo,
+                    // dataNames: this.dataNames,
+                    mLugar: this.sedes['mLugar']
+                })
+                var url = "/mercadoCBA";
             }
             const h = this.$createElement;
             // if (this.checkValidation(this.sedes) == true) {
@@ -777,7 +859,7 @@ export default {
                 //     }
                 // }
                 // var url = "/mercadoCBA";
-                var url = "/setDataSubmit";
+                // var url = "/setDataSubmit";
                 // const bandeja = "/Bandeja";
 
                 axios.post(url, {
@@ -785,16 +867,18 @@ export default {
                     })
                     .then(response => {
                         const status = JSON.parse(response.status);
-                        if (status == "200") {
+                        
+                        if (status == "200" || response == 'ingresado') {
                             // window.location = bandeja;
-                            // this.dialogFormVisible = false;
+                            this.dialogFormVisible = false;
+                            this.dialogGas = false;
                             // document.getElementById(
                             //     this.button
                             // ).disabled = true;
-                            // this.porcentaje =
-                            //     this.porcentaje + this.cantitdadPorcentaje;
+                            this.porcentaje =
+                                this.porcentaje + this.cantitdadPorcentaje;
                             // this.fullscreenLoading = false;
-                            // this.checkPorcentaje(this.porcentaje, this.button);
+                            this.checkPorcentaje(this.porcentaje, this.button);
                         }
                     })
                     .catch(error => {

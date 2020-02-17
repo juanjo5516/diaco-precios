@@ -72,4 +72,9 @@ public function getPlantillas(Request $request){
     return response()->json($query, 200);
     
 }
+
+public function github (){
+    // return \PDF::loadFile('http://www.github.com')->stream('github.pdf'); 
+        return \PDF::loadFile('http://www.github.com')->inline('github.pdf');
+    }
 }

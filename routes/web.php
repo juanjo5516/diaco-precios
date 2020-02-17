@@ -45,7 +45,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('GetListaAsede','plantillasController@getAsedeJson');
         Route::get('Bandeja','plantillasController@showInbox');
         Route::get('getinbox','plantillasController@getInbox');
-        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter');
+        Route::get('Printer/{id}/{correlativo}','plantillasController@showprinter'); 
         // Route::post('Printer','plantillasController@showprinter');
         Route::get('vaciado/{id}/{correlativo}','plantillasController@showVaciado');
         Route::post('mercadoCBA','plantillasController@vaciado');
@@ -181,6 +181,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // Preview
         Route::get('preview/{id}/{user}/{correlativo}','plantillasController@preview');
         Route::post('updatePrice','catalogos@updatePrice');
+        Route::post('change_prices_data','catalogos@change_prices_data');
         Route::post('changeStatusPlantilla','catalogos@changeStatusPlantilla');
         Route::get('revisarEnvio','plantillasController@previewSubmit');
         Route::get('viewSubmit/{id}/{user}/{correlativo}','plantillasController@submitView');
@@ -212,6 +213,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //***************
 
 
+        Route::get ('github', 'PdfController@github');
 
     //------------------------------------------------------------------------------------------
     });
