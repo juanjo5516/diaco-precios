@@ -114,36 +114,32 @@
                     width="70%"
                     top="2vh"
                     destroy-on-close
-                >
+                    >
                     <el-form :model="form">
                         <el-table
                             :data="nColumna"
                             border
                             size="small"
-                        >
+                            >
                                 <el-table-column
                                     label="No."
                                     type="index"
-                                >
+                                    >
                                 </el-table-column>
                                 <el-table-column label="Nombre" width="350" >
                                     <template slot-scope="scope">
                                         <el-input
-
                                             :name="'nombre_'+scope.row.index"
-
                                             v-model="
                                                 inputNombre[
                                                     'nombre' + scope.row.index
                                                 ]
                                             "
                                             :ref="'nombre_'+scope.row.index"
-
                                             @blur="handleInputl('nombre_'+scope.row.index, 'principal')"
-                                        >
+                                            >
 
                                         </el-input>
-
                                     </template>
                                 </el-table-column>
 
@@ -158,8 +154,7 @@
                                         "
                                         :ref="'direccion_'+scope.row.index"
                                         @blur="handleInputl('direccion_'+scope.row.index ,'principal')"
-                                    >
-
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
@@ -175,14 +170,14 @@
                                         @blur="handleInputl('departamento_'+scope.row.index,'principal')"
                                         filterable
 
-                                    >
+                                        >
                                         <el-option
                                             v-for="(item,
                                             index) in departamento"
                                             :key="index"
                                             :label="item.nombre_departamento"
                                             :value="item.codigo_departamento"
-                                        >
+                                            >
                                         </el-option>
                                     </el-select>
                                 </template>
@@ -197,7 +192,6 @@
                             </el-table-column>
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
-<!--                                    {{ index.index }}-->
                                     <el-input
                                         :name="'data_'+ scope.$index+ '_' + index.index"
                                         class="input_precios"
@@ -207,7 +201,7 @@
                                         @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
                                         @keyup.enter.native="enter('data_',scope.$index,'_',index.index)"
                                         type="text"
-                                    >
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
@@ -216,10 +210,10 @@
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogGas = false"
                             >Cancelar</el-button
-                        >
+                            >
                         <el-button type="primary" @click="ver()"
                             >Guardar</el-button
-                        >
+                            >
                     </span>
                 </el-dialog>
                 <!-- fin -->
@@ -229,18 +223,18 @@
                     width="70%"
                     top="2vh"
                     destroy-on-close
-                >
+                    >
                     <el-form :model="form">
                         <el-table
                             :data="nColumna"
                             style="width: 100%"
                             border
                             size="small"
-                        >
+                            >
                             <el-table-column
                                 label="No."
                                 type="index"
-                            >
+                                >
 
                             </el-table-column>
                             <el-table-column label="No. Local" width="170">
@@ -254,31 +248,27 @@
                                         "
                                         :min="0"
                                         :max="1000"
-                                    >
+                                        :ref="'local_'+scope.row.index"
+                                        @blur="handleInputl('local_'+scope.row.index, 'principal')"
+                                        >
 
                                     </el-input-number>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                 label="Establecimiento (campo obligatorio)"
-                            >
+                                >
                                 <template slot-scope="scope">
                                     <el-input
                                         v-model="
                                             sedes['establecimiento' + scope.row.index]
                                         "
                                         placeholder="Ingrese Establecimiento"
-                                    >
+                                        :ref="'establecimiento_'+scope.row.index"
+                                        @blur="handleInputl('establecimiento_'+scope.row.index, 'principal')"
+                                        >
 
                                     </el-input>
-                                    <!-- <el-select   v-model="sedes['select' + scope.row.index ]" filterable >
-                                                <el-option
-                                                v-for="(sede,index) in establecimientos"
-                                                v-bind:key=" index "
-                                                :label=" sede.nombre  "
-                                                :value=" sede.idEstablecimiento "
-                                                ></el-option>
-                                          </el-select> -->
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -287,14 +277,16 @@
                             </el-table-column>
                             <el-table-column label="Medida" prop="medida">
                             </el-table-column>
-                            <el-table-column label="Ref." prop="precio" v-if="(precio === undefined)">
+                            <el-table-column lable="Ref." prop="precio">
+                            </el-table-column>
+                            <!-- <el-table-column label="Ref." prop="precio" v-if="(precio == undefined)">
                                     sin Referencia
                             </el-table-column>
                             <el-table-column label="Ref." prop="precio" v-else>
-                            </el-table-column>
+                            </el-table-column> -->
                             <el-table-column v-for="(index, x) in nColumna" :key="x" :label="'Precio '+index.index">
                                 <template slot-scope="scope">
-                                    <!--                                    {{ index.index }}-->
+                                    
                                     <el-input
                                         :name="'data_'+ scope.$index+ '_' + index.index"
                                         class="input_precios"
@@ -302,59 +294,20 @@
                                         size="mini"
                                         :ref="'data_'+ scope.$index+ '_' + index.index"
                                         @blur="handleInputl('data_'+ scope.$index+ '_' + index.index,'precio')"
-                                    >
+                                        @keyup.enter.native="enter('data_',scope.$index,'_',index.index)"
+                                        >
                                     </el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
-<!--                        <table class="table table-bordered head" width="100%">-->
-<!--                            <thead>-->
-<!--                                <tr>-->
-<!--                                    <th style="width:40%">Producto</th>-->
-<!--                                    <th style="width:40%">Medida</th>-->
-<!--                                    <th-->
-<!--                                        style="width:10%"-->
-<!--                                        v-for="(index, x) in nColumna"-->
-<!--                                        v-bind:key="x"-->
-<!--                                    >-->
-<!--                                        {{ index.index }}-->
-<!--                                    </th>-->
-<!--                                </tr>-->
-<!--                            </thead>-->
-<!--                            <tbody>-->
-<!--                                <tr-->
-<!--                                    v-for="(index, ix) of Productos"-->
-<!--                                    v-bind:key="ix"-->
-<!--                                >-->
-<!--                                    <td>{{ index.produto }}</td>-->
-<!--                                    <td class="ReferencesName">-->
-<!--                                        {{ index.medida }}-->
-<!--                                    </td>-->
-<!--                                    <td-->
-<!--                                        v-for="(n, x) in nColumna"-->
-<!--                                        v-bind:key="x"-->
-<!--                                    >-->
-<!--                                        <el-input-number-->
-<!--                                            v-model="index['valor' + n.index]"-->
-<!--                                            size="mini"-->
-<!--                                            :precision="2"-->
-<!--                                            :min="0"-->
-<!--                                            :max="1000000000"-->
-<!--                                        >-->
-
-<!--                                        </el-input-number>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
                     </el-form>
                     <span slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false"
                             >Cancelar</el-button
-                        >
+                            >
                         <el-button type="primary" @click="onSubmit('dialogFormVisible')"
                             >Guardar</el-button
-                        >
+                            >
                     </span>
                 </el-dialog>
             </el-card>
@@ -363,7 +316,7 @@
                 :stroke-width="24"
                 :percentage="porcentaje"
                 status="success"
-            >
+                >
 
             </el-progress>
             <el-button
@@ -374,7 +327,7 @@
                 @click="terminar"
                 v-loading.fullscreen.lock="fullscreenTerminar"
                 >Guardar</el-button
-            >
+                >
         </el-form>
     </div>
 </template>
@@ -687,6 +640,7 @@ export default {
                     });
                 }
             }
+            // console.log(this.Productos)
         },
         getTipo: function() {
             const tipos = this.idplantilla;

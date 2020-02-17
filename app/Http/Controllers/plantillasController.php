@@ -319,8 +319,8 @@ class plantillasController extends Controller
             $categorias = DB::select("
                                 SELECT distinct 
                                 (CASE
-                                    WHEN pl.tipoVerificacion = '5' THEN '1'
-                                    WHEN pl.tipoVerificacion = '11' THEN '11'
+                                    WHEN pl.tipoVerificacion = '6' THEN '1'
+                                    WHEN pl.tipoVerificacion = '52' THEN '11'
                                     ELSE '0'
                                 END)  as paso,
                                 dtv.nombreVerificacion as type_verify
@@ -337,11 +337,15 @@ class plantillasController extends Controller
                                         ON pl.tipoVerificacion = dtv.id_TipoVerificacion 
                                     WHERE npl.id = :id",[
                                         'id' => $id]);
+                                        // WHEN pl.tipoVerificacion = '5' THEN '1' //para desarrollo
+                                        // WHEN pl.tipoVerificacion = '11' THEN '11'
+                                        // WHEN pl.tipoVerificacion = '6' THEN '1' //para produccion
+                                        // WHEN pl.tipoVerificacion = '52' THEN '11'
             $categorias_mercado = DB::select("
                                 SELECT distinct cl.nombre,
                                 (CASE
-                                    WHEN pl.tipoVerificacion = '5' THEN '1'
-                                    WHEN pl.tipoVerificacion = '11' THEN '11'
+                                    WHEN pl.tipoVerificacion = '6' THEN '1'
+                                    WHEN pl.tipoVerificacion = '52' THEN '11'
                                     ELSE '0'
                                 END)  as paso,
                                 dtv.nombreVerificacion as type_verify
@@ -413,7 +417,7 @@ class plantillasController extends Controller
 
             // return view('Ediciones.pdfdata');
 
-            // dd($coleccion[0]);
+            // dd($query);
             // dd($categorias);
             // return view('Ediciones.printer_data',[
             //     'id' => $id,
@@ -432,6 +436,21 @@ class plantillasController extends Controller
 
                 $paso = 0;
             if($categorias[0]->type_verify === 'Gas Propano'){
+                $pdf = \PDF::loadView('Ediciones.printer_data',[
+                    'id' => $id,
+                    'fecha' => $fecha,
+                    'usuario' => $usuario,
+                    'coleccion' => $query,
+                    'categoria' => $categorias,
+                    'Ncolumna' => $columna,
+                    'correlativo' => $correlativo,
+                    'cat_pro_gas' => $cat_pro_gas,
+                    "type_category" => $category_handle,
+                    "data_pro_category" => $cat_pro_com,
+                    "category_mer" => $categorias_mercado
+                ]);
+                $pdf->setPaper('Legal', 'landscape');
+            }elseif($categorias[0]->type_verify === 'Tortillería'){
                 $pdf = \PDF::loadView('Ediciones.printer_data',[
                     'id' => $id,
                     'fecha' => $fecha,
@@ -478,7 +497,7 @@ class plantillasController extends Controller
                 ]);
                 $pdf->setPaper('Legal', 'portrait');
             }
-            return $pdf->stream('Ediciones.pdf'); 
+            return $pdf->stream($correlativo.'.pdf'); 
             // return $pdf->save('Ediciones.pdf');
             // return $pdf->stream();
            // DB::commit();
@@ -571,7 +590,7 @@ class plantillasController extends Controller
     public function getPlantillas($id){
 
         $query = DB::table('diaco_plantillascba')
-                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,max(diaco_vaciadocba.precioProducto) as precio")
+                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,CONCAT('Q ',CONVERT(decimal(18,2),avg(diaco_vaciadocba.precioProducto))) as precio")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
@@ -650,7 +669,7 @@ class plantillasController extends Controller
         //dd($valores);
         //return response()->json($mercado);
 
-
+        // dd($plantilla);
         return view('Ediciones.vaciado',
             [
                 'fecha' => $fecha,
