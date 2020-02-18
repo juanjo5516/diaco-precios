@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
-    <link rel="stylesheet" href="{{public_path('css/css/bootstrap.min.css')}}">
+    <!-- <link rel="stylesheet" href="{{public_path('css/css/bootstrap.min.css')}}"> -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
     <style>
-        /* @page { margin: 4em 1em 4em 1em; } */
-        
-        
         .table {
             font-family: verdana !important;
             font-size: 11px;
@@ -17,9 +15,41 @@
             border-spacing: 0;
             border-collapse: collapse;
             border: none;
-            border-top: none !important;
-            margin-bottom: none !important;
+            /* border-top: none !important;
+            margin-bottom: none !important; */
         }
+
+        .table-sm th,
+        .table-sm td {
+            padding: 0.3rem;
+        }
+
+        .border {
+            border: 1px solid #dee2e6 !important;
+        }
+
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+        .mb-2,
+        .my-2 {
+            margin-top: 1.2rem !important;
+        }
+
+
+
+
+
         .card {
             position: relative;
             display: -webkit-box;
@@ -62,8 +92,12 @@
             }
 
         .categoria{
+                padding: 0 auto !important;
+                margin: 0 auto !important;
                 text-align: center;
-            }
+                border-spacing: 0;
+                font-size:16px !important;
+        }
 
         hr{
                 color:#000 !important;
@@ -72,21 +106,27 @@
             }
         .text_center{
             text-align:center !important;
-            width:5% !important;
+            width:10% !important;
         }
+        
 
         .handler_data_header{
             text-align:center !important;
-            width:35% !important;
+            width:20%;
+            
         }
         .handler_data_prices{
             text-align:center !important;
             
         }
-
-        .handler_data_table{
-            padding-top: -20px;
+        .handler_data_prices_merc{
+            text-align:center !important;
+            width:25px; 
         }
+
+        /* .handler_data_table{
+            padding-top: -20px;
+        } */
 
         .handle_title_document{
             text-align: center !important;
@@ -99,14 +139,26 @@
             .table-borderless th {
                 border: 0;
             }
+
+        .bg-secondary {
+            background-color: #6c757d !important;
+        }
+
+        .p-3 {
+            padding: 1rem !important;
+        }
+
+        .text-white {
+            color: #fff !important;
+        }
         
 
     </style>
 </head>
 <body>
-    <div>
+    <div >
         @foreach ($categoria as $dataCategoria)
-            <table class="table" >
+            <table class="table " >
                 <tr>
                     <td style="text-align:center"><img width="250px" height="80px" src="{{public_path('img/Ndiaco.jpg')}}" alt="diaco"  ></td>
                     <td style="text-align:center" class="handle_title_document">
@@ -116,7 +168,7 @@
                 </tr>
             </table>
         @endforeach
-        <table class="table border" >
+        <table class="table table-sm border" >
             <tr >
                 <td colspan="7">
                     Fecha: <span>{{ $fecha }}</span>
@@ -148,15 +200,18 @@
         @foreach ($categoria as $dataCategoria)
                     @if ($dataCategoria->paso == '0' && $dataCategoria->type_verify == 'Mercado')
                         @foreach($category_mer as $rows)
-                            <table class="table table-sm table-bordered border">
+                        
+                            <table class="table table-sm table-bordered border my-2" >
                                 <thead>
-                                    <tr>
-                                        <th colspan="3" class="categoria"><h5 >{{ $rows->nombre }}</h5></th>
+                                    <tr >
+                                        <th colspan="3" class="categoria ">
+                                            <div class="p-3  bg-secondary text-white">{{ $rows->nombre }}</div>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th class="text_center">No.</th>
                                         <th>Establecimiento</th>
-                                        <th class="text_center">No. local</th>
+                                        <th   class="text_center">No. local</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,41 +222,35 @@
                                             <td ></td>
                                         </tr>
                                     @endfor
+                                </tbody>
+                            </table>
+                            <table class="table table-sm table-bordered border">
+                                <thead>
                                     <tr>
-                                        <td colspan="8">
-                                            <table class="table table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Producto</th>
-                                                        <th>Medida</th>
-                                                        @for ($i = 1; $i <= $Ncolumna; $i++)
-                                                            <th > Visita {{ $i }} </th>
-                                                        @endfor
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($coleccion as $row)
-                                                        @if($row->categoria == $rows->nombre)
-                                                            <tr>
-                                                                <td>{{ $row->produto }}</td>
-                                                                <td>{{ $row->medida }}</td>
-                                                                @for ($i = 1; $i <= $Ncolumna; $i++)    
-                                                                    <td >
-                                                                        &nbsp;
-                                                                    </td>
-                                                                @endfor
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </td>
+                                        <th style="width:100px !important">Producto</th>
+                                        <th style="width:40px !important">Medida</th>
+                                        @for ($i = 1; $i <= $Ncolumna; $i++)
+                                            <th class="handler_data_prices_merc"> Visita {{ $i }} </th>
+                                        @endfor
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($coleccion as $row)
+                                        @if($row->categoria == $rows->nombre)
+                                            <tr>
+                                                <td>{{ $row->produto }}</td>
+                                                <td>{{ $row->medida }}</td>
+                                                @for ($i = 1; $i <= $Ncolumna; $i++)    
+                                                    <td ></td>
+                                                @endfor
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                 </tbody>
                             </table>
                         @endforeach
                     @elseif($dataCategoria->type_verify == 'Gas Propano' && $dataCategoria->paso == '1')
-                        <table class="table    table-bordered descripcion border" >
+                        <table class="table table-sm table-bordered  border" >
                             <thead>
                                 <tr>
                                     <th colspan="3"></th>
@@ -253,7 +302,7 @@
                             
                         </table>
                     @elseif($dataCategoria->type_verify == 'Combustibles' && $dataCategoria->paso == '11')
-                        <table class="table    table-bordered descripcion border" >
+                        <table class="table  table-sm  table-bordered  border" >
                             <thead>
                                 <tr >
                                     <th style="width:2%">No.</th>
@@ -272,7 +321,7 @@
                                     @endfor
                             </tbody>
                         </table> 
-                        <table class="table    table-bordered descripcion border">
+                        <table class="table  table-sm  table-bordered  border">
                             <thead>
                                 <tr>
                                     <th ></th>
@@ -305,7 +354,7 @@
                         </table>
                         
                     @elseif($dataCategoria->type_verify == 'Tienda de Barrio' && $dataCategoria->paso == '0')
-                            <table class="table table-sm table-bordered border">
+                            <table class="table table-sm   table-bordered border">
                                 <thead>
                                     <tr>
                                         <th class="text_center">No.</th>
@@ -324,13 +373,13 @@
                                 </tbody>
                             </table>
                             @foreach($category_mer as $rows)
-                                <table class="table table-sm table-bordered border handler_data_table">
+                                <table class="table table-sm  table-bordered border my-2">
                                     <thead>
                                         <tr>
-                                            <th class="handler_data_header">Producto - {{ $rows->nombre }}</th>
-                                            <th class="handler_data_header">Medida</th>
+                                            <th style="width:100px !important">Producto - {{ $rows->nombre }}</th>
+                                            <th style="width:40px !important">Medida</th>
                                             @for ($i = 1; $i <= $Ncolumna; $i++)
-                                                <th class="handler_data_prices"> Visita {{ $i }} </th>
+                                                <th class="handler_data_prices_merc"> Visita {{ $i }} </th>
                                             @endfor
                                         </tr>
                                     </thead>
@@ -338,12 +387,10 @@
                                         @foreach($coleccion as $row)
                                             @if($row->categoria == $rows->nombre)
                                                 <tr>
-                                                    <td>{{ $row->produto }}</td>
+                                                    <td >{{ $row->produto }}</td>
                                                     <td>{{ $row->medida }}</td>
                                                     @for ($i = 1; $i <= $Ncolumna; $i++)    
-                                                        <td >
-                                                            &nbsp;
-                                                        </td>
+                                                        <td class="handler_data_prices_merc"></td>
                                                     @endfor
                                                 </tr>
                                             @endif
@@ -399,7 +446,7 @@
                                 </table>
                             @endforeach
                     @elseif($dataCategoria->type_verify == 'Tortillería' && $dataCategoria->paso == '0')
-                            <table class="table table-sm table-bordered border">
+                            <table class="table table-sm table-bordered border my-2">
                                 <thead>
                                     <tr>
                                         <th class="text_center">No.</th>
@@ -418,7 +465,7 @@
                                 </tbody>
                             </table>
                             @foreach($category_mer as $rows)
-                                <table class="table table-sm table-bordered border handler_data_table">
+                                <table class="table table-sm table-bordered border">
                                     <thead>
                                         <tr>
                                             <th class="handler_data_header">Producto - {{ $rows->nombre }}</th>
