@@ -691,6 +691,7 @@ export default {
         onSubmit(tipo_form) {
 
             this.dataNames = []
+            ;
             if(tipo_form == 'dialogFormVisible'){
                 // for (let i = 1; i <= this.cantidadColumna ; i++) {
                 //     this.dataNames.push({

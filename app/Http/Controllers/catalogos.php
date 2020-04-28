@@ -396,6 +396,8 @@ class catalogos extends Controller
             return response()->json($data, 200);
     }
 
+    
+
     public function getCategoriaExport($id,$user,$correlativo){
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')
                               ->join('diaco_medida','diaco_medida.id_medida','=','diaco_vaciadocba.idMedida')
