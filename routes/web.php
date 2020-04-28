@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 Auth::routes();
 
 Route::get('/', 'menu@GetSelectMedida');
@@ -31,6 +34,9 @@ Route::get('GetAddressEstablecimiento','menu@GetChangeAddressEstablecimiento');
 Route::get('AddVaciadoMercado','menu@AddMercadoVaciado');
 /*Graficos */
 Route::get('bar-chart', 'ChartController@ChartProductos');
+
+
+
 
 /* Rutas de Editor de Plantillas */
 
@@ -165,7 +171,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         // *******************
 
         // Export Excel
-        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView');
+        Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView'); 
         Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
@@ -185,7 +191,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::post('changeStatusPlantilla','catalogos@changeStatusPlantilla');
         Route::get('revisarEnvio','plantillasController@previewSubmit');
         Route::get('viewSubmit/{id}/{user}/{correlativo}','plantillasController@submitView');
-        Route::get('viewSubmitPricesEdit/{id}/{user}/{correlativo}','plantillasController@submitViewEditPrices');
+        Route::get('viewSubmitPricesEdit/{id}/{user}/{correlativo}','plantillasController@submitViewEditPrices'); 
         Route::put('deletePricesSubmit','catalogos@deletePricesSubmit');
         // Route::get('getExportDataPriceRepeat/{id}/{user}/{correlativo}/{producto}/{medida}','catalogos@getExportDataPriceRepeat');
         Route::post('getExportDataPriceRepeat','catalogos@getExportDataPriceRepeat');
@@ -215,6 +221,14 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
         Route::get ('github', 'PdfController@github');
 
+        //**********Get Data Templates */
+
+        Route::get('getNameTemplate/{name}','ControllerVaciado@getNameTemplate')->name('getName');
+        Route::get('getPricesTemplate/{name}','ControllerVaciado@getPricesTemplate')->name('getPricesTemplate');
+        Route::get('union','ControllerVaciado@union');
+        //*****************************
+
+        
     //------------------------------------------------------------------------------------------
     });
 

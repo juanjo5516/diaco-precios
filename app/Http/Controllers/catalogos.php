@@ -147,7 +147,7 @@ class catalogos extends Controller
     public function addMarket(Request $request){
 
         $validar = $this->VerificarItem($request->names,'lugar','nombreMercado');
-        dd($validar);
+        // dd($validar);
         if($validar === 0){
             return response()->json(false, 200);
         }else{
@@ -395,6 +395,8 @@ class catalogos extends Controller
             ",['correlativo' => $correlativo]);
             return response()->json($data, 200);
     }
+
+    
 
     public function getCategoriaExport($id,$user,$correlativo){
             $data = vaciadocba::join('diaco_productocba','diaco_productocba.id_producto','=','diaco_vaciadocba.idProducto')

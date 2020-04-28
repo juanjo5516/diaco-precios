@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="767f9c85-afa5-418d-a1e4-13c3777252f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/catalogos.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/catalogos.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/plantillasController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/plantillasController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/EdicionPlantilla/vaciado.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/EdicionPlantilla/vaciado.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +12,7 @@
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution>
-      <executable />
+      <executable path="composer" />
     </execution>
   </component>
   <component name="DatabaseView">
@@ -174,6 +169,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/contracts" />
       <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-debugbar" />
       <path value="$PROJECT_DIR$/vendor/maximebf/debugbar" />
+      <path value="$PROJECT_DIR$/vendor/h4cc/wkhtmltoimage-amd64" />
+      <path value="$PROJECT_DIR$/vendor/h4cc/wkhtmltopdf-amd64" />
     </include_path>
   </component>
   <component name="ProjectConfigurationFiles">
@@ -202,23 +199,42 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/js/components/EdicionPlantilla" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Juan Jolon\Desktop\proyectos\diaco\resources\js\components\EdicionPlantilla" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <TestRunner scope="XML" />
+  <component name="RunManager" selected="Laravel.Laravel">
+    <configuration name="Laravel" type="LaravelStorm_run_conf_serve" factoryName="Laravel">
+      <option name="host" value="128.5.101.19" />
+      <option name="port" value="8000" />
+      <option name="route" value="/" />
+      <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
+      <option name="interpreterName" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="dev" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="watch" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Laravel.Laravel" />
+      <item itemvalue="npm.dev" />
+    </list>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -226,17 +242,7 @@
         <serviceView>
           <option name="contentProportion" value="0.05357143" />
           <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:@128.5.8.229" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@2a9c6414" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </treeState>
         </serviceView>
@@ -265,6 +271,9 @@
       <workItem from="1579554412289" duration="25343000" />
       <workItem from="1579788313410" duration="20836000" />
       <workItem from="1579897047676" duration="7436000" />
+      <workItem from="1583253125966" duration="567000" />
+      <workItem from="1583253751305" duration="851000" />
+      <workItem from="1583258365162" duration="697000" />
     </task>
     <servers />
   </component>
@@ -289,42 +298,57 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2472" y="179" key="#Notifications/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579553609600" />
-    <state x="2472" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579556086408">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="552" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583253879866">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="552" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253879866" />
     <state x="2472" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579556086408" />
-    <state x="2660" y="275" key="FileChooserDialogImpl" timestamp="1579789282161">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="684" y="395" key="ComposerCompositePathDialog" timestamp="1583253537927">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="684" y="395" key="ComposerCompositePathDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253537927" />
+    <state x="723" y="431" key="ComposerInitDialogKey" timestamp="1583253653271">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="723" y="431" key="ComposerInitDialogKey/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253653271" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1583253534295">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253534295" />
     <state x="2660" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789282161" />
-    <state width="1783" height="992" key="GridCell.Tab.0.bottom" timestamp="1579900310713">
+    <state width="1877" height="105" key="GridCell.Tab.0.bottom" timestamp="1583255073660">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1783" height="992" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310713" />
+    <state width="1877" height="105" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583255073660" />
     <state width="1748" height="183" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
-    <state width="1783" height="992" key="GridCell.Tab.0.center" timestamp="1579900310703">
+    <state width="1877" height="105" key="GridCell.Tab.0.center" timestamp="1583255073660">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1783" height="992" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1877" height="105" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583255073660" />
     <state width="1748" height="183" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
-    <state width="1783" height="992" key="GridCell.Tab.0.left" timestamp="1579900310703">
+    <state width="1877" height="105" key="GridCell.Tab.0.left" timestamp="1583255073660">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1783" height="992" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1877" height="105" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583255073660" />
     <state width="1748" height="183" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
-    <state width="1783" height="992" key="GridCell.Tab.0.right" timestamp="1579900310703">
+    <state width="1877" height="105" key="GridCell.Tab.0.right" timestamp="1583255073660">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1783" height="992" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1579900310703" />
+    <state width="1877" height="105" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583255073660" />
     <state width="1748" height="183" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579645216210" />
     <state width="196" height="539" key="HiddenNamespacesPopup" timestamp="1579626414737">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="196" height="539" key="HiddenNamespacesPopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579626414737" />
-    <state x="2381" y="163" key="SettingsEditor" timestamp="1579789286201">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="461" y="163" key="SettingsEditor" timestamp="1583253703823">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253703823" />
     <state x="2381" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1579789286201" />
+    <state x="805" y="427" key="SymfonyPathDialog" timestamp="1583253349047">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="805" y="427" key="SymfonyPathDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1583253349047" />
     <state x="2589" y="163" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1579556214083">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
