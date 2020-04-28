@@ -2,40 +2,33 @@
     <div>
         <div
             class="card bg-light mb-3"
-            v-for="(index, x) in getCategoria"
+            v-for="(index, x) in getCategoria" 
             v-bind:key="x"
         >
             <div class="card-header">
                 <!-- {{ index.categoria}} -->
             </div>
             <div class="card-body">
-                <table class="table" id="out-table">
+                <el-table :data="Getdata" stripe>
+                    <el-table-column label="Producto" prop="name_product" width="450"></el-table-column> 
+                    <el-table-column label="Medida" prop="name_measure"></el-table-column>
+                    <el-table-column label="precio" prop="price_product" width="80"></el-table-column>
+
+                </el-table>
+                <table class="table" id="out-table" v-show="showInfor">
                     <thead>
                         <tr>
                             <th>Producto</th>
                             <th>Medida</th>
-                            <th
-                                v-for="(correlativo, c) in getColumnaCount"
-                                v-bind:key="c"
-                            >
-                                Precio
-                            </th>
+                            <th>Precio</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- v-if="(item.categoria == index.categoria)" -->
                         <tr v-for="(item, i) in Getdata" v-bind:key="i">
-                            <td>{{ item.producto }}</td>
-                            <td>{{ item.medida }}</td>
-                            <td
-                                v-for="(prices, p) in getPriceData"
-                                v-bind:key="p"
-                                v-if="
-                                        item.medida == prices.medida &&
-                                            item.producto == prices.producto
-                                    "
-                            >
-                                    {{ prices.price }}
+                            <td>{{ item.name_product }}</td>
+                            <td>{{ item.name_measure }}</td>
+                            <td >
+                                 {{item.price_product}}
                             </td>
                         </tr>
                     </tbody>
@@ -68,10 +61,32 @@ export default {
             getPriceData: [],
             getColumnaCount: [],
             column: 0,
-            fullscreenLoading: false
+            fullscreenLoading: false,
+            urlRequest: {
+                getname: "/getNameTemplate/",
+                getPricesTemplate: "/getPricesTemplate/",
+            },
+            filter_name: [],
+            response_data: [
+                {
+                     response_name:{}
+                },
+                {
+                    filter_name: []
+                },
+                {
+                    columns:[]
+                },
+                {
+                    filter_name_result: []
+                },
+            ],
+            showInfor:false
         };
     },
     mounted() {
+        
+        // this.getNameTempalte();
         this.getPreciosVaciado();
         // console.log(this.categorias);
         this.getExportCategoria();
@@ -107,16 +122,19 @@ export default {
                 });
         },
         getPreciosVaciado() {
-            var url =
-                "/getExportData/" +
-                this.id +
-                "/" +
-                this.user +
-                "/" +
-                this.correlativo;
-            axios.get(url).then(response => {
+            
+            axios.get(this.urlRequest.getPricesTemplate+this.correlativo).then(response => {
                 this.Getdata = response.data;
             });
+        },
+
+        getNameTempalte(){
+            axios.get(this.urlRequest.getname+this.correlativo).then(response =>{
+                this.response_data[0].response_name = response.data;
+                for (let index = 0; index < this.response_data[0].response_name.length; index++) {
+                    this.getPreciosVaciado(this.response_data[0].response_name,this.response_data[0].response_name[index].code_measure);
+                }
+            })
         },
         getExportCategoria() {
             var url =
@@ -140,7 +158,7 @@ export default {
                 this.correlativo;
             axios.get(url).then(response => {
                 this.getPriceData = response.data;
-                console.log(this.getPriceData);
+                
             });
         },
         getColumn() {
