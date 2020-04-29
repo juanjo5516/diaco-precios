@@ -607,12 +607,13 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
-
+            
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            // if (producto == "Gas propano") {
-            if (producto == "Gas Propano") {
+            if (producto == "Gas propano") { //desarrollo
+            // if (producto == "Gas Propano") { //produccion
+                
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {

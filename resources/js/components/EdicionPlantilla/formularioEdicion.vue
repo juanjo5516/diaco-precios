@@ -29,14 +29,17 @@
                                     <option >Seleccione una Opción</option>
                                     <option v-for="(item, idx) in DataResult" :key="idx" :value="item.id_TipoVerificacion">{{ item.nombreVerificacion}}</option>  
                                 </select> -->
-                                <el-select v-model="selectTPlantilla" placeholder="Tipo Plantilla">
+                                <!-- <el-select v-model="selectTPlantilla" placeholder="Tipo Plantilla" filterable>
                                     <el-option
                                     v-for="item in DataResult"
                                     :key="item.code"
                                     :label="item.name"
                                     :value="item.code">
                                     </el-option>
-                                </el-select>
+                                </el-select> -->
+                                <el-autocomplete v-model="selectTPlantilla" :fetch-suggestions="querySearchAsync" placeholder="Seleccione" >
+
+                                </el-autocomplete>
                             </el-col>
                            
 
@@ -48,7 +51,7 @@
                                     <option v-for="(item, idx) in coleccion" :key="idx" :value="item.id">{{ item.nombre }}</option>  
                                 </select> -->
 
-                                <el-select v-model="selectCategoria" placeholder="Categoria">
+                                <el-select v-model="selectCategoria" placeholder="Categoria" filterable>
                                     <el-option
                                     v-for="item in coleccion"
                                     :key="item.id"
@@ -157,6 +160,9 @@
         props: ['fecha','coleccion'],  
         data() {
             return {
+            links: [],
+            state: '',
+            timeout:  null,
             ListadoProducto:[],
             ListadoMedidas:[],
             DataProducto:[],
@@ -185,14 +191,45 @@
             }
         },
          mounted() {
+             
             this.getData();
             this.getAllProduct();
             this.getAllmeasure();
         },methods: {
+
+loadAll() {
+        return [
+          { "value": "vue", "link": "https://github.com/vuejs/vue" },
+          { "value": "element", "link": "https://github.com/ElemeFE/element" },
+          { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
+          { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
+          { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
+          { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
+          { "value": "babel", "link": "https://github.com/babel/babel" }
+         ];
+      },
+            querySearchAsync(queryString, cb) {
+                var links = this.links;
+                var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+                
+                clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                cb(queryString);
+                }, 3000 * Math.random());
+            },
+            createFilter(queryString) {
+                return (link) => {
+                    
+                return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+
             getData: function(){
               axios.get('/findAllVisita')
                 .then(response => {
                   this.DataResult = response.data;
+                  this.links = this.loadAll();
+                  
 
                 })
                 .catch(function (error) {
