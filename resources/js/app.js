@@ -20,6 +20,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/es';
 import 'vue-select/dist/vue-select.css';
 
+import Vuetify from 'vuetify'
+
 
 
 
@@ -27,7 +29,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
 
-Vue.use(ElementUI, { locale }, Buefy);
+Vue.use(ElementUI, { locale }, Buefy, Vuetify);
 
 
 
@@ -64,6 +66,7 @@ Vue.component('submit-component', require('./components/EdicionPlantilla/submitP
 Vue.component('authorize-component', require('./components/exportacion/authorize.vue').default);
 Vue.component('updateprices-component', require('./components/exportacion/updateprices.vue').default);
 Vue.component('submitdata-component', require('./components/chart/submitData.vue').default);
+Vue.component('test-component', require('./components/vuetify/report/design.vue').default);
 
 
 Vue.component('api-component', require('./components/api/api.vue').default);

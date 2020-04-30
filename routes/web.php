@@ -229,6 +229,13 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('test/{name}','plantillasController@handleTemplate');
         //*****************************
 
+        //**********vuetify */
+
+        Route::get('reportDesign','controllerVuetify@reportDesign');
+        Route::get('departamentos','controllerVuetify@getDepartament');
+
+        //*****************************
+
 
         
     //------------------------------------------------------------------------------------------

@@ -518,7 +518,7 @@ class plantillasController extends Controller
                 $pdf->setPaper('Legal', 'portrait');
             }
             else{
-                dd
+                
                 $pdf = \PDF::loadView('Ediciones.printer_data',[
                     'id' => $id,
                     'fecha' => $fecha,
