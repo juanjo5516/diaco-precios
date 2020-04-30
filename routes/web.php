@@ -226,7 +226,9 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('getNameTemplate/{name}','ControllerVaciado@getNameTemplate')->name('getName');
         Route::get('getPricesTemplate/{name}','ControllerVaciado@getPricesTemplate')->name('getPricesTemplate');
         Route::get('union','ControllerVaciado@union');
+        Route::get('test/{name}','plantillasController@handleTemplate');
         //*****************************
+
 
         
     //------------------------------------------------------------------------------------------
