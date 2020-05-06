@@ -67,6 +67,7 @@ Vue.component('authorize-component', require('./components/exportacion/authorize
 Vue.component('updateprices-component', require('./components/exportacion/updateprices.vue').default);
 Vue.component('submitdata-component', require('./components/chart/submitData.vue').default);
 Vue.component('test-component', require('./components/vuetify/report/design.vue').default);
+Vue.component('designtemplate-componente', require('./components/vuetify/report/designTemplate.vue').default)
 
 
 Vue.component('api-component', require('./components/api/api.vue').default);

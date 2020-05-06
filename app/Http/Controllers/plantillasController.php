@@ -198,7 +198,7 @@ class plantillasController extends Controller
 
                 // print 200;
                 DB::commit();
-                return response()->json('success', 200);
+                return response()->json('success', 200); 
             } catch (\Exceptio $e) {
                 DB::rollBack();
                 return $e;

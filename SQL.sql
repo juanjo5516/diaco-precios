@@ -121,8 +121,10 @@ CREATE TABLE diaco_asignar_productos_categoria(
 	idProducto INTEGER NOT NULL,
 	idTipoVerificacion INTEGER NOT NULL,
 	idCategoria INTEGER NOT NULL,
-	created_at timestamp,
+	idMedida INTEGER NOT NULL,
+	created_at datetime,
 	CONSTRAINT producto_asignacion FOREIGN KEY (idProducto) REFERENCES diaco_productocba(id_producto),
 	CONSTRAINT tipo_asignacion FOREIGN KEY (idTipoVerificacion) REFERENCES diaco_tipoverificacioncba(id_TipoVerificacion),
-	CONSTRAINT categoria_asignacion FOREIGN KEY (idCategoria) REFERENCES diaco_categoriacba(id_Categoria)
+	CONSTRAINT categoria_asignacion FOREIGN KEY (idCategoria) REFERENCES diaco_categoriacba(id_Categoria),
+	CONSTRAINT medida_asignacion FOREIGN KEY (idMedida) REFERENCES diaco_medida(id_medida)
 )

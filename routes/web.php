@@ -172,7 +172,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
         // Export Excel
         Route::get('view/{id}/{user}/{correlativo}','plantillasController@exportExcelView'); 
-        Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');
+        Route::get('getExportData/{id}/{user}/{correlativo}','catalogos@getExportData');  
         Route::get('getExportDataCategory/{id}/{user}/{correlativo}','catalogos@getCategoriaExport');
         Route::get('getPriceExport/{id}/{user}/{correlativo}','catalogos@getExportDataPrice');
         Route::get('getPriceExportColumn/{id}/{user}/{correlativo}/{columna}','catalogos@getExportDataPriceColumna');
@@ -233,6 +233,11 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 
         Route::get('reportDesign','controllerVuetify@reportDesign');
         Route::get('departamentos','controllerVuetify@getDepartament');
+        Route::get('design_template','controllerVuetify@design_template');
+        Route::post('addDesignTemplate','controllerVuetify@addDesignTemplate');
+        Route::post('show_table','controllerVuetify@show_table');
+        Route::post('getNameLocal','controllerVuetify@getNameLocal');
+        Route::post('getNameLocalFilter','controllerVuetify@getFilter');
 
         //*****************************
 

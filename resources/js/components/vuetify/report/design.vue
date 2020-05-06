@@ -11,6 +11,7 @@
               <el-select
                 v-model="model_request.model_departament"
                 placeholder="Departamento"
+                filterable
                 @change="municipios"
               >
                 <el-option
@@ -27,7 +28,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col>
-              <el-select v-model="model_request.model_municipio" placeholder="Municipio">
+              <el-select v-model="model_request.model_municipio" placeholder="Municipio" filterable>
                 <el-option
                   v-for="(item, i) in list_response.list_municipios"
                   v-bind:key="i"
@@ -42,7 +43,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col>
-              <el-select v-model="model_request.model_type_category" placeholder="Categoría">
+              <el-select v-model="model_request.model_type_category" placeholder="Categoría" filterable> 
                 <el-option
                   v-for="(item, i) in list_response.list_type_category"
                   v-bind:key="i"
@@ -57,7 +58,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col>
-              <el-select v-model="model_request.model_category" placeholder="Categoría">
+              <el-select v-model="model_request.model_category" placeholder="Categoría" filterable>
                 <el-option
                   v-for="(item, i) in list_response.list_category"
                   v-bind:key="i"
@@ -73,6 +74,8 @@
                 <span class="mb-3">Fecha Inicial:</span>
                 <el-date-picker
                   v-model="model_request.model_range_initial"
+                  format="dd-MM-yyyy"
+                  value-format="dd-MM-yyyy"
                   type="date"
                   size="large"
                   clearable
@@ -87,6 +90,8 @@
                 <span class="mb-3">Fecha Final:</span>
                 <el-date-picker
                   v-model="model_request.model_range_final"
+                  format="dd-MM-yyyy"
+                  value-format="dd-MM-yyyy"
                   type="date"
                   size="large"
                   clearable
@@ -97,7 +102,7 @@
           </el-row>
           <el-row >
             <div class="mt-3">
-              <el-button type="primary">Generar</el-button>
+              <el-button type="primary" @click="submit">Generar</el-button>
             </div>
           </el-row>
         </el-card>
@@ -109,6 +114,20 @@
               <span class="sr-only">Loading...</span>
             </div>
           </div>
+          <el-card v-for="(index,i) in list_response.list_Local" :key="i">
+            <div slot="header">
+              <span>{{ index.nombreMercado }}</span>
+            </div>
+            <div v-for="(data,k) in list_response.list_Local_filter" :key="k">
+           
+              <el-table :data="data.data" v-if="data.type === index.nombreMercado">
+                <el-table-column label="Producto" prop="producto"></el-table-column>
+                <el-table-column label="Medida" prop="medida"></el-table-column>
+                <el-table-column label="Precio" prop="precio"></el-table-column>
+              </el-table>
+            </div>
+          </el-card>
+          
         </el-main>
       </el-container>
     </el-container>
@@ -122,23 +141,30 @@
 export default {
   data() {
     return {
+      size_list:0,
       url_response: {
         departament: "departamentos",
         municipios: "getMunicipio",
         type: "findAllVisita",
         category: "getCategory",
+        show_table: "show_table",
+        getNameLocal: "getNameLocal",
+        getNameLocalFilter: "getNameLocalFilter", 
       },
       list_response: {
         list_departament: [],
         list_municipios: [],
         list_category: [],
         list_type_category: [],
+        list_response_data: [],
+        list_Local:[],
+        list_Local_filter:[]
       },
       model_request: {
         model_departament: "",
         model_municipio: "",
         model_category: "",
-        model__type_category: "",
+        model_type_category: "",
         model_range_initial:"",
         model_range_final:"",
       },
@@ -151,6 +177,88 @@ export default {
     this.getCategory();
   },
   methods: {
+
+    clear(){
+      this.model_request.model_departament = "todo";
+      this.model_request.model_municipio = "todo";
+      this.model_request.model_category = "todo";
+      this.model_request.model_type_category = "todo";
+    },
+    submit() {
+
+
+      this.loading_true = true;
+      axios.post(this.url_response.getNameLocal,{
+        departament: this.model_request.model_departament, 
+        municipio: this.model_request.model_municipio,
+        type: this.model_request.model_type_category,
+        category: this.model_request.model_category,
+        fInitial: this.model_request.model_range_initial,
+        fFinal: this.model_request.model_range_final
+          }).then(response =>{
+        this.list_response.list_Local = response.data;
+        this.loading_true = false;
+        for (let index = 0; index < response.data.length; index++) {
+          this.getNameLocalFilter(response.data[index].nombreMercado);
+        }
+        
+        
+      })
+
+      // this.getNameLocal();
+      // axios.post(this.url_response.show_table,{
+      //   departament: this.model_request.model_departament, 
+      //   municipio: this.model_request.model_municipio,
+      //   type: this.model_request.model_type_category,
+      //   category: this.model_request.model_category,
+      //   fInitial: this.model_request.model_range_initial,
+      //   fFinal: this.model_request.model_range_final
+      //     }).then(response => {
+           
+      //       this.loading_true = false;
+            
+            
+      //     })
+    },
+
+    getNameLocal(){
+      axios.post(this.url_response.getNameLocal,{
+        departament: this.model_request.model_departament, 
+        municipio: this.model_request.model_municipio,
+        type: this.model_request.model_type_category,
+        category: this.model_request.model_category,
+        fInitial: this.model_request.model_range_initial,
+        fFinal: this.model_request.model_range_final
+          }).then(response =>{
+        this.list_response.list_Local = response.data;
+        
+        for (let index = 0; index < response.data.length; index++) {
+          
+          this.getNameLocalFilter(response.data[index].nombreMercado);
+        }
+        
+        
+      })
+    },
+    getNameLocalFilter(id){
+      this.list_response.list_Local_filter = []
+      axios.post(this.url_response.getNameLocalFilter,{
+        departament: this.model_request.model_departament, 
+        municipio: this.model_request.model_municipio,
+        type: this.model_request.model_type_category,
+        category: this.model_request.model_category,
+        fInitial: this.model_request.model_range_initial,
+        fFinal: this.model_request.model_range_final,
+        filter: id
+          }).then(response =>{
+            
+            this.list_response.list_Local_filter.push({
+                'type': id,
+                'data':response.data
+            })
+      })
+      console.log(this.list_response.list_Local_filter)
+    },
     getDepartament() {
       axios.get(this.url_response.departament).then(response => {
         this.list_response.list_departament = response.data;

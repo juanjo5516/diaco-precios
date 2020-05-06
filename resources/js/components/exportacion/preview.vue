@@ -9,7 +9,7 @@
                     <table class="table table-striped table-bordered table-hover table-responsive">
                         <thead class="thead-dark">
                             <tr>
-                                <th >Código</th>
+                                <th >Código</th> 
                                 <th>Producto</th>
                                 <th>Medida</th>
                                 <th>Precio</th>
@@ -188,7 +188,7 @@ export default {
                 this.correlativo;
             axios.get(url).then(response => {
                 this.Getdata = response.data;
-            //     console.log(this.Getdata);
+                console.log(this.Getdata);
             });
         },
         dataPrices(codigo, prices) {

@@ -134,12 +134,7 @@
           class="my-4"
           v-loading.fullscreen.lock="fullscreenLoading"
         >Almacenar Boleta</el-button>
-        <el-button
-          @click="test"
-          type="primary"
-          class="my-4"
-          v-loading.fullscreen.lock="fullscreenLoading"
-        >tst</el-button>
+        
 
         <el-button
           @click="newData"

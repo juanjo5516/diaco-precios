@@ -44,6 +44,9 @@
                         <a class="nav-link" href=/AsignarSede>
                             <i class="nav-icon fas fa-angle-right"></i> Asignación
                         </a>
+                        <a class="nav-link" href=/design_template>
+                            <i class="nav-icon fas fa-angle-right"></i> Diseñar Plantilla
+                        </a>
                         <a class="nav-link" href=/clonar>
                             <i class="nav-icon fas fa-angle-right"></i> Clonar plantillas
                         </a>
