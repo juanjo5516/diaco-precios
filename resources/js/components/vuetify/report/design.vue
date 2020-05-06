@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container style="height: 700px; ">
+    <el-container style="height: 720px; ">
       <el-aside width="300px">
         <el-card class="box-card">
           <el-row :gutter="10">
@@ -100,6 +100,17 @@
               </div>
             </el-col>
           </el-row>
+          <el-row :gutter="15" class="mb-3 mt-3">
+            <el-col :span="25">
+              <div>
+                <span >Tipo de Busqueda:</span>
+                <el-radio-group v-model="model_request.radio_select_db" size="small"> 
+                  <el-radio label="Actual" border></el-radio>
+                  <el-radio label="Anterior" border></el-radio>
+                </el-radio-group>
+              </div>
+            </el-col>
+          </el-row>
           <el-row >
             <div class="mt-3">
               <el-button type="primary" @click="submit">Generar</el-button>
@@ -167,6 +178,7 @@ export default {
         model_type_category: "",
         model_range_initial:"",
         model_range_final:"",
+        radio_select_db:"",
       },
       loading_true:false
     };
@@ -194,7 +206,8 @@ export default {
         type: this.model_request.model_type_category,
         category: this.model_request.model_category,
         fInitial: this.model_request.model_range_initial,
-        fFinal: this.model_request.model_range_final
+        fFinal: this.model_request.model_range_final,
+        db: this.model_request.radio_select_db
           }).then(response =>{
         this.list_response.list_Local = response.data;
         this.loading_true = false;
@@ -228,7 +241,8 @@ export default {
         type: this.model_request.model_type_category,
         category: this.model_request.model_category,
         fInitial: this.model_request.model_range_initial,
-        fFinal: this.model_request.model_range_final
+        fFinal: this.model_request.model_range_final,
+        db: this.model_request.radio_select_db
           }).then(response =>{
         this.list_response.list_Local = response.data;
         
@@ -249,7 +263,8 @@ export default {
         category: this.model_request.model_category,
         fInitial: this.model_request.model_range_initial,
         fFinal: this.model_request.model_range_final,
-        filter: id
+        filter: id,
+        db: this.model_request.radio_select_db
           }).then(response =>{
             
             this.list_response.list_Local_filter.push({
