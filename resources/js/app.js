@@ -20,7 +20,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/es';
 import 'vue-select/dist/vue-select.css';
 
-import Vuetify from 'vuetify'
+// import Vuetify from 'vuetify'
 
 
 
@@ -29,7 +29,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
 
-Vue.use(ElementUI, { locale }, Buefy, Vuetify);
+Vue.use(ElementUI, { locale }, Buefy);
 
 
 

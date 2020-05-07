@@ -97,54 +97,89 @@ class controllerVuetify extends Controller
 
     public function getNameLocal(Request $request){ 
 
-        
+        if ($request->db == "Actual") {
+            if($request->departament == "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                
+                $response = DB::select("SELECT DISTINCT
+                        dm.nombreMercado from diaco_vaciadocba dv
+                        INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                ");
 
-        if($request->departament == "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                return response()->json($response,200);
 
-            $response = DB::select("SELECT DISTINCT
-                dm.nombreMercado from diaco_vaciadocba dv
-                    INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            ");
-            return response()->json($response,200);
+            }else if($request->departament != "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
 
-        }else if($request->departament != "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."'");
 
-            $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
-            INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            WHERE dm.departamento_id = '".$request->departament."'");
+                return response()->json($response,200);
 
-            return response()->json($response,200);
+            }else if($request->departament != "" && $request->municipio != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
 
-        }else if($request->departament != "" && $request->municipio != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."' and  dm.municipio_id = '".$request->municipio."'");
+                return response()->json($response,200);
 
-            $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
-            INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            WHERE dm.departamento_id = '".$request->departament."' and  dm.municipio_id = '".$request->municipio."'");
-            return response()->json($response,200);
+            }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.municipio_id = '".$request->municipio."' and dm.departamento_id = '".$request->departament."' and dv.tipoVerificacion = '".$request->type."'");
+                return response()->json($response,200);
+            }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial == "" && $request->fFinal == ""){
 
-        }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
-            $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
-            INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            WHERE dm.municipio_id = '".$request->municipio."' and dm.departamento_id = '".$request->departament."' and dv.tipoVerificacion = '".$request->type."'");
-            return response()->json($response,200);
-        }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial == "" && $request->fFinal == ""){
+                $response = DB::select("SELECT DISTINCT dm.nombreMercado FROM diaco_asignar_productos_categoria dap
+                INNER JOIN diaco_vaciadocba dv ON dap.idProducto = dv.idProducto AND dap.idMedida = dv.idMedida AND dap.idTipoVerificacion = dv.tipoVerificacion
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."' AND dm.municipio_id = '".$request->municipio."' AND dap.idTipoVerificacion = '".$request->type."' AND dap.idCategoria = '".$request->category."'");
 
-            $response = DB::select("SELECT DISTINCT dm.nombreMercado FROM diaco_asignar_productos_categoria dap
-            INNER JOIN diaco_vaciadocba dv ON dap.idProducto = dv.idProducto AND dap.idMedida = dv.idMedida AND dap.idTipoVerificacion = dv.tipoVerificacion
-            INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            WHERE dm.departamento_id = '".$request->departament."' AND dm.municipio_id = '".$request->municipio."' AND dap.idTipoVerificacion = '".$request->type."' AND dap.idCategoria = '".$request->category."'");
+                return response()->json($response,200);
+            }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != ""){
 
-            return response()->json($response,200);
-        }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != ""){
+                $response = DB::select("SELECT DISTINCT dm.nombreMercado FROM diaco_asignar_productos_categoria dap
+                INNER JOIN diaco_vaciadocba dv ON dap.idProducto = dv.idProducto AND dap.idMedida = dv.idMedida AND dap.idTipoVerificacion = dv.tipoVerificacion
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."' AND dm.municipio_id = '".$request->municipio."' AND dap.idTipoVerificacion = '".$request->type."' AND dap.idCategoria = '".$request->category."' and
+                convert(varchar,dv.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'");
 
-            $response = DB::select("SELECT DISTINCT dm.nombreMercado FROM diaco_asignar_productos_categoria dap
-            INNER JOIN diaco_vaciadocba dv ON dap.idProducto = dv.idProducto AND dap.idMedida = dv.idMedida AND dap.idTipoVerificacion = dv.tipoVerificacion
-            INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
-            WHERE dm.departamento_id = '".$request->departament."' AND dm.municipio_id = '".$request->municipio."' AND dap.idTipoVerificacion = '".$request->type."' AND dap.idCategoria = '".$request->category."' and
-            convert(varchar,dv.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'");
-
-            return response()->json($response,200);
+                return response()->json($response,200);
+            }
         }
+
+        if($request->db == "Anterior"){
+            if($request->departament == "" && $request->municipio == "" && $request->type == ""){
+                
+                $response = DB::select("SELECT DISTINCT
+                        dm.nombreMercado from diaco_vaciadocba dv
+                        INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                ");
+
+                return response()->json($response,200);
+
+            }else if($request->departament != "" && $request->municipio == "" && $request->type == ""){
+
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."'");
+
+                return response()->json($response,200);
+
+            }else if($request->departament != "" && $request->municipio != "" && $request->type == ""){
+
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.departamento_id = '".$request->departament."' and  dm.municipio_id = '".$request->municipio."'");
+                return response()->json($response,200);
+
+            }else if($request->departament != "" && $request->municipio != "" && $request->type != ""){
+                $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
+                INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
+                WHERE dm.municipio_id = '".$request->municipio."' and dm.departamento_id = '".$request->departament."' and dv.tipoVerificacion = '".$request->type."'");
+                return response()->json($response,200);
+            }
+        }
+        
         // else{
         //     $response = DB::select("SELECT DISTINCT  dm.nombreMercado FROM diaco_vaciadocba dv
         //     INNER JOIN diaco_mercadocba dm ON dv.idLugarVisita = dm.idMercado
@@ -180,104 +215,172 @@ class controllerVuetify extends Controller
 
     public function getFilter(Request $request){
 
-        if($request->filter != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
-            $data = DB::select("SELECT 
-            dpcba.nombre AS producto,
-            dm.nombre AS medida, 
-            CONCAT('Q ',CONVERT(decimal(18,2),max(dvcba.precioProducto))) as precio
-            FROM diaco_asignar_productos_categoria dapc
-                INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
-                dapc.idMedida = dvcba.idMedida AND
-                dapc.idCategoria = dvcba.id_Categoria AND
-                dapc.idTipoVerificacion = dvcba.tipoVerificacion
-                INNER JOIN diaco_asignarsedecba dast
-                    ON dast.correlativo = dvcba.Ncorrelativo
-                INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
-                INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
-                INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
-                INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
-                INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
-                INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
-                INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
-                WHERE
-                  dmcba.nombreMercado = '".$request->filter."'   
-                GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
+        if ($request->db == "Actual") {
+            if($request->filter != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $data = DB::select("SELECT 
+                dpcba.nombre AS producto,
+                dm.nombre AS medida, 
+                CONCAT('Q ',CONVERT(decimal(18,2),avg(dvcba.precioProducto))) as precio
+                FROM diaco_asignar_productos_categoria dapc
+                    INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
+                    dapc.idMedida = dvcba.idMedida AND
+                    dapc.idCategoria = dvcba.id_Categoria AND
+                    dapc.idTipoVerificacion = dvcba.tipoVerificacion
+                    INNER JOIN diaco_asignarsedecba dast
+                        ON dast.correlativo = dvcba.Ncorrelativo
+                    INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                    INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                    INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                    INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
+                    INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                    INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                    INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
+                    WHERE
+                    dmcba.nombreMercado = '".$request->filter."'   
+                    GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
+
+                    return response()->json($data,200);
+                    // return response()->json('1',200);
+            }else if($request->type != "" && $request->filter != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $data = DB::select("SELECT 
+                dpcba.nombre AS producto,
+                dm.nombre AS medida, 
+                CONCAT('Q ',CONVERT(decimal(18,2),avg(dvcba.precioProducto))) as precio
+                FROM diaco_asignar_productos_categoria dapc
+                    INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
+                    dapc.idMedida = dvcba.idMedida AND
+                    dapc.idCategoria = dvcba.id_Categoria AND
+                    dapc.idTipoVerificacion = dvcba.tipoVerificacion
+                    INNER JOIN diaco_asignarsedecba dast
+                        ON dast.correlativo = dvcba.Ncorrelativo
+                    INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                    INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                    INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                    INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
+                    INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                    INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                    INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
+                    WHERE dapc.idTipoVerificacion = '".$request->type."' and dmcba.nombreMercado = '".$request->filter."'   
+                    GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
 
                 return response()->json($data,200);
-                // return response()->json('1',200);
-        }else if($request->type != "" && $request->filter != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
-            $data = DB::select("SELECT 
-            dpcba.nombre AS producto,
-            dm.nombre AS medida, 
-            CONCAT('Q ',CONVERT(decimal(18,2),max(dvcba.precioProducto))) as precio
-            FROM diaco_asignar_productos_categoria dapc
-                INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
-                dapc.idMedida = dvcba.idMedida AND
-                dapc.idCategoria = dvcba.id_Categoria AND
-                dapc.idTipoVerificacion = dvcba.tipoVerificacion
-                INNER JOIN diaco_asignarsedecba dast
-                    ON dast.correlativo = dvcba.Ncorrelativo
-                INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
-                INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
-                INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
-                INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
-                INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
-                INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
-                INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
-                WHERE dapc.idTipoVerificacion = '".$request->type."' and dmcba.nombreMercado = '".$request->filter."'   
-                GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
+            }else if ($request->type != "" && $request->filter != "" && $request->category != "" && $request->fInitial == "" && $request->fFinal == ""){
 
-            return response()->json($data,200);
-        }else if ($request->type != "" && $request->filter != "" && $request->category != "" && $request->fInitial == "" && $request->fFinal == ""){
+                $data = DB::select("SELECT 
+                dpcba.nombre AS producto,
+                dm.nombre AS medida, 
+                CONCAT('Q ',CONVERT(decimal(18,2),avg(dvcba.precioProducto))) as precio
+                FROM diaco_asignar_productos_categoria dapc
+                    INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
+                    dapc.idMedida = dvcba.idMedida AND
+                    dapc.idCategoria = dvcba.id_Categoria AND
+                    dapc.idTipoVerificacion = dvcba.tipoVerificacion
+                    INNER JOIN diaco_asignarsedecba dast
+                        ON dast.correlativo = dvcba.Ncorrelativo
+                    INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                    INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                    INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                    INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
+                    INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                    INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                    INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
+                    WHERE dapc.idTipoVerificacion = '".$request->type."' AND dapc.idCategoria = '".$request->category."' AND dmcba.nombreMercado = '".$request->filter."'   
+                    GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
+                    
+                    return response()->json($data,200);
+            }else if ($request->type != "" && $request->filter != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != ""){
 
-            $data = DB::select("SELECT 
-            dpcba.nombre AS producto,
-            dm.nombre AS medida, 
-            CONCAT('Q ',CONVERT(decimal(18,2),max(dvcba.precioProducto))) as precio
-            FROM diaco_asignar_productos_categoria dapc
-                INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
-                dapc.idMedida = dvcba.idMedida AND
-                dapc.idCategoria = dvcba.id_Categoria AND
-                dapc.idTipoVerificacion = dvcba.tipoVerificacion
-                INNER JOIN diaco_asignarsedecba dast
-                    ON dast.correlativo = dvcba.Ncorrelativo
-                INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
-                INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
-                INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
-                INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
-                INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
-                INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
-                INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
-                WHERE dapc.idTipoVerificacion = '".$request->type."' AND dapc.idCategoria = '".$request->category."' AND dmcba.nombreMercado = '".$request->filter."'   
-                GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
-                
-                return response()->json($data,200);
-        }else if ($request->type != "" && $request->filter != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != ""){
-
-            $data = DB::select("SELECT 
-            dpcba.nombre AS producto,
-            dm.nombre AS medida, 
-            CONCAT('Q ',CONVERT(decimal(18,2),max(dvcba.precioProducto))) as precio
-            FROM diaco_asignar_productos_categoria dapc
-                INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
-                dapc.idMedida = dvcba.idMedida AND
-                dapc.idCategoria = dvcba.id_Categoria AND
-                dapc.idTipoVerificacion = dvcba.tipoVerificacion
-                INNER JOIN diaco_asignarsedecba dast
-                    ON dast.correlativo = dvcba.Ncorrelativo
-                INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
-                INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
-                INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
-                INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
-                INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
-                INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
-                INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
-                WHERE dapc.idTipoVerificacion = '".$request->type."' AND dapc.idCategoria = '".$request->category."' AND dmcba.nombreMercado = '".$request->filter."' and
-                convert(varchar,dvcba.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'  
-                GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
-                
-                return response()->json($data,200);
+                $data = DB::select("SELECT 
+                dpcba.nombre AS producto,
+                dm.nombre AS medida, 
+                CONCAT('Q ',CONVERT(decimal(18,2),avg(dvcba.precioProducto))) as precio
+                FROM diaco_asignar_productos_categoria dapc
+                    INNER JOIN diaco_vaciadocba dvcba ON dapc.idProducto = dvcba.idProducto AND 
+                    dapc.idMedida = dvcba.idMedida AND
+                    dapc.idCategoria = dvcba.id_Categoria AND
+                    dapc.idTipoVerificacion = dvcba.tipoVerificacion
+                    INNER JOIN diaco_asignarsedecba dast
+                        ON dast.correlativo = dvcba.Ncorrelativo
+                    INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                    INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                    INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                    INNER JOIN diaco_mercadocba dmcba ON dvcba.idLugarVisita = dmcba.idMercado
+                    INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                    INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                    INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
+                    WHERE dapc.idTipoVerificacion = '".$request->type."' AND dapc.idCategoria = '".$request->category."' AND dmcba.nombreMercado = '".$request->filter."' and
+                    convert(varchar,dvcba.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'  
+                    GROUP BY dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre");
+                    
+                    return response()->json($data,200);
+            }
         }
+        if ($request->db == "Anterior") {
+            if($request->filter != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $data = DB::select("SELECT 
+                    dpcba.nombre AS producto,
+                    dm.nombre AS medida, 
+                    CONCAT('Q ',CONVERT(decimal(18,2),avg(dapc.precioProducto))) as precio
+                    FROM diaco_vaciadocba dapc
+                        INNER JOIN diaco_asignarsedecba dast
+                            ON dast.correlativo = dapc.Ncorrelativo
+                        INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                        INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                        INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                        INNER JOIN diaco_mercadocba dmcba ON dapc.idLugarVisita = dmcba.idMercado
+                        INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                        INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                        WHERE
+                        dmcba.nombreMercado = '".$request->filter."'     
+                        GROUP BY dpcba.nombre, dm.nombre");
+
+                    return response()->json($data,200);
+                    // return response()->json('1',200);
+            }else if($request->type != "" && $request->filter != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
+                $data = DB::select("SELECT 
+                        dpcba.nombre AS producto,
+                        dm.nombre AS medida, 
+                        CONCAT('Q ',CONVERT(decimal(18,2),avg(dapc.precioProducto))) as precio
+                        FROM diaco_vaciadocba dapc
+                            INNER JOIN diaco_asignarsedecba dast
+                                ON dast.correlativo = dapc.Ncorrelativo
+                            INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                            INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                            INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                            INNER JOIN diaco_mercadocba dmcba ON dapc.idLugarVisita = dmcba.idMercado
+                            INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                            INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                            WHERE
+                            dmcba.nombreMercado = '".$request->filter."' AND dapc.tipoVerificacion = '".$request->type."'
+                            GROUP BY dpcba.nombre, dm.nombre");
+
+                return response()->json($data,200);
+            }
+            else if ($request->type != "" && $request->filter != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != ""){
+
+                $data = DB::select("SELECT 
+                            dpcba.nombre AS producto,
+                            dm.nombre AS medida, 
+                            CONCAT('Q ',CONVERT(decimal(18,2),avg(dapc.precioProducto))) as precio
+                            FROM diaco_vaciadocba dapc
+                                INNER JOIN diaco_asignarsedecba dast
+                                    ON dast.correlativo = dapc.Ncorrelativo
+                                INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                                INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                                INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                                INNER JOIN diaco_mercadocba dmcba ON dapc.idLugarVisita = dmcba.idMercado
+                                INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                                INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
+                                WHERE
+                                dmcba.nombreMercado = '".$request->filter."' AND dapc.tipoVerificacion = '".$request->type."' and
+                                convert(varchar,dapc.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."' 
+                                GROUP BY dpcba.nombre, dm.nombre
+                                ");
+                    
+                    return response()->json($data,200);
+            }
+        }
+
 
 
 
