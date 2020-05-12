@@ -133,14 +133,50 @@ class plantillasController extends Controller
         return $date;
     }
 
+    public function handleTemplate($name){
+        
+        $type = TipoVisitaPlantilla::where('nombreVerificacion','=',$name)->exists();
+
+        if($type){
+            $id = TipoVisitaPlantilla::select('id_TipoVerificacion')->where('nombreVerificacion','=',$name)->get();
+            $response = $id[0]['id_TipoVerificacion'];
+            
+            return response()->json($response,200);
+        }else{
+            try {
+                
+                $query = DB::statement("exec AddTipo :name",
+                [
+                    'name' => $name
+                ]);
+                
+                
+                $id = TipoVisitaPlantilla::select('id_TipoVerificacion')->where('nombreVerificacion','=',$name)->get();
+                $response = $id[0]['id_TipoVerificacion'];
+                return response()->json($response, 200);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json(false, 200);
+            }
+
+        }
+        
+    }
+    
+    public function handleCategory($name){
+
+    }
+
     public function store(Request $request){
 
+        
         $TIMESTAMP = Carbon::now();
 
         DB::beginTransaction();
         $valor = sizeof($request->Dproducto);
         // dd($request->Dproducto[0]['codeProducto']);
 
+        
 
         $validar = $this->VerificarIdTemplate($request->Nplantilla, $request->NColumna);
         if ($validar != 0) {
@@ -162,7 +198,7 @@ class plantillasController extends Controller
 
                 // print 200;
                 DB::commit();
-                return response()->json('success', 200);
+                return response()->json('success', 200); 
             } catch (\Exceptio $e) {
                 DB::rollBack();
                 return $e;
@@ -482,6 +518,7 @@ class plantillasController extends Controller
                 $pdf->setPaper('Legal', 'portrait');
             }
             else{
+                
                 $pdf = \PDF::loadView('Ediciones.printer_data',[
                     'id' => $id,
                     'fecha' => $fecha,

@@ -115,3 +115,16 @@ INSERT INTO diaco_coordenadas_cba(id_diaco_sede,latitut,longitud)
           (22,'14.573761','-90.603341'),
           (23,'14.851395','-90.070321'),
           (24,'14.279221','-90.301012')
+
+CREATE TABLE diaco_asignar_productos_categoria(
+	code INTEGER NOT NULL PRIMARY KEY IDENTITY,
+	idProducto INTEGER NOT NULL,
+	idTipoVerificacion INTEGER NOT NULL,
+	idCategoria INTEGER NOT NULL,
+	idMedida INTEGER NOT NULL,
+	created_at datetime,
+	CONSTRAINT producto_asignacion FOREIGN KEY (idProducto) REFERENCES diaco_productocba(id_producto),
+	CONSTRAINT tipo_asignacion FOREIGN KEY (idTipoVerificacion) REFERENCES diaco_tipoverificacioncba(id_TipoVerificacion),
+	CONSTRAINT categoria_asignacion FOREIGN KEY (idCategoria) REFERENCES diaco_categoriacba(id_Categoria),
+	CONSTRAINT medida_asignacion FOREIGN KEY (idMedida) REFERENCES diaco_medida(id_medida)
+)
