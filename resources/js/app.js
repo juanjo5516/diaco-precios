@@ -68,6 +68,7 @@ Vue.component('updateprices-component', require('./components/exportacion/update
 Vue.component('submitdata-component', require('./components/chart/submitData.vue').default);
 Vue.component('test-component', require('./components/vuetify/report/design.vue').default);
 Vue.component('designtemplate-componente', require('./components/vuetify/report/designTemplate.vue').default)
+Vue.component('charthome-componente', require('./components/vuetify/chart/home_chart.vue').default)
 
 
 Vue.component('api-component', require('./components/api/api.vue').default);

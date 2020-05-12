@@ -257,7 +257,7 @@ class plantillasController extends Controller
                                 ->join('diaco_usuario','diaco_sede.id_diaco_sede','=','diaco_usuario.id_sede_diaco')
                                 ->join('diaco_plantillascba','NombrePlantilla','=','diaco_name_template_cba.NombreTemplate')
                                 // ->select('NAME_TEMPLATE_CBA.NombreTemplate','diaco_sede.nombre_sede','AsignarSedeCBA.estatus','AsignarSedeCBA.created_at')
-                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,diaco_asignarsedecba.filtro")
+                                ->selectraw("distinct diaco_name_template_cba.id,diaco_asignarsedecba.correlativo,diaco_name_template_cba.NombreTemplate,diaco_sede.nombre_sede,(CASE WHEN (diaco_asignarsedecba.estatus = 1) THEN 'Activo' ELSE 'Inactivo' END) as estatus, diaco_plantillascba.tipoVerificacion as Tipo,FORMAT(diaco_asignarsedecba.created_at, 'dd/MM/yyyy') as fecha,DATEDIFF(DAY,diaco_asignarsedecba.created_at, getdate())  as retrazo,diaco_asignarsedecba.filtro")
                                 ->where('diaco_sede.id_diaco_sede', '=', $usuario[0]->id)
                                 ->where('diaco_asignarsedecba.idUsuario','=',$usuario[0]->id_usuario)
                                 ->where('diaco_asignarsedecba.estatus','>','0')

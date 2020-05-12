@@ -2,7 +2,7 @@
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="./">
         <img class="navbar-brand-full" src=" {{ asset('images/diaco/logo.jpg') }}"  width="119" height="45" alt="Diaco">
         <img class="navbar-brand-minimized" src=" {{ asset('images/diaco/logo.jpg') }} " width="30" height="30" alt="Diaco">
     </a>
@@ -13,7 +13,10 @@
     <ul class="nav navbar-nav ml-auto" >
         <li>
                 <a class="btn" href="/Bandeja">
-                    <i class="fas fa-mail-bulk"></i> &nbsp;Bandeja</a>
+                    <i class="fas fa-mail-bulk"></i> &nbsp;Bandeja
+                    <!-- <span class="badge badge-primary badge-pill">14</span> -->
+                </a>
+                    
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
