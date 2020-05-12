@@ -64,6 +64,10 @@
                         <a class="nav-link" href=/envio_sede>
                             <i class="nav-icon fas fa-angle-right"></i> Enviados por Sedes</a> 
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=/reportDesign>
+                            <i class="nav-icon fas fa-angle-right"></i> Reporte General</a>
+                    </li>
                     {{-- <li class="nav-item">
                         <a class="nav-link" href=/Edicion>
                             <i class="nav-icon fas fa-angle-right"></i> Editor
@@ -77,20 +81,20 @@
                     </li> --}}
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
+            <!-- <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" >Reportes</a>
                 <ul class="nav-dropdown-items">
                     <li class="nav-item">
                         <a class="nav-link" href=/reportDesign>
                             <i class="nav-icon fas fa-angle-right"></i> Reporte General</a>
                     </li>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href=/envio_sede>
                             <i class="nav-icon fas fa-angle-right"></i> Enviados por Sedes</a> 
-                    </li> -->
+                    </li>
 
                 </ul>
-            </li>
+            </li> -->
             <!-- <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#">Api</a>
                 <ul class="nav-dropdown-items">
