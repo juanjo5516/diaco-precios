@@ -36,6 +36,7 @@
         "vue-pdf": "^4.0.7",
         "vue-select": "^3.1.0",
         "vuejs-datatable": "^1.7.0",
+        "vuetify": "^2.2.26",
         "xlsx": "^0.15.3"
     },
     "devDependencies": {

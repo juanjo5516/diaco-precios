@@ -607,12 +607,13 @@ export default {
             });
         },
         showDialogEdit(producto, button) {
-
+            
             this.inputNombre = [];
             this.inputdireccion = [];
             this.inputDepartamento = []
-            // if (producto == "Gas propano") {
-            if (producto == "Gas Propano") {
+            if (producto == "Gas propano") { //desarrollo
+            // if (producto == "Gas Propano") { //produccion
+                
                 this.dataDepartamento();
                 this.dialogGas = true;
             } else {
@@ -689,10 +690,10 @@ export default {
                 });
         },
         onSubmit(tipo_form) {
-
-            this.dataNames = []
-            ;
+            
+            this.dataNames = [];
             if(tipo_form == 'dialogFormVisible'){
+                 console.log('submit');
                 // for (let i = 1; i <= this.cantidadColumna ; i++) {
                 //     this.dataNames.push({
                 //     'dataName': this.sedes['establecimiento'+i],
@@ -721,7 +722,7 @@ export default {
 
                 this.dataPrice = [];
                 for(let p = 0; p < this.Productos.length; p++){
-                    for(let f = 1; f < this.cantidadColumna; f++){
+                    for(let f = 1; f <= this.cantidadColumna; f++){
                     this.dataPrice.push({
                             categoria: this.Productos[p].categoria,
                             categoria_id: this.Productos[p].categoria_id,
@@ -735,9 +736,10 @@ export default {
                         
                     }
                 }
-            
+            console.log(this.dataPrice);
 
             }else{
+               
                 // for (let i = 1; i <= this.cantidadColumna ; i++) {
                 //     this.dataNames.push({
                 //     'dataName': this.inputNombre['nombre'+i],
@@ -777,6 +779,7 @@ export default {
                         })
                     }
                 }
+                
 
                 
                 

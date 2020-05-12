@@ -46,8 +46,8 @@ class MovilApp extends Controller
        
         return fractal()
             ->collection($response)
-            ->transformWith(new DataDepartamento())
-            ->includeCharacters()
+            ->transformWith(new DataDepartamento()) 
+            ->includeCharacters() 
             ->toArray();
         
     }
@@ -71,7 +71,7 @@ class MovilApp extends Controller
                         ->groupBy('diaco_productocba.nombre','diaco_productocba.id_producto')
                         ->orderByRaw('diaco_productocba.id_producto')
                         ->get();
-        return $last_price;
+        return $last_price; 
     }
 
     public function apiPrice_app($id,$idCategoria){
