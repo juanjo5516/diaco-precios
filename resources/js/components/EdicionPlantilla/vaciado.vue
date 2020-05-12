@@ -600,7 +600,7 @@ export default {
             this.municipio = dato;
         },
         getVisitas: function() {
-            var url = "/findAllVisita";
+            var url = "/findAllVisita";  
             axios.get(url).then(response => {
                 this.plantillasall = response.data;
                 //   this.total = response.data.length;
