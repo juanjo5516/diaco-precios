@@ -158,6 +158,14 @@
                             <span class="sr-only">Loading...</span>
                         </div>
                     </div>
+                    <el-alert v-show="catch_error.show"
+                        :title="catch_error.title_error"
+                        :type="catch_error.type_error"
+                        :description="catch_error.description_error"
+                        :closable="false"
+                        :effect = "catch_error.effect_error" 
+                        show-icon>
+                    </el-alert>
                     <table class="table">
                         <tbody>
                             <tr
@@ -165,7 +173,7 @@
                                 :key="i">
                                 <td>
                                   <div class="empresa">
-                                    <div class="hijo">
+                                    <div >
                                       {{ index.nombreMercado }}
                                     </div>
                                   </div>
@@ -251,7 +259,8 @@
 }
 
 .empresa{
-  font-size: 18px;
+  font-size: 16px;
+  width: 150px;
   display: flex;
   align-items: center;
   
@@ -276,7 +285,14 @@ export default {
             size_list: 0,
             value_border:true,
             message_table:{
-              mensajeData: "Cargando datos...",
+              mensajeData: "Cargando datos...", 
+            },
+            catch_error: {
+                title_error: "Consulta sin registros",
+                type_error: "warning",
+                description_error: "No se encontro registros para estos parametros",
+                effect_error: "dark",
+                show: false
             },
             url_response: {
                 departament: "departamentos",
@@ -321,7 +337,9 @@ export default {
             this.model_request.model_type_category = "todo";
         },
         submit() {
+            this.catch_error.show = false;
             this.loading_true = true;
+            this.list_response.list_Local = [];
             axios
                 .post(this.url_response.getNameLocal, {
                     departament: this.model_request.model_departament,
@@ -333,28 +351,22 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    this.list_response.list_Local = response.data;
-                    this.loading_true = false;
-                    for (let index = 0; index < response.data.length; index++) {
-                        this.getNameLocalFilter(
-                            response.data[index].nombreMercado
-                        );
+                    
+                    const status = JSON.parse(response.status);
+                    if (status == "200" && response.data.length > 0) {
+                        for (let index = 0; index < response.data.length; index++) {
+                            this.getNameLocalFilter(
+                                response.data[index].nombreMercado
+                            );
+                        }
+                    }else{
+                        this.message_table.mensajeData =
+                        "sin precios de referencia";
+                        this.value_border = false;
+                        this.loading_true = false;
+                        this.catch_error.show = true;
                     }
                 });
-
-            // this.getNameLocal();
-            // axios.post(this.url_response.show_table,{
-            //   departament: this.model_request.model_departament,
-            //   municipio: this.model_request.model_municipio,
-            //   type: this.model_request.model_type_category,
-            //   category: this.model_request.model_category,
-            //   fInitial: this.model_request.model_range_initial,
-            //   fFinal: this.model_request.model_range_final
-            //     }).then(response => {
-
-            //       this.loading_true = false;
-
-            //     })
         },
 
         getNameLocal() {
@@ -379,7 +391,9 @@ export default {
                 });
         },
         getNameLocalFilter(id) {
+            
             this.list_response.list_Local_filter = [];
+            this.list_response.list_Local = [];
             axios
                 .post(this.url_response.getNameLocalFilter, {
                     departament: this.model_request.model_departament,
@@ -392,21 +406,25 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    // this.list_response.list_Local_filter.push({
-                    //     type: id,
-                    //     data: response.data
-                    // });
-                    
-                    if (response.data.length == 0) {
+                    this.catch_error.show = true;
+                    if (response.data.length == 0) { 
                       this.message_table.mensajeData =
                         "sin precios de referencia";
-                        this.value_border = false
+                        this.value_border = false;
+                        this.loading_true = false;
+                       
                     }else{
-                      this.list_response.list_Local_filter.push({
-                        type: id,
-                        data: response.data
-                    });
+                        this.catch_error.show = false;
+                        this.list_response.list_Local.push({
+                            nombreMercado: id
+                        })
+                        this.list_response.list_Local_filter.push({
+                            type: id,
+                            data: response.data
+                        });
+                        this.loading_true = false;
                     }
+                    
                 });
             
         },
