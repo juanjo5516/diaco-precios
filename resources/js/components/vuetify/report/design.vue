@@ -30,7 +30,7 @@
                     <el-row :gutter="10">
                         <el-col>
                             <el-select
-                                v-model="model_request.model_municipio"
+                                v-model="model_request.model_municipio" 
                                 placeholder="Municipio"
                                 filterable
                             >
@@ -140,7 +140,10 @@
                             <el-button type="primary" @click="submit"
                                 >Generar</el-button
                             >
+                            <el-button  type="success" icon="el-icon-printer" @click="exportExcel" ></el-button>
                         </div>
+
+
                     </el-row>
                 </el-card>
             </el-aside>
@@ -166,7 +169,7 @@
                         :effect = "catch_error.effect_error" 
                         show-icon>
                     </el-alert>
-                    <table class="table">
+                    <table class="table" id="exportData">
                         <tbody>
                             <tr
                                 v-for="(index, i) in list_response.list_Local"
@@ -174,15 +177,61 @@
                                 <td>
                                   <div class="empresa">
                                     <div >
-                                      {{ index.nombreMercado }}
+                                      {{ index.name }}
+                                    </div>
+                                  </div>
+                                </td>
+                                <!-- <td colspan="3" v-for="(data,k) in list_response.list_Local_filter" :key="k"> -->
+                                <td>
+                                  <!-- <div v-if="data.mercado === index.mercado"> -->
+                                  <div >
+                                      
+                                      <el-table
+                                          :data="index.items.data"
+                                          stripe
+                                          :border="value_border"
+                                          size="small" 
+                                          :empty-text="message_table.mensajeData"
+                                          
+                                          >
+                                          <el-table-column type="index" width="100">
+                                          </el-table-column>
+                                          <el-table-column
+                                              label="Producto"
+                                              prop="product"
+                                              
+                                          ></el-table-column>
+                                          <el-table-column
+                                              label="Medida"
+                                              prop="measure"
+                                              width="150"
+                                          ></el-table-column>
+                                          <el-table-column
+                                              label="Precio"
+                                              prop="price"
+                                              width="150"
+                                          ></el-table-column>
+                                      </el-table>
+                                  </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <table class="table" id="exportData">
+                        <tbody>
+                            <tr
+                                v-for="(index, i) in list_response.list_Local"
+                                :key="i">
+                                <td>
+                                  <div class="empresa">
+                                    <div >
+                                      {{ index.mercado }}
                                     </div>
                                   </div>
                                 </td>
                                 <td colspan="3">
                                   <div
-                                      v-for="(data,
-                                      k) in list_response.list_Local_filter"
-                                      :key="k">
+                                      v-for="(data,k) in list_response.list_Local_filter" :key="k">
                                       <el-table
                                           :data="data.data"
                                           stripe
@@ -214,7 +263,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                                 <!-- <template>
                   <div v-for="(data,k) in list_response.list_Local_filter" :key="k">
                       <td v-if="data.type === index.nombreMercado">{{data.data[k].producto}}</td>
@@ -279,6 +328,12 @@
 }
 </style>
 <script>
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
+    import jsPDF from 'jspdf' 
+    import html2canvas from "html2canvas"
+    // import domtoimage from "dom-to-image";
+    // import 'jspdf-autotable' 
 export default {
     data() {
         return {
@@ -301,7 +356,8 @@ export default {
                 category: "getCategory",
                 show_table: "show_table",
                 getNameLocal: "getNameLocal",
-                getNameLocalFilter: "getNameLocalFilter"
+                getNameLocalFilter: "getNameLocalFilter",
+                
             },
             list_response: {
                 list_departament: [],
@@ -310,7 +366,8 @@ export default {
                 list_type_category: [],
                 list_response_data: [],
                 list_Local: [],
-                list_Local_filter: []
+                list_Local_filter: [],
+                setNameFilter: []
             },
             model_request: {
                 model_departament: "",
@@ -330,6 +387,32 @@ export default {
         this.getCategory();
     },
     methods: {
+        exportExcel() {
+        var table = 'exportData';
+        var name = 'exportData';
+        var DocumentName = "exportData";
+        var link = document.createElement('a');
+        link.download = DocumentName + '.xls';
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html  xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+        , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            // window.location.href = uri + base64(format(template, ctx))
+            link.href = uri + base64(format(template, ctx));
+            link.click();
+        
+        },
+        export2(){
+            // let data = XLSX.utils.json_to_sheet(this.bien)
+            const tbl = document.getElementById('exportData')
+            let data = XLSX.utils.table_to_book(tbl)
+            const workbook = XLSX.utils.book_new()
+            const filename = 'devschile-admins'
+            XLSX.utils.book_append_sheet(workbook, data, filename)
+            XLSX.writeFile(workbook, `${filename}.xlsx`)
+        },
         clear() {
             this.model_request.model_departament = "todo";
             this.model_request.model_municipio = "todo";
@@ -353,12 +436,10 @@ export default {
                 .then(response => {
                     
                     const status = JSON.parse(response.status);
-                    if (status == "200" && response.data.length > 0) {
-                        for (let index = 0; index < response.data.length; index++) {
-                            this.getNameLocalFilter(
-                                response.data[index].nombreMercado
-                            );
-                        }
+                    const length = response.data.data.length; 
+                    if (status == "200" && length > 0 ) {
+                        this.list_response.list_Local = response.data.data;
+                        this.loading_true = false;
                     }else{
                         this.message_table.mensajeData =
                         "sin precios de referencia";
@@ -406,12 +487,12 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    this.catch_error.show = true;
                     if (response.data.length == 0) { 
-                      this.message_table.mensajeData =
+                        this.message_table.mensajeData =
                         "sin precios de referencia";
                         this.value_border = false;
                         this.loading_true = false;
+                        // this.catch_error.show = true;
                        
                     }else{
                         this.catch_error.show = false;
