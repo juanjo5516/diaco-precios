@@ -236,7 +236,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         Route::get('design_template','controllerVuetify@design_template');
         Route::post('addDesignTemplate','controllerVuetify@addDesignTemplate');
         Route::post('show_table','controllerVuetify@show_table');
-        Route::post('getNameLocal','controllerVuetify@getNameLocal');
+        // Route::post('getNameLocal','controllerVuetify@getNameLocal');
+        Route::post('getNameLocal','controllerVuetify@getReportData');
         Route::post('getNameLocalFilter','controllerVuetify@getFilter');
 
         //*****************************
