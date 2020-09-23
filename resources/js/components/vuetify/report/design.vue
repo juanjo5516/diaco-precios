@@ -434,13 +434,14 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    
+                    console.log("Respuesta ", response.data.data);
                     const status = JSON.parse(response.status);
-                    const length = response.data.length; 
+                    const length = response.data.data.length; 
+                    console.log(length);
                     if (status == "200" && length > 0 ) {
-                        console.log(response.data)
-                        this.list_response.list_Local = response.data;
-                        console.log(response.data);
+                        // console.log("datos",response.data.data)
+                        this.list_response.list_Local = response.data.data;
+                        
                         this.loading_true = false;
                     }else{
                         this.message_table.mensajeData =
