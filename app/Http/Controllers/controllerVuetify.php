@@ -547,8 +547,10 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                // $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toArray();
+                // return $uom;
+                return response()->json($uom,200);
 
                 
             }else if($request->departament != "" && $request->municipio != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
