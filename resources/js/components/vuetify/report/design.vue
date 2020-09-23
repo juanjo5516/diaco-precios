@@ -436,7 +436,7 @@ export default {
                 .then(response => {
                     
                     const status = JSON.parse(response.status);
-                    const length = response.data.data.length; 
+                    const length = response.data.length; 
                     if (status == "200" && length > 0 ) {
                         console.log(response.data)
                         this.list_response.list_Local = response.data;
