@@ -12,6 +12,7 @@
                                 v-model="model_request.model_departament"
                                 placeholder="Departamento"
                                 filterable
+                                clearable
                                 @change="municipios"
                             >
                                 <el-option
@@ -33,6 +34,7 @@
                                 v-model="model_request.model_municipio" 
                                 placeholder="Municipio"
                                 filterable
+                                clearable
                             >
                                 <el-option
                                     v-for="(item,
@@ -53,6 +55,7 @@
                                 v-model="model_request.model_type_category"
                                 placeholder="Categoría"
                                 filterable
+                                clearable
                             >
                                 <el-option
                                     v-for="(item,
@@ -70,9 +73,11 @@
                     <el-row :gutter="10">
                         <el-col>
                             <el-select
+                                :disabled="visible"
                                 v-model="model_request.model_category"
                                 placeholder="Categoría"
                                 filterable
+                                clearable
                             >
                                 <el-option
                                     v-for="(item,
@@ -90,8 +95,8 @@
                                 <span class="mb-3">Fecha Inicial:</span>
                                 <el-date-picker
                                     v-model="model_request.model_range_initial"
-                                    format="dd-MM-yyyy"
-                                    value-format="dd-MM-yyyy"
+                                    format="yyyy-MM-dd"
+                                    value-format="yyyy-MM-dd"
                                     type="date"
                                     size="large"
                                     clearable
@@ -107,8 +112,8 @@
                                 <span class="mb-3">Fecha Final:</span>
                                 <el-date-picker
                                     v-model="model_request.model_range_final"
-                                    format="dd-MM-yyyy"
-                                    value-format="dd-MM-yyyy"
+                                    format="yyyy-MM-dd"
+                                    value-format="yyyy-MM-dd"
                                     type="date"
                                     size="large"
                                     clearable
@@ -123,6 +128,7 @@
                             <div>
                                 <span>Tipo de Busqueda:</span>
                                 <el-radio-group
+                                    @change="cambio"
                                     v-model="model_request.radio_select_db"
                                     size="small"
                                 >
@@ -177,7 +183,7 @@
                                 <td>
                                   <div class="empresa">
                                     <div >
-                                      {{ index.name }}
+                                        {{ index.name }}
                                     </div>
                                   </div>
                                 </td>
@@ -187,7 +193,7 @@
                                   <div >
                                       
                                       <el-table
-                                          :data="index.items.data"
+                                          :data="index.items"
                                           stripe
                                           :border="value_border"
                                           size="small" 
@@ -337,6 +343,7 @@
 export default {
     data() {
         return {
+            visible:false,
             size_list: 0,
             value_border:true,
             message_table:{
@@ -404,6 +411,13 @@ export default {
             link.click();
         
         },
+        cambio(data){
+            if(data === 'Anterior'){
+                this.visible = true;
+            }else{
+                this.visible = false;
+            }
+        },
         export2(){
             // let data = XLSX.utils.json_to_sheet(this.bien)
             const tbl = document.getElementById('exportData')
@@ -434,13 +448,13 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    console.log("Respuesta ", response.data.data);
+                    // console.log("Respuesta ", response.data);
                     const status = JSON.parse(response.status);
-                    const length = response.data.data.length; 
-                    console.log(length);
+                    const length = response.data.length; 
                     if (status == "200" && length > 0 ) {
                         // console.log("datos",response.data.data)
-                        this.list_response.list_Local = response.data.data;
+                        this.list_response.list_Local = response.data;
+                        // console.log(this.list_response.list_Local);
                         
                         this.loading_true = false;
                     }else{
@@ -450,6 +464,8 @@ export default {
                         this.loading_true = false;
                         this.catch_error.show = true;
                     }
+                }).catch(erro => {
+                    console.log(erro);
                 });
         },
 

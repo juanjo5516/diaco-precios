@@ -12,6 +12,7 @@ use App\Models\vaciadocba;
 use League\Fractal;
 use Illuminate\Support\Collection;
 use App\Transformers\reportTransformer;
+use League\Fractal\Serializer\ArraySerializer; 
 
 class controllerVuetify extends Controller
 {
@@ -157,8 +158,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
                 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
             }else if($request->departament != "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
 
                 $response = DB::select("SELECT 
@@ -214,8 +215,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
             }else if($request->departament != "" && $request->municipio != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
                 $response = DB::select("SELECT 
                 dmcba.nombreMercado as mercado,
@@ -271,8 +272,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
 
             }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
 
@@ -330,8 +331,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
             }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial == "" && $request->fFinal == "" ){
 
                 $response = DB::select("SELECT 
@@ -389,8 +390,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
             }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category != "" && $request->fInitial != "" && $request->fFinal != "" ){
 
                 $response = DB::select("SELECT 
@@ -413,7 +414,8 @@ class controllerVuetify extends Controller
                     INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
                     INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
                     WHERE dmcba.departamento_id = '".$request->departament."' and dmcba.municipio_id = '".$request->municipio."' and dvcba.tipoVerificacion = '".$request->type."' and
-                    dapc.idCategoria = '".$request->category."' and  convert(varchar,dvcba.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'
+                    dapc.idCategoria = '".$request->category."' 
+                    and  dvcba.created_at BETWEEN CONVERT(DATETIME,'".$request->fInitial."') AND CONVERT(DATETIME,'".$request->fFinal."')
                     GROUP BY dmcba.nombreMercado, dmcba.nombreMercado,dpcba.nombre, dm.nombre, dc.nombre
                 ");
                 
@@ -435,7 +437,7 @@ class controllerVuetify extends Controller
                     INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida
                     INNER JOIN diaco_categoriacba dc on dapc.idCategoria = dc.id_Categoria
                     WHERE dmcba.departamento_id = '".$request->departament."' and dmcba.municipio_id = '".$request->municipio."' and dvcba.tipoVerificacion = '".$request->type."' and
-                    dapc.idCategoria = '".$request->category."' and  convert(varchar,dvcba.created_at,5) BETWEEN '".$request->fInitial."' AND '".$request->fFinal."'
+                    dapc.idCategoria = '".$request->category."' and  dvcba.created_at BETWEEN CONVERT(DATETIME,'".$request->fInitial."') AND CONVERT(DATETIME,'".$request->fFinal."')
 
                 ");
 
@@ -449,8 +451,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
             }
         }
         if ($request->db == "Anterior") {
@@ -498,8 +500,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
 
             }else if($request->departament != "" && $request->municipio == "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
 
@@ -548,9 +550,11 @@ class controllerVuetify extends Controller
                 }
 
                 // $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toArray();
-                // return $uom;
+                // $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toArray();
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
                 return response()->json($uom,200);
+                
+                // return $uom;
 
                 
             }else if($request->departament != "" && $request->municipio != "" && $request->type == "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == "" ){
@@ -599,9 +603,8 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
-
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
                 
 
             }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category == "" && $request->fInitial == "" && $request->fFinal == ""){
@@ -649,8 +652,60 @@ class controllerVuetify extends Controller
                                 ]);
                 }
 
-                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->includeCharacters()->toJson();
-                return $uom;
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
+            }else if($request->departament != "" && $request->municipio != "" && $request->type != "" && $request->category == "" && $request->fInitial != "" && $request->fFinal != "" ){
+
+                $response = DB::select("SELECT 
+                dmcba.nombreMercado AS mercado,
+                dpcba.nombre AS producto,
+                dm.nombre AS medida, 
+                CONCAT('Q ',CONVERT(decimal(18,2),avg(dapc.precioProducto))) as precio
+                FROM diaco_vaciadocba dapc
+                    INNER JOIN diaco_asignarsedecba dast
+                        ON dast.correlativo = dapc.Ncorrelativo
+                    INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                    INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                    INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                    INNER JOIN diaco_mercadocba dmcba ON dapc.idLugarVisita = dmcba.idMercado
+                    INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                    INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida  
+                    WHERE dmcba.departamento_id = '".$request->departament."'  and dmcba.municipio_id = '".$request->municipio."'  and dapc.tipoVerificacion = '".$request->type."'
+                    and dapc.created_at BETWEEN CONVERT(DATETIME,'".$request->fInitial."') AND CONVERT(DATETIME,'".$request->fFinal."')
+                    GROUP BY dmcba.nombreMercado, dpcba.nombre, dm.nombre
+                    ");
+
+                    $filter = DB::select("SELECT DISTINCT
+                    dmcba.nombreMercado AS mercado
+                    FROM diaco_vaciadocba dapc
+                        INNER JOIN diaco_asignarsedecba dast
+                            ON dast.correlativo = dapc.Ncorrelativo
+                        INNER JOIN diaco_sede ds ON dast.idSede = ds.id_diaco_sede
+                        INNER JOIN municipio muni ON ds.codigo_municipio = muni.codigo_municipio
+                        INNER JOIN departamento dep ON muni.codigo_departamento = dep.codigo_departamento
+                        INNER JOIN diaco_mercadocba dmcba ON dapc.idLugarVisita = dmcba.idMercado
+                        INNER JOIN diaco_productocba dpcba ON dapc.idProducto = dpcba.id_producto
+                        INNER JOIN diaco_medida dm ON dapc.idMedida = dm.id_medida   
+                        WHERE dmcba.departamento_id = '".$request->departament."' and dmcba.municipio_id = '".$request->municipio."'  and dapc.tipoVerificacion = '".$request->type."'
+                        and dapc.created_at BETWEEN CONVERT(DATETIME,'".$request->fInitial."') AND CONVERT(DATETIME,'".$request->fFinal."')
+                        GROUP BY dmcba.nombreMercado, dpcba.nombre, dm.nombre
+
+                    ");
+
+                $filter_name = array();
+                $branchData = collect($response);
+                foreach ($filter as $row) {
+                    $data = $branchData->where('mercado','=', $row->mercado);
+                                array_push($filter_name,[
+                                    'name' =>$row->mercado,
+                                    'items' => $data
+                                ]);
+                }
+
+                $uom = fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())->toArray();
+                return response()->json($uom,200);
+
+                
             }
         }
     }
