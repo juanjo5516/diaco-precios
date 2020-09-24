@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 
+
 class reportTransformer extends TransformerAbstract
 {
     /**
@@ -34,7 +35,8 @@ class reportTransformer extends TransformerAbstract
         
         return [
             'name'      =>      $data['name'],
-            'items'     =>      fractal($data['items'], new uom_data())   
+            'items'     =>      fractal($data['items'], new uom_data())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())  
+            // fractal()->collection($filter_name)->transformWith(new reportTransformer())->serializeWith(new \Spatie\Fractalistic\ArraySerializer())
         ];
     }
 }
