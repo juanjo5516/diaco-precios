@@ -448,7 +448,7 @@ export default {
                     db: this.model_request.radio_select_db
                 })
                 .then(response => {
-                    // console.log("Respuesta ", response.data);
+                    console.log("Respuesta ", response.data);
                     const status = JSON.parse(response.status);
                     const length = response.data.length; 
                     if (status == "200" && length > 0 ) {
