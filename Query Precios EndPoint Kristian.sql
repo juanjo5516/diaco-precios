@@ -1,3 +1,4 @@
+begin
 SELECT  
 	t1.code,
 	t1.articulo,
@@ -61,5 +62,5 @@ SELECT
 
 	ON t1.code = t2.code
 where t1.idMedida = t2.idMedida
-	
+end;	
 

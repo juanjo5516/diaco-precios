@@ -29,7 +29,7 @@ SELECT
 	INNER JOIN diaco_categoriacba categorias
 		ON categorias.id_Categoria = plantilla.idCategoria
     WHERE convert(date,vaciado.created_at) <= '2019-08-21'
-        AND sede.id_diaco_sede = 1
+        AND sede.id_diaco_sede = @sede
 		and categorias.id_Categoria = 1
     GROUP BY precio.nombre, medida.nombre,precio.id_producto, medida.id_medida)  t1
  full outer JOIN 
