@@ -28,7 +28,7 @@ class dataSede extends TransformerAbstract
                 //'latitude'          =>  $data['dataS']->latitut,
                 //'longitude'         =>  $data['dataS']->longitud,
 
-                'code'              =>  $data['code'],
+                'code'              =>  $data['code'], 
                 'name'              =>  $data['name'],
                 'latitude'          =>  $data['latitude'],
                 'longitude'         =>  $data['longitude'],

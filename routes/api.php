@@ -38,4 +38,9 @@ Route::get('prices/{id}/{categoria}','MovilApp@apiPrice_app');
 Route::post('createMarket','plantillasController@createMarket');
 
 
+Route::get('categoriasPublicas','InfoPublic@movile_app');
+Route::get('preciosPublicos/{id}/{categoria}','InfoPublic@apiPrice_app');
+Route::post('price_view','InfoPublic@price_view');
+
+
 
