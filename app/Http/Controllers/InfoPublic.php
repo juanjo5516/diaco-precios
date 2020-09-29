@@ -9,6 +9,7 @@ use League\Fractal;
 use App\Transformers\preciosPublicos;
 use App\Transformers\PublicDepartament;
 use Illuminate\Support\Collection;
+use App\Model\Precios;
 use Carbon\Carbon;
 
 class InfoPublic extends Controller
@@ -108,6 +109,15 @@ class InfoPublic extends Controller
         ->serializeWith(new \Spatie\Fractalistic\ArraySerializer()) 
         ->toArray();
 
+    }
+
+    public function price_view(Request $request){
+        $data = Precios::selectraw('medida,articulo,CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria])
+        ->groupBy('medida','articulo')
+        
+        ->get();
+
+        return response()->json($data,200);
     }
 
 
