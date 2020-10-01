@@ -120,6 +120,32 @@ class InfoPublic extends Controller
         return response()->json($data,200);
     }
 
+    public function chartPublic(Request $request){
+        
+        $data = Precios::selectraw("CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio,
+        (case month(fecha_uno)
+            when  1 then concat('Enero',' ',year(fecha_uno))
+            when  2 then concat('Febrero',' ',year(fecha_uno))
+            when  3 then concat('Marzo',' ',year(fecha_uno))
+            when  4 then concat('Abril',' ',year(fecha_uno))
+            when  5 then concat('Mayo',' ',year(fecha_uno))
+            when  6 then concat('Junio',' ',year(fecha_uno))
+            when  7 then concat('Julio',' ',year(fecha_uno))
+            when  8 then concat('Agosto',' ',year(fecha_uno))
+            when  9 then concat('Septiembre',' ',year(fecha_uno))
+            when  10 then concat('Octubre',' ',year(fecha_uno))
+            when  11 then concat('Noviembre',' ',year(fecha_uno))
+            when  12 then concat('Diciembre',' ',year(fecha_uno))
+        END) mes,
+        year(fecha_uno) as fecha
+        ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'medida' => $request->medida['code'], 'articulo' => $request->medida['medida'] ]))
+        ->groupBy('fecha_uno')
+        ->orderBy('fecha','asc')
+        ->distinct()->get();
+
+        return response()->json($data,200);
+    }
+
 
     function array_unique2($a)
     {

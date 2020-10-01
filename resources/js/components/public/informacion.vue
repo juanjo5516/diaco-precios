@@ -69,10 +69,28 @@
                         ></el-option>
                       </el-select>
                     </el-form-item>
+                    <el-form-item label="Medida:" prop="medida">
+                      <el-select
+                        :disabled="handlerSelect.selectMedida"
+                        v-model="form.medida"
+                        placeholder="Medida"
+                        filterable
+                        clearable
+                        @change="char_Price"
+                      >
+                        <el-option
+                          v-for="(item, i) in responseList.listMedida"
+                          v-bind:key="i"
+                          :label="item.medida"
+                          :value='{"code":item.code, "medida": item.articulo}'
+                        ></el-option>
+                      </el-select>
+                    </el-form-item>
                   </el-form>
                 </el-col>
                 <el-col :xs="25" :sm="6" :md="8" :lg="20" :xl="10">
                   <el-table
+                    height="250"
                     v-if="visible"
                     v-loading="loading"
                     :data="responseList.listPreciosPublic"
@@ -155,22 +173,26 @@ export default {
       handlerSelect: {
         selectSede: true,
         selectProducto: true,
+        selectMedida: true,
       },
       form: {
         departamento: "",
         sede: "",
         producto: "",
+        medida:[],
       },
       url: {
         Departamentos: "api/categoriasPublicas",
         precios: "api/preciosPublicos/",
         precios_view: "api/price_view",
+        chartPublic: "api/chartPublic"
       },
       responseList: {
         listDepartamento: [],
         listSedes: [],
         listPrecios: [],
         listPreciosPublic: [],
+        listMedida: [],
       },
       rules: {
         departamento: [
@@ -231,7 +253,7 @@ export default {
       //     this.responseList.listPreciosPublic = response.data;
       //     console.log(this.responseList.listPreciosPublic);
       //   });
-
+      this.responseList.listMedida = [];
       this.loading = true;
       axios
         .post(this.url.precios_view, {
@@ -242,9 +264,26 @@ export default {
           this.responseList.listPreciosPublic = response.data;
           this.visible = true;
           this.loading = false;
-          // console.log(response.data)
-          this.chartDataShow("line", response.data);
+          for (let index = 0; index < response.data.length; index++) {
+            this.responseList.listMedida.push({
+              'medida' : response.data[index].articulo + '-' + response.data[index].medida,
+              'code' : response.data[index].medida,
+              'articulo': response.data[index].articulo
+            })
+          }
+          this.handlerSelect.selectMedida = false;
+          console.log(response.data)
         });
+    },
+    char_Price() {
+      
+      axios.post(this.url.chartPublic,{
+        sede: this.form.sede,
+        categoria: this.form.producto,
+        medida: this.form.medida
+      }).then(response => {
+        this.chartDataShow("line", response.data);
+      })
     },
     chartDataShow(tipe, request) {
       const ctx = this.$refs.grafica;
@@ -254,15 +293,18 @@ export default {
       ctx.height = "500";
       ctx.width = "800";
 
+console.log(request.map((item) => item.precio))
       const myChart = new Chart(ctx, {
         type: tipe,
         data: {
-          labels: request.map((item) => item.articulo),
+          labels: request.map((item) => item.mes),
           datasets: [
             {
               label: "Tendencia de Precios",
               data: request.map((item) => item.precio),
-              
+              lineTension: 0,
+              fill: false,
+              borderColor: 'red'
               // data: [0, 20, 40, 50],
               // backgroundColor: request.map(
               //     item => item.backgroundColor
@@ -283,20 +325,21 @@ export default {
           //     this.showInfo(legendItem);
           // },
 
-          // legend: {
-          //     display: false,
-          //     rtl: true,
-          //     labels: {
-          //         // fontColor: "rgb(255, 99, 132)"
-          //         boxWidth: 20,
-          //         fontSize: 14,
-          //         padding: 8,
-          //         usePointStyle: false
+          legend: {
+              display: true,
+              // rtl: true,
+              position: 'top',
+              labels: {
+                  fontColor: "rgb(255, 99, 132)",
+                  boxWidth: 80,
+                  // fontSize: 14,
+                  // padding: 8,
+                  // usePointStyle: false
 
-          //         //fin
-          //     },
-          //     align: "center"
-          // },
+                  //fin
+              },
+              align: "center"
+          },
           // tooltips: {
           //     mode: "label",
 
@@ -364,14 +407,14 @@ export default {
           // },
 
           scales: {
-            yAxes: [
-              {
-                ticks: {
-                  suggestedMin: 10,
-                  suggestedMax: 100,
-                },
-              },
-            ],
+            // yAxes: [
+            //   {
+            //     ticks: {
+            //       suggestedMin: 1,
+            //       suggestedMax: 10,
+            //     },
+            //   },
+            // ],
             // xAxes: [
             //     {
             //         display: true,
@@ -390,17 +433,17 @@ export default {
             //         }
             //     }
             // ]
-            // yAxes: [
-            //     {
-            //         // stacked: true
-            //         ticks: {
-            //             // beginAtZero: true
-            //             // callback: function(value, index, values) {
-            //             //     return "$" + value;
-            //             // }
-            //         }
-            //     }
-            // ]
+            yAxes: [
+                {
+                    // stacked: true
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            return "Q" + value;
+                        }
+                    }
+                }
+            ]
           },
           // layout: {
           //     padding: {
