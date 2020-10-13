@@ -52,20 +52,38 @@
                         ></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="Producto:" prop="producto">
+                    <el-form-item label="categoria:" prop="producto">
                       <el-select
                         :disabled="handlerSelect.selectProducto"
                         v-model="form.producto"
+                        placeholder="Categoria"
+                        filterable
+                        clearable
+                        @change="productos"
+                      >
+                      <!-- @change="precios" -->
+                        <el-option
+                          v-for="(item, i) in responseList.listPrecios"
+                          v-bind:key="i"
+                          :label="item.name"
+                          :value="item.code"
+                        ></el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="Producto:" prop="pro">
+                      <el-select
+                        :disabled="handlerSelect.selectMedida"
+                        v-model="form.pro"
                         placeholder="Producto"
                         filterable
                         clearable
                         @change="precios"
                       >
                         <el-option
-                          v-for="(item, i) in responseList.listPrecios"
+                          v-for="(item, i) in responseList.listPro"
                           v-bind:key="i"
-                          :label="item.name"
-                          :value="item.code"
+                          :label="item.articulo"
+                          :value='item.code'
                         ></el-option>
                       </el-select>
                     </el-form-item>
@@ -82,7 +100,7 @@
                           v-for="(item, i) in responseList.listMedida"
                           v-bind:key="i"
                           :label="item.medida"
-                          :value='{"code":item.code, "medida": item.articulo}'
+                          :value='item.code'
                         ></el-option>
                       </el-select>
                     </el-form-item>
@@ -180,12 +198,15 @@ export default {
         sede: "",
         producto: "",
         medida:[],
+        pro:""
       },
       url: {
         Departamentos: "api/categoriasPublicas",
         precios: "api/preciosPublicos/",
         precios_view: "api/price_view",
-        chartPublic: "api/chartPublic"
+        chartPublic: "api/chartPublic",
+        price_viewFilter: "api/price_viewFilter",
+        price_view_Category: "api/price_view_Category",
       },
       responseList: {
         listDepartamento: [],
@@ -193,6 +214,8 @@ export default {
         listPrecios: [],
         listPreciosPublic: [],
         listMedida: [],
+        listPro:[]
+        
       },
       rules: {
         departamento: [
@@ -246,54 +269,75 @@ export default {
       }
       // console.log(this.responseList.listPrecios);
     },
+    productos(){
+      axios.post(this.url.price_view_Category,{
+        sede: this.form.sede,
+        categoria: this.form.producto,
+      }).then(response => {
+        this.responseList.listPro = response.data;
+        this.handlerSelect.selectMedida = false;
+      })
+    },
     precios() {
-      // axios
-      //   .get(this.url.precios + this.form.sede + "/" + this.form.producto)
-      //   .then((response) => {
-      //     this.responseList.listPreciosPublic = response.data;
-      //     console.log(this.responseList.listPreciosPublic);
-      //   });
-      this.responseList.listMedida = [];
+      this.responseList.listMedida = []; 
       this.loading = true;
       axios
         .post(this.url.precios_view, {
           sede: this.form.sede,
           categoria: this.form.producto,
+          code: this.form.pro
         })
         .then((response) => {
-          this.responseList.listPreciosPublic = response.data;
-          this.visible = true;
+          // this.responseList.listPreciosPublic = response.data;
+          // this.visible = true;
           this.loading = false;
+          // console.log(response.data);
           for (let index = 0; index < response.data.length; index++) {
             this.responseList.listMedida.push({
-              'medida' : response.data[index].articulo + '-' + response.data[index].medida,
-              'code' : response.data[index].medida,
-              'articulo': response.data[index].articulo
+              'medida' : response.data[index].medida,
+              'code' : response.data[index].code,
+              
             })
+            // this.responseList.listMedida.push({
+            //   'medida' : response.data[index].articulo + '-' + response.data[index].medida,
+            //   'code' : response.data[index].medida,
+            //   'articulo': response.data[index].articulo
+            // })
           }
           this.handlerSelect.selectMedida = false;
-          console.log(response.data)
+          // console.log(response.data)
         });
     },
     char_Price() {
-      
-      axios.post(this.url.chartPublic,{
-        sede: this.form.sede,
-        categoria: this.form.producto,
-        medida: this.form.medida
-      }).then(response => {
-        this.chartDataShow("line", response.data);
+
+      axios.post(this.url.price_viewFilter,{
+          sede: this.form.sede,
+          categoria: this.form.producto,
+          idMedida: this.form.medida,
+          code: this.form.pro
+      }).then(response =>  {
+        this.visible = true;
+        this.responseList.listPreciosPublic = response.data;
+
+        axios.post(this.url.chartPublic,{
+          sede: this.form.sede,
+          categoria: this.form.producto,
+          medida: this.form.medida,
+          code: this.form.pro
+        }).then(response => {
+          this.chartDataShow("line", response.data);
+        })
       })
     },
     chartDataShow(tipe, request) {
       const ctx = this.$refs.grafica;
       const legends = this.$refs.leyends;
-      console.log(request);
+      // console.log(request);
 
       ctx.height = "500";
       ctx.width = "800";
 
-console.log(request.map((item) => item.precio))
+// console.log(request.map((item) => item.precio))
       const myChart = new Chart(ctx, {
         type: tipe,
         data: {

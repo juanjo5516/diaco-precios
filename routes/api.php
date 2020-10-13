@@ -41,7 +41,9 @@ Route::post('createMarket','plantillasController@createMarket');
 Route::get('categoriasPublicas','InfoPublic@movile_app');
 Route::get('preciosPublicos/{id}/{categoria}','InfoPublic@apiPrice_app');
 Route::post('price_view','InfoPublic@price_view');
+Route::post('price_viewFilter','InfoPublic@price_viewFilter');
 Route::post('chartPublic','InfoPublic@chartPublic');
+Route::post('price_view_Category','InfoPublic@price_view_Category');
 
 
 
