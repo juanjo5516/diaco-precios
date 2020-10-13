@@ -262,5 +262,7 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
 // Route::group(['middleware' => ['admin']], function () {
 
 
+    // commit por pull
+
 // });
 
