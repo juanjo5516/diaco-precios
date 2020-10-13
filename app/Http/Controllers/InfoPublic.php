@@ -112,9 +112,26 @@ class InfoPublic extends Controller
     }
 
     public function price_view(Request $request){
-        $data = Precios::selectraw('medida,articulo,CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria])
+        // $data = Precios::selectraw('medida,articulo,CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria])
+        // ->groupBy('medida','articulo')
+        $data = Precios::selectraw('idMedida as code, medida')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria, 'code' => $request->code])
+        ->groupBy('medida','idMedida')
+        ->get();
+
+        return response()->json($data,200);
+    }
+
+    public function price_view_Category(Request $request){
+        $data = Precios::selectraw('code, articulo')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria])
+        ->groupBy('code','articulo')
+        ->get();
+
+        return response()->json($data,200);
+    }
+
+    public function price_viewFilter(Request $request){
+        $data = Precios::selectraw('medida,articulo,CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio')->where(['sede_uno' => $request->sede, 'categoria_uno' => $request->categoria,'sede_dos' => $request->sede,'categoria_dos' => $request->categoria, 'idMedida' => $request->idMedida, 'code' => $request->code])
         ->groupBy('medida','articulo')
-        
         ->get();
 
         return response()->json($data,200);
@@ -122,7 +139,7 @@ class InfoPublic extends Controller
 
     public function chartPublic(Request $request){
         
-        $data = Precios::selectraw("CONVERT(DECIMAL(10,2),ROUND(max(precio_anterior),2,0)) as precio,
+        $data = Precios::selectraw("CONVERT(DECIMAL(10,2),ROUND(precio_anterior,2,0)) as precio,
         (case month(fecha_uno)
             when  1 then concat('Enero',' ',year(fecha_uno))
             when  2 then concat('Febrero',' ',year(fecha_uno))
@@ -138,8 +155,9 @@ class InfoPublic extends Controller
             when  12 then concat('Diciembre',' ',year(fecha_uno))
         END) mes,
         year(fecha_uno) as fecha
-        ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'medida' => $request->medida['code'], 'articulo' => $request->medida['medida'] ]))
-        ->groupBy('fecha_uno')
+        ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida,'code' => $request->code ]))
+        // ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida['code'], 'articulo' => $request->medida['medida'] ]))
+        ->groupBy('fecha_uno','precio_anterior')
         ->orderBy('fecha','asc')
         ->distinct()->get();
 
