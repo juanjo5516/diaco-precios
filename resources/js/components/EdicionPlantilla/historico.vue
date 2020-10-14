@@ -27,7 +27,7 @@
                     }}</span>
                 </template>
             </el-table-column> -->
-            <el-table-column width="220" label="Operaciones">
+            <!-- <el-table-column width="220" label="Operaciones">
                 <template slot-scope="scope">
                     <el-link
                         :underline="false"
@@ -40,12 +40,6 @@
                                 idUser
                         "
                     >
-                        <!-- <el-button
-                            size="small"
-                            type="success"
-                            icon="el-icon-office-building">
-                        Excel
-                        </el-button> -->
                         <el-button
                             size="small"
                             type="success"
@@ -55,7 +49,7 @@
                         </el-button>
                     </el-link>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <div style="text-align: left;margin-top: 30px;">
             <el-pagination
