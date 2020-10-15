@@ -159,7 +159,7 @@ class InfoPublic extends Controller
         // ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida['code'], 'articulo' => $request->medida['medida'] ]))
         ->groupBy('fecha_uno','precio_anterior')
         ->orderBy('fecha','asc')
-        ->distinct()->get();
+        ->get();
 
         return response()->json($data,200);
     }
