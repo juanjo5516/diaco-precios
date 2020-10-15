@@ -155,9 +155,12 @@ class InfoPublic extends Controller
             when  12 then concat('Diciembre',' ',year(fecha_uno))
         END) mes,
         year(fecha_uno) as fecha
-        ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida,'code' => $request->code ]))
+        ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida,'code' => $request->code]))
+        ->whereYear('fecha_uno', '=', 2020)
         // ")->where((['sede_uno' => $request->sede, 'sede_dos' => $request->sede,'categoria_uno' => $request->categoria, 'categoria_dos' => $request->categoria,'idMedida' => $request->medida['code'], 'articulo' => $request->medida['medida'] ]))
         ->groupBy('fecha_uno','precio_anterior')
+        ->orderBy('precio','asc')
+        ->orderBy('mes','asc')
         ->orderBy('fecha','asc')
         ->get();
 
