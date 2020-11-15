@@ -44,6 +44,10 @@ Route::post('price_view','InfoPublic@price_view');
 Route::post('price_viewFilter','InfoPublic@price_viewFilter');
 Route::post('chartPublic','InfoPublic@chartPublic');
 Route::post('price_view_Category','InfoPublic@price_view_Category');
+Route::get('tipos','InfoPublic@getTipoV');
+Route::post('month','InfoPublic@getMonth');
+Route::post('year','InfoPublic@getYear');
+Route::post('viewCBA','InfoPublic@viewCBA');
 
 
 

@@ -18,6 +18,10 @@ class InfoPublic extends Controller
         return view('public.index'); 
     } 
 
+    public function cba(){
+        return view('public.cba'); 
+    } 
+
 
     public function movile_app(){
         $departments = DB::SELECT('exec VerifyActiveDepartments');
@@ -173,5 +177,55 @@ class InfoPublic extends Controller
         $n = array();
         foreach ($a as $k=>$v) if (!in_array($v,$n))$n[$k]=$v;
         return $n;
+    }
+
+
+    public function getTipoV(){
+        $data = DB::table('diaco_tipoverificacioncba')->select('id_TipoVerificacion AS code', 'nombreVerificacion AS name')
+        ->where(['status' => 'A','id_TipoVerificacion' => 5])->get();
+
+        return response()->json($data,200);
+    }
+
+    public function getMonth(Request $request){
+        $data = DB::table('monthYearCba')
+                ->selectraw("(case mes
+                when  1 then 'Enero'
+                when  2 then 'Febrero'
+                when  3 then 'Marzo'
+                when  4 then 'Abril'
+                when  5 then 'Mayo'
+                when  6 then 'Junio'
+                when  7 then 'Julio'
+                when  8 then 'Agosto'
+                when  9 then 'Septiembre'
+                when  10 then 'Octubre'
+                when  11 then 'Noviembre'
+                when  12 then 'Diciembre'
+            END) Mes,mes,year,tipo")
+            ->distinct()
+            ->where(['tipo' => $request->id])
+            ->get();
+
+        return response()->json($data,200);
+    }
+
+    public function getYear(Request $request){
+        $data = DB::table('monthYearCba')
+            ->selectraw("year")
+            ->distinct()
+            ->where(['tipo' => $request->id])
+            ->get();
+
+        return response()->json($data,200);
+    }
+
+    public function viewCBA(Request $request){
+        $data = DB::table('precioCBA_view')
+            ->selectRaw('name,CONVERT(DECIMAL(10,2),ROUND(precio,2,0)) as  precio')
+            ->where(['tipo' => $request->tipo, 'mes' => $request->mes, 'year' => $request->year])
+            ->get(); 
+        
+        return response()->json($data,200);
     }
 }

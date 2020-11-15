@@ -71,6 +71,7 @@ Vue.component('designtemplate-componente', require('./components/vuetify/report/
 Vue.component('charthome-componente', require('./components/vuetify/chart/home_chart.vue').default)
 
 Vue.component('informacion-componente', require('./components/public/informacion.vue').default)
+Vue.component('cba-componente', require('./components/public/cba.vue').default)
 
 Vue.component('api-component', require('./components/api/api.vue').default);
 const app = new Vue({
