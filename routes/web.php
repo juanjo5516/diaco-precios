@@ -255,7 +255,8 @@ Route::get('bar-chart', 'ChartController@ChartProductos');
         //------------------------------------------------------------------------------------------
     });
     Route::get('Publica','InfoPublic@index'); 
-
+    Route::get('CBA','InfoPublic@cba'); 
+  
 
 
 
