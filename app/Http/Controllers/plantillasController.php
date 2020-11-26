@@ -627,18 +627,32 @@ class plantillasController extends Controller
     public function getPlantillas($id){
 
         $query = DB::table('diaco_plantillascba')
-                        ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,CONCAT('Q ',CONVERT(decimal(18,2),avg(diaco_vaciadocba.precioProducto))) as precio")
+                        ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion")
                         ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
                         ->join('diaco_productocba','id_producto','=','idProducto')
                         ->join('diaco_medida','id_medida','=','idMedida')
                         ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
-                        ->join('diaco_vaciadocba as dv','dv.idProducto','=','diaco_plantillascba.idProducto')
-                        ->join('diaco_vaciadocba','diaco_vaciadocba.idMedida','=','diaco_plantillascba.idMedida')
+                        // ->join('diaco_vaciadocba as dv','dv.idProducto','=','diaco_plantillascba.idProducto')
+                        // ->join('diaco_vaciadocba','diaco_vaciadocba.idMedida','=','diaco_plantillascba.idMedida')
                         ->where('diaco_name_template_cba.id',$id)
                         ->groupBy(['diaco_plantillascba.idCategoria','diaco_medida.id_medida','diaco_plantillascba.NombrePlantilla','diaco_plantillascba.created_at','diaco_categoriacba.nombre','diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_plantillascba.tipoVerificacion'])
                         ->orderBy('diaco_productocba.nombre')
                         ->get();
+        // $query = DB::table('diaco_plantillascba')
+        //                 ->selectraw(" distinct diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion,CONCAT('Q ',CONVERT(decimal(18,2),avg(diaco_vaciadocba.precioProducto))) as precio")
+        //                 ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
+        //                 ->join('diaco_productocba','id_producto','=','idProducto')
+        //                 ->join('diaco_medida','id_medida','=','idMedida')
+        //                 ->join('diaco_name_template_cba','NombreTemplate','=','NombrePlantilla')
+        //                 ->join('diaco_vaciadocba as dv','dv.idProducto','=','diaco_plantillascba.idProducto')
+        //                 ->join('diaco_vaciadocba','diaco_vaciadocba.idMedida','=','diaco_plantillascba.idMedida')
+        //                 ->where('diaco_name_template_cba.id',$id)
+        //                 ->groupBy(['diaco_plantillascba.idCategoria','diaco_medida.id_medida','diaco_plantillascba.NombrePlantilla','diaco_plantillascba.created_at','diaco_categoriacba.nombre','diaco_productocba.nombre','diaco_medida.nombre','diaco_productocba.id_producto','diaco_plantillascba.tipoVerificacion'])
+        //                 ->orderBy('diaco_productocba.nombre')
+        //                 ->get();
 
+
+        // dd($query);
         $query_data = DB::table('diaco_plantillascba')
             ->selectraw("diaco_plantillascba.idCategoria as idCategoria,diaco_medida.id_medida as idmedida,diaco_plantillascba.NombrePlantilla,diaco_plantillascba.created_at,diaco_categoriacba.nombre as categoria,diaco_productocba.nombre as produto,diaco_medida.nombre as medida, diaco_productocba.id_producto as producto,diaco_plantillascba.tipoVerificacion")
             ->join('diaco_categoriacba','id_Categoria','=','idCategoria')
@@ -706,6 +720,7 @@ class plantillasController extends Controller
         //dd($valores);
         //return response()->json($mercado);
 
+        // dd($plantilla);
         // dd($plantilla);
         return view('Ediciones.vaciado',
             [
