@@ -14,7 +14,9 @@
       </el-form-item>
     </el-form>
     <el-table
-      :data="plantillasall.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      :data="plantillasall
+      .filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))
+      .slice((currentPage-1)*pagesize,currentPage*pagesize)"
       style="width: 100%"
       border
     >

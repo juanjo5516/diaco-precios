@@ -17,13 +17,21 @@
       </el-form-item>
     </el-form>
     <el-table
-      :data="plantillasall.slice((currentPage-1)*pagesize,currentPage*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      :data="plantillasall
+      .filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))
+      .slice((currentPage-1)*pagesize,currentPage*pagesize)"
       style="width: 100%"
       border
     >
+<!--     <el-table
+      :data="plantillasall.slice((pageIndex-1)*pagesize,pageIndex*pagesize).filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%"
+      border
+    > -->
       <!-- <el-table-column prop="code" label="#" width="50"></el-table-column> -->
-      <el-table-column  type="index" width="50"></el-table-column>
+      <el-table-column type="index" width="50"></el-table-column>
       <el-table-column prop="name" label="Nombre"></el-table-column>
+
       <el-table-column label="Operaciones" width="200">
         <template slot="header" slot-scope="scope">
           <el-input
@@ -40,6 +48,7 @@
           >Eliminar</el-button>
         </template>
       </el-table-column>
+      
     </el-table>
     <div style="text-align: left;margin-top: 30px;">
       <el-pagination
@@ -61,6 +70,7 @@ export default {
       total: 0,
       currentPage: 1,
       pagesize: 10,
+      pageIndex: 2,
       formInline: {
         name: ""
       },
