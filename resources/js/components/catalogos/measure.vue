@@ -30,12 +30,6 @@
             size="mini"
             placeholder="Buscar"/>
         </template>
-        <template slot="header" slot-scope="scope">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="Buscar"/>
-        </template>
         <template slot-scope="scope">
           <el-button size="mini"  @click="handleEdit(scope.row.code)">Editar</el-button>
           <el-button
@@ -61,10 +55,12 @@
 export default {
   data() {
     return {
+      links: [],
       plantillasall: [],
       total: 0,
       currentPage: 1,
       pagesize: 10,
+      pageIndex: 2,
       formInline: {
         name: ""
       },
@@ -88,10 +84,14 @@ export default {
     this.getPlantillasData();
   },
   methods: {
+    checkItem(item){
+
+    },
     getPlantillasData: function() {
       var url = "/findAllmeasure";
       axios.get(url).then(response => {
         this.plantillasall = response.data;
+        this.links = response.data;
         this.total = response.data.length;
       });
     },
