@@ -686,7 +686,8 @@ class plantillasController extends Controller
     }
 
     public function getMercado(){
-        $mercado = DB::table('diaco_mercadocba')->select('idMercado','nombreMercado as nombre')->get();
+        //$mercado = DB::table('diaco_mercadocba')->select('idMercado','nombreMercado as nombre')->get();
+        $mercado = DB::table('diaco_mercadocba')->select('idMercado','nombreMercado as nombre')->where('status','A')->get();
         return $mercado;
     }
 

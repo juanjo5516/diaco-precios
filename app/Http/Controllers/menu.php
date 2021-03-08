@@ -342,7 +342,7 @@ class menu extends Controller
         $categoria = DB::table("diaco_categoriacba")->select('id_Categoria as id','nombre as nombre')->get();
         $producto = DB::table("diaco_productocba")->select('id_producto as id','nombre as Pnombre')->get();
         $medida = DB::table('diaco_medida')->select('id_medida as id','nombre as nombre')->get();
-        $mercado = DB::table('diaco_mercadocba')->select('idMercado as id','nombreMercado as nombre','direccionMercado as direccion')->get();
+        $mercado = DB::table('diaco_mercadocba')->select('idMercado as id','nombreMercado as nombre','direccionMercado as direccion')->where('status','A')->get();
         $establecimiento = DB::table('diaco_establecimientocba')->select('idEstablecimiento as id','nombreEstablecimiento as nombre','direccionEstablecimiento as direccion')->get();
         return view('menu.addMercado',
         [
