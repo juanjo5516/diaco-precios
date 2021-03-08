@@ -1,7 +1,7 @@
 
 <nav class="sidebar-nav">
     <ul class="nav">
-        @if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Javier Pineda')
+        @if (Auth()->user()->nombre == 'Juan José Jolón Granados'  || Auth()->user()->nombre == 'Herberth Ordoñez' || Auth()->user()->nombre == 'Jose Gudiel' || Auth()->user()->nombre == 'Carlos Paxtor' || Auth()->user()->nombre == 'Oliver Salvador' || Auth()->user()->nombre == 'Jorge Carballo')
             <li class="nav-title">Catálogos</li>
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-star"></i> Catálogos</a>
