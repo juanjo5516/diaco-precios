@@ -63,7 +63,7 @@
 
           <el-col :xs="25" :sm="6" :md="8" :lg="6" :xl="10">
             <div class="sub-title">
-              # de Columnas:
+              # de Columnas (Cantidad de Establecimientos a visitar):
               <strong>*</strong>
             </div>
             <el-input

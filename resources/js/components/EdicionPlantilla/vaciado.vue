@@ -7,7 +7,7 @@
             ref="formInline"
             id="vue-Asignacion"
         >
-            <el-card class="box-card">
+            <el-card class="box-card" ref="card-jj">
                 <div slot="header" class="clearfix">
                     <span>Vaciado de Información</span>
                     <span class="d"></span>
@@ -223,6 +223,7 @@
                     width="70%"
                     top="2vh"
                     destroy-on-close
+                    @close="cerrar"
                     >
                     <el-form :model="form">
                         <el-table
@@ -574,6 +575,7 @@ export default {
     },
     mounted() {
 
+
         this.getTipo();
         this.getPropano();
         this.getSMercado();
@@ -590,6 +592,13 @@ export default {
         }
     },
     methods: {
+        cerrar(){
+            console.log(this.inputprecios);
+            this.inputprecios=[];
+            this.inputMercados=[];
+            this.sedes=[];
+
+        },
         dataDepartamento() {
             var url = "/getDepartamento";
             axios.get(url).then(response => {
@@ -610,7 +619,8 @@ export default {
             
             this.inputNombre = [];
             this.inputdireccion = [];
-            this.inputDepartamento = []
+            this.inputDepartamento = [];
+            
             console.log(producto);
             // if (producto == "Gas propano") { //desarrollo
             if (producto == "Gas Propano") { //produccion
@@ -693,6 +703,7 @@ export default {
         onSubmit(tipo_form) {
             
             this.dataNames = [];
+            this.dataPrice = [];
             if(tipo_form == 'dialogFormVisible'){
                  console.log('submit');
                 // for (let i = 1; i <= this.cantidadColumna ; i++) {
@@ -738,6 +749,8 @@ export default {
                     }
                 }
             console.log(this.dataPrice);
+            
+
 
             }else{
                
@@ -937,7 +950,7 @@ export default {
         handleInputl(val,nivel){
             if(nivel === 'principal'){
                 const ctx = this.$refs[val];
-
+                console.log(ctx);
                 if(ctx.value === undefined){
                     ctx.$el.classList.add('validate_input');
                     this.handle_error_name.push(
